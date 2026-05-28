@@ -1,0 +1,1998 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap');
+  :root {
+    --pon-bg:#E6F1FB; --pon-border:#B5D4F4; --pon-text:#0C447C;
+    --kitsu-bg:#E1F5EE; --kitsu-border:#9FE1CB; --kitsu-text:#085041;
+    --color-text-primary:#1f2933; --color-text-secondary:#52606d; --color-text-tertiary:#8292a3;
+    --color-border-tertiary:#d9e2ec; --color-border-secondary:#bcccdc;
+    --color-background-primary:#fff; --color-background-secondary:#f8fafc; --color-background-info:#e0f2fe; --color-text-info:#0369a1;
+    --border-radius-md:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0} body{font-family:'Noto Sans JP',sans-serif;background:#fff;color:var(--color-text-primary)}
+  .script-wrap{max-width:760px;margin:0 auto;padding:2rem 1.5rem 4rem;font-family:'Noto Sans JP',sans-serif}
+  .podcast-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:.5px solid var(--color-border-tertiary)}
+  .podcast-label{font-size:11px;font-weight:500;letter-spacing:.12em;color:var(--color-text-tertiary);text-transform:uppercase;margin-bottom:.5rem}
+  .podcast-title{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:700;line-height:1.5;margin-bottom:.75rem}
+  .episode-subtitle{font-size:13px;color:var(--color-text-secondary)}
+  .controls{position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:.5px solid var(--color-border-tertiary);padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem;z-index:10}
+  .filter-btn,.toggle-btn{font-size:12px;padding:5px 12px;border-radius:20px;border:.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:background .15s}
+  .filter-btn:hover,.toggle-btn:hover{background:var(--color-background-secondary)} .filter-btn.active,.toggle-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent;font-weight:500}
+  .toggle-btn{margin-left:auto}.section{margin-bottom:2rem}.section.hidden,.section-divider.hidden{display:none}
+  .section-label{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--color-text-tertiary);text-transform:uppercase;margin-bottom:1rem;padding:4px 10px;background:var(--color-background-secondary);border-radius:20px;border:.5px solid var(--color-border-tertiary)}
+  .line{display:flex;gap:12px;margin-bottom:1rem;align-items:flex-start}.speaker-tag{flex-shrink:0;width:52px;padding:3px 0;text-align:center;font-size:12px;font-weight:700;border-radius:6px;letter-spacing:.04em;margin-top:18px}
+  .speaker-pon .speaker-tag{background:var(--pon-bg);color:var(--pon-text);border:.5px solid var(--pon-border)}.speaker-kitsu .speaker-tag{background:var(--kitsu-bg);color:var(--kitsu-text);border:.5px solid var(--kitsu-border)}
+  .line-text{flex:1;font-size:15px;line-height:1.85;color:var(--color-text-primary)}.speaker-pon .line-text{border-left:2px solid var(--pon-border);padding-left:12px}.speaker-kitsu .line-text{border-left:2px solid var(--kitsu-border);padding-left:12px}
+  .line-read{display:block;min-height:18px;font-size:11px;line-height:1.5;color:#9aa5b1;letter-spacing:.02em;margin-bottom:1px}.line-jp{display:block}.line-jp ruby rt{font-size:.58em;color:#718096;font-weight:500}.line-romaji{display:block;font-size:12px;color:#64748b;margin-top:3px;line-height:1.65}.hide-romaji .line-romaji{display:none}.line-en{display:block;font-size:13px;color:var(--color-text-secondary);margin-top:4px;font-style:italic;line-height:1.7}
+  .section-divider{display:flex;align-items:center;gap:12px;margin:2rem 0}.section-divider::before,.section-divider::after{content:'';flex:1;height:.5px;background:var(--color-border-tertiary)}
+  .glossary{margin-top:3rem;padding-top:2rem;border-top:.5px solid var(--color-border-tertiary)}.glossary h2{font-family:'Noto Serif JP',serif;font-size:20px;margin-bottom:.5rem}.glossary-note{font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.7}.glossary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.glossary-card{background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:14px;padding:12px}.glossary-word{font-weight:700;font-size:16px}.glossary-reading{font-size:12px;color:#64748b;margin-top:2px}.glossary-meaning{font-size:13px;color:var(--color-text-secondary);margin-top:6px;line-height:1.55}
+
+ruby {
+  ruby-position: over;
+}
+
+rt {
+  font-size: 15px;
+  color: #666;
+}
+
+</style>
+<div class="script-wrap">
+<div class="podcast-header">
+<div class="podcast-label">Japanese Story Podcast</div>
+<div class="podcast-title"><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>して<ruby>初めて<rt>はじめて</rt></ruby><ruby>気づ<rt>きづ</rt></ruby>くこと<br/>Things Nobody Tells You About Learning Japanese</div>
+<div class="episode-subtitle"><ruby>第１<rt>だいいち</rt></ruby><ruby>話<rt>はなし</rt></ruby> ・ Episode 01</div>
+</div>
+<div class="controls">
+<button class="filter-btn active" onclick="filterSection('all', event)">すべて</button>
+<button class="filter-btn" onclick="filterSection('opening', event)">Opening</button>
+<button class="filter-btn" onclick="filterSection('discovery1', event)">You Already Know M</button>
+<button class="filter-btn" onclick="filterSection('discovery2', event)">Words That Don't T</button>
+<button class="filter-btn" onclick="filterSection('discovery3', event)">The Culture Lives </button>
+<button class="filter-btn" onclick="filterSection('discovery4', event)">Communication Feel</button>
+<button class="filter-btn" onclick="filterSection('discovery5', event)">Mistakes Are Part </button>
+<button class="filter-btn" onclick="filterSection('discovery6', event)">The First Sentence</button>
+<button class="filter-btn" onclick="filterSection('discovery7', event)">Japanese Changes H</button>
+<button class="filter-btn" onclick="filterSection('discovery8', event)">DISCOVERY EIGHT: T</button>
+<button class="filter-btn" onclick="filterSection('closing', event)">Closing</button>
+<button class="filter-btn" onclick="filterSection('discovery10', event)">WORD GLOSSARY (Epi</button>
+<button class="toggle-btn active" id="romajiToggle" onclick="toggleRomaji()">Romaji ON</button>
+</div>
+<div class="section" data-section="opening">
+<div class="section-label">▶ INTRO</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">みなさん、こんにちは！ようこそ！</span>
+<span class="line-romaji">mi na sa n ko n ni chi ha！ yo u ko so！</span>
+<span class="line-en">Hey everyone — hello! Welcome!</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">こんにちは。<ruby>来て<rt>きて</rt></ruby>くれてありがとう。</span>
+<span class="line-romaji">ko n ni chi wa [来] te ku re te a ri ga to u</span>
+<span class="line-en">Hello. Thank you so much for being here.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>僕<rt>ぼく</rt></ruby>はポン！そして、これが<ruby>初めて<rt>はじめて</rt></ruby>のエピソードだよ！<ruby>信じ<rt>しんじ</rt></ruby>られる？！</span>
+<span class="line-romaji">bo ku wa po n！ so shi te ko re ga wa ji me te no e pi soo do da yo！ [信] ji ra re ru？！</span>
+<span class="line-en">I'm Pon! And this — this right here — is the very first episode! Can you believe it?!</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>私<rt>わたし</rt></ruby>はキツ。ポンが<ruby>興奮<rt>こうふん</rt></ruby>しすぎないように、いつも<ruby>隣<rt>となり</rt></ruby>にいるよ。</span>
+<span class="line-romaji">wa ta shi wa ki tsu po n ga ko u fu n shi su gi na i yo u ni i tsu mo to na ri ni i ru yo</span>
+<span class="line-en">I'm Kitsu. And I'm here to make sure Pon doesn't completely lose his mind with excitement.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ははは！でも<ruby>本当<rt>ほんとう</rt></ruby>に、すごく<ruby>嬉しい<rt>うれしい</rt></ruby>んだ。 <ruby>今日<rt>きょう</rt></ruby>ここにいるみんな、ありがとう。<ruby>本当<rt>ほんとう</rt></ruby>に。</span>
+<span class="line-romaji">ha wa ha！ de mo ho n to u ni su go ku u re shi i n da kyo u ko ko ni i ru mi n na a ri ga to u ho n to u ni</span>
+<span class="line-en">Ha! Okay, fair. But genuinely — I'm so happy right now. If you're listening to this, thank you. Seriously. This means everything.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ここは「Japanese Story Podcast」。 このポッドキャストは、<ruby>日本語<rt>にほんご</rt></ruby>と<ruby>日本文化<rt>にほんぶんか</rt></ruby>が<ruby>大好き<rt>だいすき</rt></ruby>な<ruby>人<rt>ひと</rt></ruby>たちのための<ruby>場所<rt>ばしょ</rt></ruby>。</span>
+<span class="line-romaji">ko ko wa J a p a n e s e S t o r y P o d c a s t ko no po d do kya su to wa ni ho n go to ni ho n bu n ka ga da i su ki na hi to ta chi no ta me no [場] [所]</span>
+<span class="line-en">This is the Japanese Story Podcast. This is a space for anyone who loves Japanese — or thinks they might.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>している<ruby>人<rt>ひと</rt></ruby>も、アニメが<ruby>好き<rt>すき</rt></ruby>な<ruby>人<rt>ひと</rt></ruby>も、 <ruby>日本<rt>にほん</rt></ruby>に<ruby>旅行<rt>りょこう</rt></ruby>したい<ruby>人<rt>ひと</rt></ruby>も、なんとなく<ruby>気に<rt>きに</rt></ruby>なっている<ruby>人<rt>ひと</rt></ruby>も。 みんなのための<ruby>番組<rt>ばんぐみ</rt></ruby>だよ。</span>
+<span class="line-romaji">ni ho n go o be n kyo u shi te i ru hi to mo a ni me ga su ki na hi to mo [日] [本] ni ryo ko u shi ta i hi to mo na n to na ku [気] ni na t te i ru hi to mo mi n na no ta me no [番] [組] da yo</span>
+<span class="line-en">Whether you're already studying Japanese, whether you're an anime fan, whether you want to travel to Japan someday, or whether you just have this feeling — this kind of quiet pull toward Japan and you don't even know why yet. This show is for you.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>するって、<ruby>最初<rt>さいしょ</rt></ruby>は<ruby>怖く<rt>こわく</rt></ruby><ruby>感じる<rt>かんじる</rt></ruby>かもしれない。 でも、<ruby>私<rt>わたし</rt></ruby>たちはその<ruby>旅<rt>たび</rt></ruby>を<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>歩きたい<rt>あるきたい</rt></ruby>の。 レッスンじゃなくて、<ruby>会話<rt>かいわ</rt></ruby>として。</span>
+<span class="line-romaji">ni ho n go o be n kyo u su ru t te sa i sho wa ko wa ku ka n ji ru ka mo shi re na i de mo wa ta shi ta chi wa so no [旅] o i s sho ni a ru ki ta i no re s su n ja na ku te ka i wa to shi te</span>
+<span class="line-en">Learning Japanese can feel intimidating at first. But we want to walk that journey with you — not as a lesson, but as a conversation. Like friends talking.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">そう！<ruby>授業<rt>じゅぎょう</rt></ruby>みたいじゃなくて、<ruby>友達<rt>ともだち</rt></ruby>とおしゃべりしてる<ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">so u！ ju gyo u mi ta i ja na ku te to mo da chi to o sha be ri shi te ru [感] ji</span>
+<span class="line-en">Exactly. Not a classroom. More like... you found two people who just really love this stuff, and you're sitting with us.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>今日<rt>きょう</rt></ruby>の<ruby>テーマ<rt>てーま</rt></ruby>はね、「<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>して<ruby>初めて<rt>はじめて</rt></ruby><ruby>気づく<rt>きづく</rt></ruby>こと」。</span>
+<span class="line-romaji">kyo u no tee ma wa ne ni ho n go o be n kyo u shi te wa ji me te ki zu ku ko to</span>
+<span class="line-en">And today's topic is: the things nobody tells you about learning Japanese.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あ、これ、<ruby>絶対<rt>ぜったい</rt></ruby><ruby>面白い<rt>おもしろい</rt></ruby>やつだ。</span>
+<span class="line-romaji">a ko re [絶] [対] o mo shi ro i ya tsu da</span>
+<span class="line-en">Oh, I already love this topic. Nobody warned me about any of this stuff.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ポン、あなたはどうやって<ruby>日本語<rt>にほんご</rt></ruby>に<ruby>興味<rt>きょうみ</rt></ruby>を<ruby>持った<rt>もった</rt></ruby>の？</span>
+<span class="line-romaji">po n a na ta wa do u ya t te ni ho n go ni kyo u mi o mo t ta no？</span>
+<span class="line-en">Pon, tell me — how did you first get interested in Japanese?</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えっとね、アニメだよ。もちろん。 <ruby>最初<rt>さいしょ</rt></ruby>は<ruby>字幕<rt>じまく</rt></ruby>で<ruby>見て<rt>みて</rt></ruby>たんだけど、ある<ruby>日<rt>ひ</rt></ruby>、キャラクターが<ruby>言った<rt>いった</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>が <ruby>字幕<rt>じまく</rt></ruby>より<ruby>先に<rt>さきに</rt></ruby><ruby>意味<rt>いみ</rt></ruby>がわかった<ruby>気が<rt>きが</rt></ruby>して。 「あ、わかった！」って<ruby>感じ<rt>かんじ</rt></ruby>。その<ruby>瞬間<rt>しゅんかん</rt></ruby>が<ruby>最高<rt>さいこう</rt></ruby>だったな。</span>
+<span class="line-romaji">e t to ne a ni me da yo mo chi ro n sa i sho wa ji ma ku de [見] te ta n da ke do a ru [日] kya ra ku taa ga [言] t ta ko to ba ga ji ma ku yo ri [先] ni i mi ga wa ka t ta [気] ga shi te a wa ka t ta！ t te [感] ji so no shu n ka n ga sa i ko u da t ta na</span>
+<span class="line-en">Anime. Obviously. Come on. I was watching with subtitles like everyone does, and then one day — one random Tuesday afternoon — a character said something and I understood it *before* I even read the subtitle. Just for a second. And I remember thinking, "Wait. Did I just...?" That moment. That tiny little moment. That's what got me.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">その<ruby>感覚<rt>かんかく</rt></ruby>、すごくわかる。 <ruby>私<rt>わたし</rt></ruby>は<ruby>子ども<rt>こども</rt></ruby>の<ruby>頃<rt>ころ</rt></ruby>、おばあちゃんが<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>歌<rt>うた</rt></ruby>を<ruby>歌<rt>うた</rt></ruby>ってくれてたの。 <ruby>意味<rt>いみ</rt></ruby>は<ruby>全然<rt>ぜんぜん</rt></ruby>わからなかったけど、<ruby>音<rt>おと</rt></ruby>がとても<ruby>好き<rt>すき</rt></ruby>だった。 <ruby>日本語<rt>にほんご</rt></ruby>ってね、<ruby>音楽<rt>おんがく</rt></ruby>みたいだと<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">so no ka n ka ku su go ku wa ka ru wa ta shi wa ko do mo no ko ro o ba a cha n ga ni ho n go de u ta o u ta t te ku re te ta no i mi wa [全] [然] wa ka ra na ka t ta ke do [音] ga to te mo su ki da t ta ni ho n go t te ne o n ga ku mi ta i da to [思] u</span>
+<span class="line-en">I know that feeling so well. For me, it was my grandmother. She used to sing Japanese songs when I was small. I didn't understand a single word. But the sound of it — I just loved the sound. Japanese feels like music to me. It always has.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>音楽<rt>おんがく</rt></ruby>みたい」、いい<ruby>表現<rt>ひょうげん</rt></ruby>だね。</span>
+<span class="line-romaji">o n ga ku mi ta i i i hyo u ge n da ne</span>
+<span class="line-en">"Like music." I love that.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">よく<ruby>考え<rt>かんがえ</rt></ruby>てみると、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>音<rt>おと</rt></ruby>ってほかの<ruby>言語<rt>げんご</rt></ruby>と<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違う<rt>ちがう</rt></ruby>よね。 <ruby>母音<rt>ぼいん</rt></ruby>がはっきりしてて、<ruby>音<rt>おと</rt></ruby>がリズミカルで。</span>
+<span class="line-romaji">yo ku [考] e te mi ru to ni ho n go no [音] t te ho ka no [言] [語] to [全] [然] [違] u yo ne bo i n ga wa k ki ri shi te te [音] ga ri zu mi ka ru de</span>
+<span class="line-en">If you think about it, Japanese has such a distinctive sound compared to other languages. The vowels are very clear and consistent — a, i, u, e, o — always the same sounds. It gives Japanese this almost melodic, rhythmic quality.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">そうそう！<ruby>英語<rt>えいご</rt></ruby>ってスペルと<ruby>発音<rt>はつおん</rt></ruby>が<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違う<rt>ちがう</rt></ruby>じゃん。 <ruby>日本語<rt>にほんご</rt></ruby>はローマ<ruby>字<rt>じ</rt></ruby>で<ruby>書い<rt>かい</rt></ruby>たら<ruby>読め<rt>よめ</rt></ruby>るって<ruby>気づ<rt>きづ</rt></ruby>いた<ruby>時<rt>とき</rt></ruby>、ちょっと<ruby>感動<rt>かんどう</rt></ruby>した。</span>
+<span class="line-romaji">so u so u！ e i go t te su pe ru to wa tsu o n ga [全] [然] [違] u ja n ni ho n go wa roo ma [字] de [書] i ta ra [読] me ru t te [気] zu i ta [時] cho t to [感] [動] shi ta</span>
+<span class="line-en">Yes! I remember discovering that Japanese pronunciation is actually very consistent. In English, spelling and pronunciation are basically enemies. But in Japanese? What you see is mostly what you get. That honestly felt like a gift after years of English spelling tests.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>ひらがな<rt>ひらがな</rt></ruby>を<ruby>覚えた<rt>おぼえた</rt></ruby>ら、<ruby>何で<rt>なんで</rt></ruby>も<ruby>読め<rt>よめ</rt></ruby>るようになるの。 <ruby>最初<rt>さいしょ</rt></ruby>は「え、そんなに<ruby>早く<rt>はやく</rt></ruby>？！」って<ruby>思う<rt>おもう</rt></ruby>かもしれないけど、<ruby>本当<rt>ほんとう</rt></ruby>なの。</span>
+<span class="line-romaji">hi ra ga na o o bo e ta ra [何] de mo [読] me ru yo u ni na ru no sa i sho wa e so n na ni [早] ku？！ t te [思] u ka mo shi re na i ke do ho n to u na no</span>
+<span class="line-en">And once you learn hiragana — the first of the three writing systems — you can actually read everything written in it. That usually takes people a week or two, and suddenly whole sentences become readable. It feels like getting a small superpower.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>ひらがな<rt>ひらがな</rt></ruby>を<ruby>覚えた<rt>おぼえた</rt></ruby><ruby>時<rt>とき</rt></ruby>、<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>中の<rt>なかの</rt></ruby><ruby>広告<rt>こうこく</rt></ruby>が<ruby>読め<rt>よめ</rt></ruby>るようになって、 もうずっとキョロキョロしてた。「あ、<ruby>読め<rt>よめ</rt></ruby>る！あれも<ruby>読め<rt>よめ</rt></ruby>る！」って。</span>
+<span class="line-romaji">hi ra ga na o o bo e ta [時] de n sha no [中] no ko u ko ku ga [読] me ru yo u ni na t te mo u zu t to kyo ro kyo ro shi te ta a [読] me ru！ a re mo [読] me ru！ t te</span>
+<span class="line-en">When I first learned hiragana and went to Japan, I kept stopping in the streets looking at every sign, every menu, every advertisement going "I can read that! And that!" My friends thought something was wrong with me. But I was just... so happy.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="discovery1"><div class="section-label">✦ DISCOVERY ONE: You Already Know More Than You Think</div></div>
+<div class="section" data-section="discovery1">
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">じゃあ、<ruby>一番<rt>いちばん</rt></ruby><ruby>最初<rt>さいしょ</rt></ruby>に「えっ！」って<ruby>思った<rt>おもった</rt></ruby>ことって<ruby>何だ<rt>なんだ</rt></ruby>った？</span>
+<span class="line-romaji">ja a [一] [番] sa i sho ni e！ t te [思] t ta ko to t te [何] da t ta？</span>
+<span class="line-en">Okay, so here's my question — what was the first thing that genuinely surprised you when you started actually learning Japanese?</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">んー、これはね、もうほとんどの<ruby>人<rt>ひと</rt></ruby>が<ruby>同じ<rt>おなじ</rt></ruby>こと<ruby>言う<rt>いう</rt></ruby>と<ruby>思う<rt>おもう</rt></ruby>んだけど。 <ruby>日本語<rt>にほんご</rt></ruby>の<ruby>単語<rt>たんご</rt></ruby>、もう<ruby>知って<rt>しって</rt></ruby>るのがいっぱいあるって<ruby>気づ<rt>きづ</rt></ruby>いた<ruby>時<rt>とき</rt></ruby>！</span>
+<span class="line-romaji">n ko re wa ne mo u ho to n do no hi to ga [同] ji ko to [言] u to [思] u n da ke do ni ho n go no ta n go mo u [知] t te ru no ga i p pa i a ru t te [気] zu i ta [時]！</span>
+<span class="line-en">Hmm. I think almost everyone says this same thing — the moment you realize how many Japanese words you already know.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あー！そう、そう！これ、びっくりしたよ。 「カラオケ」とか「スシ」とか「サムライ」とか。 でもそれだけじゃないんだよね。</span>
+<span class="line-romaji">aa！ so u so u！ ko re bi k ku ri shi ta yo ka ra o ke to ka su shi to ka sa mu ra i to ka de mo so re da ke ja na i n da yo ne</span>
+<span class="line-en">Yes! Okay, yes! I thought Japanese would be this completely foreign world — karaoke, sushi, samurai, sure — but I didn't realize how deep it goes.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうなの。「ツナミ」もそう。「エモジ」もそう。 「カラテ」も「マンガ」も「アニメ」も、 <ruby>全部<rt>ぜんぶ</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>からきてるんだよ。</span>
+<span class="line-romaji">so u na no tsu na mi mo so u e mo ji mo so u ka ra te mo ma n ga mo a ni me mo ze n bu ni ho n go ka ra ki te ru n da yo</span>
+<span class="line-en">Tsunami. Emoji. Karate. Manga. Anime. All Japanese. And once you start noticing, you can't stop.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">スーパーで「エダマメ」<ruby>頼ん<rt>たのん</rt></ruby>だら、それも<ruby>日本語<rt>にほんご</rt></ruby>って<ruby>気づ<rt>きづ</rt></ruby>いて。 「<ruby>待っ<rt>まっ</rt></ruby>て、これ<ruby>日本語<rt>にほんご</rt></ruby>だったの？！」ってなった。</span>
+<span class="line-romaji">suu paa de e da ma me [頼] n da ra so re mo ni ho n go t te [気] zu i te [待] t te ko re ni ho n go da t ta no？！ t te na t ta</span>
+<span class="line-en">I ordered edamame at a restaurant and then went home and was like, "Hold on. Edamame is Japanese? That's Japanese?!" And then I went into a complete spiral.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ、その<ruby>気持ち<rt>きもち</rt></ruby>、すごくわかるよ。 <ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>し<ruby>始め<rt>はじめ</rt></ruby>ると、<ruby>急に<rt>きゅうに</rt></ruby><ruby>世界<rt>せかい</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>が<ruby>見え<rt>みえ</rt></ruby>てくるの。 <ruby>今まで<rt>いままで</rt></ruby><ruby>気づ<rt>きづ</rt></ruby>かなかっただけで、ずっとそこにあったんだよね。</span>
+<span class="line-romaji">fu fu so no [気] [持] chi su go ku wa ka ru yo ni ho n go o be n kyo u shi [始] me ru to [急] ni se ka i no [中] ni ni ho n go ga [見] e te ku ru no [今] ma de [気] zu ka na ka t ta da ke de zu t to so ko ni a t ta n da yo ne</span>
+<span class="line-en">Ha, that spiral is real. It's like once you start learning Japanese, you suddenly see it everywhere. It was always there. You just weren't looking.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「えっ、これも？！これも？！」って<ruby>毎日<rt>まいにち</rt></ruby>なってたよ。 <ruby>最高<rt>さいこう</rt></ruby>の<ruby>感覚<rt>かんかく</rt></ruby>だった。</span>
+<span class="line-romaji">e ko re mo？！ ko re mo？！ t te ma i ni chi na t te ta yo sa i ko u no ka n ka ku da t ta</span>
+<span class="line-en">I spent like a week just going "Wait, that one too?!" every single day. It felt like discovering a secret that was hiding in plain sight.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>逆<rt>ぎゃく</rt></ruby>に、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby>も<ruby>英語<rt>えいご</rt></ruby>からきた<ruby>言葉<rt>ことば</rt></ruby>がたくさんあるよ。 「<ruby>カタカナ<rt>かたかな</rt></ruby><ruby>語<rt>ご</rt></ruby>」って<ruby>言う<rt>いう</rt></ruby>んだけど。</span>
+<span class="line-romaji">gya ku ni ni ho n go no [中] ni mo e i go ka ra ki ta ko to ba ga ta ku sa n a ru yo ka ta ka na [語] t te [言] u n da ke do</span>
+<span class="line-en">And it goes both ways, actually. Japanese has borrowed a huge number of words from English too. They're written in katakana — one of the writing systems — and they sound a little different, but once you recognize the pattern, it opens up a whole new world.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あー、「テレビ」とか「コンピューター」とか？</span>
+<span class="line-romaji">aa te re bi to ka ko n pyuu taa to ka？</span>
+<span class="line-en">Oh! Like *terebi* for television? And *konpyuutaa* for computer?</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう！「アイスクリーム」も「マクドナルド」も「スマートフォン」も。 <ruby>日本語<rt>にほんご</rt></ruby>と<ruby>英語<rt>えいご</rt></ruby>は、お<ruby>互いに<rt>たがいに</rt></ruby>たくさん<ruby>言葉<rt>ことば</rt></ruby>を<ruby>借り<rt>かり</rt></ruby>てるんだよ。</span>
+<span class="line-romaji">so u！ a i su ku rii mu mo ma ku do na ru do mo su maa to fu o n mo ni ho n go to e i go wa o [互] i ni ta ku sa n ko to ba o [借] ri te ru n da yo</span>
+<span class="line-en">Exactly. Ice cream, McDonald's, smartphone — they're all there. Japanese and English have been quietly lending words to each other for decades. It's like a long friendship you didn't know about.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それを<ruby>知って<rt>しって</rt></ruby>から、<ruby>カタカナ<rt>かたかな</rt></ruby>が<ruby>一番楽<rt>いちばんらく</rt></ruby>しくなった。 「これ、<ruby>英語<rt>えいご</rt></ruby>じゃない？」って<ruby>推測<rt>すいそく</rt></ruby>するゲームみたいで。</span>
+<span class="line-romaji">so re o [知] t te ka ra ka ta ka na ga [一] [番] [楽] shi ku na t ta ko re e i go ja na i？ t te [推] [測] su ru gee mu mi ta i de</span>
+<span class="line-en">After I learned that, katakana became my favorite game. You just try to figure out what the English word is underneath. Sometimes you get it immediately, sometimes it takes a minute, and when you crack it — incredibly satisfying.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="discovery2"><div class="section-label">✦ DISCOVERY TWO: Words That Don't Translate</div></div>
+<div class="section" data-section="discovery2">
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">でも<ruby>逆<rt>ぎゃく</rt></ruby>に、<ruby>英語<rt>えいご</rt></ruby>に<ruby>訳せない<rt>やくせない</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>もたくさんあるよね。</span>
+<span class="line-romaji">de mo gya ku ni e i go ni ya ku se na i ni ho n go no ko to ba mo ta ku sa n a ru yo ne</span>
+<span class="line-en">But then there's the other side of it — the words that go the other direction. Japanese words that don't translate into English at all.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あ！「<ruby>木漏れ日<rt>こもれび</rt></ruby>」とか？！</span>
+<span class="line-romaji">a！ ko mo re bi to ka？！</span>
+<span class="line-en">Oh! Like komorebi?!</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう、まさに。 「<ruby>木漏れ日<rt>こもれび</rt></ruby>」（こもれび）。 <ruby>木の葉<rt>このは</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>から<ruby>差し込む<rt>さしこむ</rt></ruby><ruby>光<rt>ひかり</rt></ruby>のこと。</span>
+<span class="line-romaji">so u ma sa ni ko mo re bi ko mo re bi ko no wa no a i da ka ra sa shi ko mu hi ka ri no ko to</span>
+<span class="line-en">Exactly. Komorebi. It's the light that filters through leaves in the trees. That soft, dappled sunlight coming through branches.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>英語<rt>えいご</rt></ruby>だと「sunlight through the leaves」って<ruby>言う<rt>いう</rt></ruby>しかないけど、 <ruby>日本語<rt>にほんご</rt></ruby>はそれを<ruby>一言<rt>ひとこと</rt></ruby>で<ruby>言え<rt>いえ</rt></ruby>るんだよね。</span>
+<span class="line-romaji">e i go da to s u n l i g h t t h r o u g h t h e l e a v e s t te [言] u shi ka na i ke do ni ho n go wa so re o [一] [言] de [言] e ru n da yo ne</span>
+<span class="line-en">In English you'd have to say "sunlight filtering through the leaves" — five whole words — and it still doesn't feel the same. Japanese just has a single word and it's beautiful.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本文化<rt>にほんぶんか</rt></ruby>の<ruby>中<rt>なか</rt></ruby>では、<ruby>自然<rt>しぜん</rt></ruby>がとても<ruby>大切<rt>たいせつ</rt></ruby>にされてるから、 <ruby>自然<rt>しぜん</rt></ruby>を<ruby>表す<rt>あらわす</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>がたくさんあるの。</span>
+<span class="line-romaji">ni ho n bu n ka no [中] de wa shi ze n ga to te mo ta i se tsu ni sa re te ru ka ra shi ze n o [表] su ko to ba ga ta ku sa n a ru no</span>
+<span class="line-en">I think it speaks to how deeply nature is valued in Japanese culture. The language has so many words for natural phenomena that feel almost invisible in English.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>他に<rt>ほかに</rt></ruby>もある？</span>
+<span class="line-romaji">[他] ni mo a ru？</span>
+<span class="line-en">Are there more like that?</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">たくさんあるよ。<ruby>例えば<rt>たとえば</rt></ruby>「<ruby>物の哀れ<rt>もののあわれ</rt></ruby>」（もののあわれ）。 <ruby>美しい<rt>うつくしい</rt></ruby>ものが<ruby>消えて<rt>きえて</rt></ruby>いく<ruby>時の<rt>ときの</rt></ruby>、<ruby>切なく<rt>せつなく</rt></ruby>て<ruby>温かい<rt>あたたかい</rt></ruby><ruby>気持ち<rt>きもち</rt></ruby>。 <ruby>桜<rt>さくら</rt></ruby>が<ruby>散る<rt>ちる</rt></ruby><ruby>時に<rt>ときに</rt></ruby><ruby>感じる<rt>かんじる</rt></ruby>ような<ruby>気持ち<rt>きもち</rt></ruby>。</span>
+<span class="line-romaji">ta ku sa n a ru yo [例] e ba mo no no a wa re mo no no a wa re u tsu ku shi i mo no ga ki e te i ku [時] no [切] na ku te a ta ta ka i [気] [持] chi sa ku ra ga chi ru [時] ni ka n ji ru yo u na [気] [持] chi</span>
+<span class="line-en">So many. One I love is *mono no aware*. It's this bittersweet feeling — the beauty in things passing away. Like watching cherry blossoms fall and feeling both moved and a little sad at the same time. The Japanese have a word for that exact feeling.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あー、それ、<ruby>桜<rt>さくら</rt></ruby>を<ruby>見る<rt>みる</rt></ruby>たびに<ruby>感じる<rt>かんじる</rt></ruby><ruby>感覚<rt>かんかく</rt></ruby>だよね。 でも<ruby>英語<rt>えいご</rt></ruby>だとずっと「なんか、いい<ruby>感じ<rt>かんじ</rt></ruby>... でも<ruby>切ない<rt>せつない</rt></ruby>...」みたいな<ruby>感じ<rt>かんじ</rt></ruby>だった。</span>
+<span class="line-romaji">aa so re sa ku ra o [見] ru ta bi ni ka n ji ru ka n ka ku da yo ne de mo e i go da to zu t to na n ka i i [感] ji de mo se tsu na i mi ta i na [感] ji da t ta</span>
+<span class="line-en">I've had that feeling so many times and never had a word for it. In English I'd just be like "it's... nice? But also kind of sad? I don't know." And Japanese just goes — *mono no aware*. Done.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">それがね、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ぶ<rt>まなぶ</rt></ruby>ことの<ruby>魔法<rt>まほう</rt></ruby>だと<ruby>思う<rt>おもう</rt></ruby>。 <ruby>新しい<rt>あたらしい</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>を<ruby>学ぶ<rt>まなぶ</rt></ruby>んじゃなくて、ずっと<ruby>感じ<rt>かんじ</rt></ruby>てたけど<ruby>名前<rt>なまえ</rt></ruby>がなかったものに <ruby>名前<rt>なまえ</rt></ruby>がつく<ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">so re ga ne ni ho n go o [学] bu ko to no ma ho u da to [思] u [新] shi i ko to ba o [学] bu n ja na ku te zu t to [感] ji te ta ke do na ma e ga na ka t ta mo no ni na ma e ga tsu ku [感] ji</span>
+<span class="line-en">And I think that's part of what makes language learning so quietly powerful. You're not just learning new words. You're gaining names for feelings you've always had but never had words for.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、なんか<ruby>感動<rt>かんどう</rt></ruby>する。</span>
+<span class="line-romaji">so re na n ka [感] [動] su ru</span>
+<span class="line-en">Okay, that genuinely gave me chills.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「わびさび」って<ruby>聞い<rt>きい</rt></ruby>たことある？</span>
+<span class="line-romaji">wa bi sa bi t te [聞] i ta ko to a ru？</span>
+<span class="line-en">Have you heard of *wabi-sabi*?</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えっと... なんとなく<ruby>知って<rt>しって</rt></ruby>るけど、ちゃんとした<ruby>意味<rt>いみ</rt></ruby>は<ruby>知ら<rt>しら</rt></ruby>ないな。</span>
+<span class="line-romaji">e t to na n to na ku [知] t te ru ke do cha n to shi ta i mi wa [知] ra na i na</span>
+<span class="line-en">I've heard the term but I couldn't really explain it if someone asked me.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「わびさび」はね、<ruby>不完全<rt>ふかんぜん</rt></ruby>なものや、<ruby>古い<rt>ふるい</rt></ruby>もの、 <ruby>時間<rt>じかん</rt></ruby>が<ruby>経った<rt>たった</rt></ruby>ものの<ruby>中に<rt>なかに</rt></ruby><ruby>美しさ<rt>うつくしさ</rt></ruby>を<ruby>見つ<rt>みつ</rt></ruby>けること。 <ruby>傷<rt>きず</rt></ruby>や<ruby>欠け<rt>かけ</rt></ruby>があるお<ruby>茶碗<rt>ちゃわん</rt></ruby>の<ruby>方が<rt>ほうが</rt></ruby>、<ruby>完璧<rt>かんぺき</rt></ruby>なものより<ruby>味<rt>あじ</rt></ruby>がある、みたいな<ruby>感覚<rt>かんかく</rt></ruby>。</span>
+<span class="line-romaji">wa bi sa bi wa ne fu ka n ze n na mo no ya fu ru i mo no ji ka n ga ta t ta mo no no [中] ni u tsu ku shi sa o [見] tsu ke ru ko to [傷] ya [欠] ke ga a ru o cha wa n no [方] ga ka n pe ki na mo no yo ri [味] ga a ru mi ta i na ka n ka ku</span>
+<span class="line-en">Wabi-sabi is the appreciation of beauty in imperfection and impermanence. An old, cracked tea bowl that's been repaired with gold — that's wabi-sabi. A mossy stone in a garden. A faded wooden door. Things that show age, wear, and the passage of time as something to cherish, not fix.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">なんか、すごく<ruby>優しい<rt>やさしい</rt></ruby><ruby>考え方<rt>かんがえかた</rt></ruby>だよね。 <ruby>完璧<rt>かんぺき</rt></ruby>じゃなくていい、みたいな。</span>
+<span class="line-romaji">na n ka su go ku [優] shi i [考] e [方] da yo ne ka n pe ki ja na ku te i i mi ta i na</span>
+<span class="line-en">That's such a gentle way to look at the world. Like permission to stop chasing perfection. Things are more beautiful *because* they're imperfect.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうなの。<ruby>日本語<rt>にほんご</rt></ruby><ruby>学習<rt>がくしゅう</rt></ruby>にも<ruby>当て<rt>あて</rt></ruby>はまると<ruby>思う<rt>おもう</rt></ruby>。 <ruby>完璧<rt>かんぺき</rt></ruby>に<ruby>話せ<rt>はなせ</rt></ruby>なくてもいい。 その<ruby>途中<rt>とちゅう</rt></ruby>の<ruby>姿<rt>すがた</rt></ruby>が、もう<ruby>美しい<rt>うつくしい</rt></ruby>んだよ。</span>
+<span class="line-romaji">so u na no ni ho n go [学] [習] ni mo [当] te wa ma ru to [思] u ka n pe ki ni [話] se na ku te mo i i so no [途] [中] no [姿] ga mo u u tsu ku shi i n da yo</span>
+<span class="line-en">And I think it applies to learning Japanese too. You don't have to be perfect. The cracked tea bowl version of your Japanese — full of mistakes and effort — that's already something worth appreciating.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「わびさびな<ruby>日本語<rt>にほんご</rt></ruby><ruby>学習者<rt>がくしゅうしゃ</rt></ruby>」か。なんかいい<ruby>響き<rt>ひびき</rt></ruby>だな。</span>
+<span class="line-romaji">wa bi sa bi na ni ho n go ga ku shu u sha ka na n ka i i [響] ki da na</span>
+<span class="line-en">"A wabi-sabi Japanese learner." I love that framing. I'm going to hold onto that.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="discovery3"><div class="section-label">✦ DISCOVERY THREE: The Culture Lives in the Language</div></div>
+<div class="section" data-section="discovery3">
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ん<rt>まなん</rt></ruby>でいくとね、<ruby>言葉<rt>ことば</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>が<ruby>隠れてる<rt>かくれてる</rt></ruby>って<ruby>気づく<rt>きづく</rt></ruby>の。</span>
+<span class="line-romaji">ni ho n go o [学] n de i ku to ne ko to ba no [中] ni bu n ka ga ka ku re te ru t te ki zu ku no</span>
+<span class="line-en">There's something else that surprises people — how much of Japanese culture is hiding *inside* the language itself.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">どういうこと？</span>
+<span class="line-romaji">do u i u ko to？</span>
+<span class="line-en">What do you mean?</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>例えば<rt>たとえば</rt></ruby>「<ruby>いただきます<rt>いただきます</rt></ruby>」。 <ruby>ご飯<rt>ごはん</rt></ruby>を<ruby>食べる<rt>たべる</rt></ruby><ruby>前<rt>まえ</rt></ruby>に<ruby>言う<rt>いう</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>。 これ、どう<ruby>翻訳<rt>ほんやく</rt></ruby>する？</span>
+<span class="line-romaji">[例] e ba i ta da ki ma su go wa n o ta be ru [前] ni [言] u ko to ba ko re do u ho n ya ku su ru？</span>
+<span class="line-en">Take *itadakimasu*（いただきます）. You say it before eating. But how do you translate it?</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>いただきます<rt>いただきます</rt></ruby>」...「Let's eat!」？でもなんか<ruby>違う<rt>ちがう</rt></ruby><ruby>気が<rt>きが</rt></ruby>する。</span>
+<span class="line-romaji">i ta da ki ma su L e t ' s e a t!？ de mo na n ka [違] u [気] ga su ru</span>
+<span class="line-en">"Let's eat"? I mean, that's what I used at first but... it doesn't feel right.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうなの。「<ruby>いただきます<rt>いただきます</rt></ruby>」はただ「<ruby>食べ<rt>たべ</rt></ruby>よう」じゃないの。 <ruby>食べ物<rt>たべもの</rt></ruby>を<ruby>育てて<rt>そだてて</rt></ruby>くれた<ruby>人<rt>ひと</rt></ruby>、<ruby>料理<rt>りょうり</rt></ruby>してくれた<ruby>人<rt>ひと</rt></ruby>、 そして<ruby>命<rt>いのち</rt></ruby>をくれた<ruby>動物<rt>どうぶつ</rt></ruby>や<ruby>植物<rt>しょくぶつ</rt></ruby>への<ruby>感謝<rt>かんしゃ</rt></ruby>を<ruby>込め<rt>こめ</rt></ruby>た<ruby>言葉<rt>ことば</rt></ruby>なの。</span>
+<span class="line-romaji">so u na no i ta da ki ma su wa ta da [食] be yo u ja na i no ta be mo no o so da te te ku re ta hi to ryo u ri shi te ku re ta hi to so shi te i no chi o ku re ta do u bu tsu ya sho ku bu tsu e no ka n sha o [込] me ta ko to ba na no</span>
+<span class="line-en">Right. It's not just "let's eat." It's a gesture of gratitude — to the person who grew the food, to the person who cooked it, and even to the living things that gave their lives to become the meal. It holds all of that in five syllables.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えーっ！じゃあ「<ruby>いただきます<rt>いただきます</rt></ruby>」って<ruby>言う<rt>いう</rt></ruby>たびに、それ<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>感じ<rt>かんじ</rt></ruby>てるの？</span>
+<span class="line-romaji">ee！ ja a i ta da ki ma su t te [言] u ta bi ni so re ze n bu [感] ji te ru no？</span>
+<span class="line-en">Wait, so every time someone says itadakimasu they're feeling *all* of that?</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうだよ。<ruby>日本<rt>にほん</rt></ruby>に<ruby>住んでた<rt>すんでた</rt></ruby><ruby>時<rt>とき</rt></ruby>、<ruby>食事<rt>しょくじ</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>毎回<rt>まいかい</rt></ruby><ruby>言う<rt>いう</rt></ruby>んだけど、 なんか、<ruby>食べ物<rt>たべもの</rt></ruby>との<ruby>関係<rt>かんけい</rt></ruby>が<ruby>変わ<rt>かわ</rt></ruby>った<ruby>気が<rt>きが</rt></ruby>した。 もっと<ruby>丁寧<rt>ていねい</rt></ruby>に、<ruby>大切<rt>たいせつ</rt></ruby>に<ruby>感じる<rt>かんじる</rt></ruby>ようになった。</span>
+<span class="line-romaji">so u da yo [日] [本] ni su n de ta [時] sho ku ji no [前] ni ma i ka i [言] u n da ke do na n ka ta be mo no to no ka n ke i ga [変] wa t ta [気] ga shi ta mo t to te i ne i ni ta i se tsu ni ka n ji ru yo u ni na t ta</span>
+<span class="line-en">When I was living in Japan, saying it every single meal — something shifted. The relationship with food felt different. More grateful. More intentional. It's a tiny ritual but it carries a lot of weight.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、すごくいい<ruby>話<rt>はなし</rt></ruby>だな。 <ruby>言葉<rt>ことば</rt></ruby><ruby>一つ<rt>ひとつ</rt></ruby>で、そんなに<ruby>変わ<rt>かわ</rt></ruby>るんだ。</span>
+<span class="line-romaji">so re su go ku i i [話] da na ko to ba [一] tsu de so n na ni [変] wa ru n da</span>
+<span class="line-en">That's beautiful. One little word and it changes how you feel about your whole meal.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「おつかれさま」（<ruby>お疲れ様<rt>おつかれさま</rt></ruby>）も、<ruby>英語<rt>えいご</rt></ruby>に<ruby>訳し<rt>やくし</rt></ruby>にくい<ruby>言葉<rt>ことば</rt></ruby>ね。 「You must be tired」でも「Good work」でもちょっと<ruby>違う<rt>ちがう</rt></ruby>。</span>
+<span class="line-romaji">o tsu ka re sa ma o tsu ka re sa ma mo e i go ni [訳] shi ni ku i ko to ba ne Y o u m u s t b e t i r e d de mo G o o d w o r k de mo cho t to [違] u</span>
+<span class="line-en">*Otsukaresama*（お疲れ様）is another one that's hard to translate. "You must be tired" or "good work" — neither really captures it.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あー、あれ！<ruby>仕事<rt>しごと</rt></ruby><ruby>終わった<rt>おわった</rt></ruby><ruby>時に<rt>ときに</rt></ruby><ruby>言う<rt>いう</rt></ruby>やつだよね？</span>
+<span class="line-romaji">aa a re！ shi go to o wa t ta [時] ni [言] u ya tsu da yo ne？</span>
+<span class="line-en">Oh, I love this one! That's what you say when someone finishes work, right?</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。でも「ありがとう」とも「<ruby>お疲れ様<rt>おつかれさま</rt></ruby>」とも<ruby>違う<rt>ちがう</rt></ruby>の。 「あなたが<ruby>頑張った<rt>がんばった</rt></ruby>ことを、<ruby>私<rt>わたし</rt></ruby>は<ruby>見て<rt>みて</rt></ruby>るよ」っていう<ruby>意味<rt>いみ</rt></ruby>が<ruby>込め<rt>こめ</rt></ruby>られてるんだよね。 お<ruby>互い<rt>たがい</rt></ruby>の<ruby>苦労<rt>くろう</rt></ruby>を<ruby>認め合う<rt>みとめあう</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>。</span>
+<span class="line-romaji">so u de mo a ri ga to u to mo o tsu ka re sa ma to mo [違] u no a na ta ga ga n ba t ta ko to o wa ta shi wa [見] te ru yo t te i u i mi ga [込] me ra re te ru n da yo ne o [互] i no ku ro u o mi to me a u ko to ba</span>
+<span class="line-en">It's more like... "I see your effort. I acknowledge what you went through today." It's mutual recognition. You're not just thanking someone or complimenting them — you're saying, *I see you. I see what today cost you.*</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、<ruby>日本語<rt>にほんご</rt></ruby>にあって<ruby>英語<rt>えいご</rt></ruby>にないの、ちょっとうらやましいな。</span>
+<span class="line-romaji">so re ni ho n go ni a t te e i go ni na i no cho t to u ra ya ma shi i na</span>
+<span class="line-en">English really needs a word like that. Some days you just want someone to go *otsukaresama* and really mean it.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ。でもね、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ぶ<rt>まなぶ</rt></ruby>と、こういう<ruby>気持ち<rt>きもち</rt></ruby>を<ruby>表現<rt>ひょうげん</rt></ruby>できるようになるから、 <ruby>英語<rt>えいご</rt></ruby>で<ruby>話す<rt>はなす</rt></ruby><ruby>時<rt>とき</rt></ruby>も、<ruby>何か<rt>なにか</rt></ruby><ruby>変わ<rt>かわ</rt></ruby>る<ruby>気が<rt>きが</rt></ruby>する。</span>
+<span class="line-romaji">fu fu de mo ne ni ho n go o [学] bu to ko u i u [気] [持] chi o hyo u ge n de ki ru yo u ni na ru ka ra e i go de [話] su [時] mo [何] ka [変] wa ru [気] ga su ru</span>
+<span class="line-en">Ha. But learning Japanese does that — it gives you a wider emotional vocabulary even when you go back to English.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>ごめんなさい<rt>ごめんなさい</rt></ruby>」と「<ruby>すみません<rt>すみません</rt></ruby>」の<ruby>違い<rt>ちがい</rt></ruby>も<ruby>最初<rt>さいしょ</rt></ruby>わからなかったな。</span>
+<span class="line-romaji">go me n na sa i to su mi ma se n no [違] i mo sa i sho wa ka ra na ka t ta na</span>
+<span class="line-en">Oh, speaking of untranslatable things — can we talk about apologies? Because I was very confused for a long time about *gomen nasai* versus *sumimasen*.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あ、いい<ruby>テーマ<rt>てーま</rt></ruby>！ <ruby>簡単<rt>かんたん</rt></ruby>に<ruby>言う<rt>いう</rt></ruby>と、「<ruby>ごめんなさい<rt>ごめんなさい</rt></ruby>」は「I'm sorry」で、 「<ruby>すみません<rt>すみません</rt></ruby>」は「Excuse me」に<ruby>近い<rt>ちかい</rt></ruby>んだけど、もっと<ruby>深い<rt>ふかい</rt></ruby><ruby>意味<rt>いみ</rt></ruby>があるの。</span>
+<span class="line-romaji">a i i tee ma！ [簡] [単] ni [言] u to go me n na sa i wa I ' m s o r r y de su mi ma se n wa E x c u s e m e ni [近] i n da ke do mo t to [深] i i mi ga a ru no</span>
+<span class="line-en">Great topic. Simply put, *gomen nasai* is closer to "I'm sorry" — you use it when you've done something wrong and genuinely regret it. But *sumimasen* is more complex.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>すみません<rt>すみません</rt></ruby>」、よく<ruby>聞く<rt>きく</rt></ruby>よね。<ruby>毎回<rt>まいかい</rt></ruby>の<ruby>会話<rt>かいわ</rt></ruby>に<ruby>出て<rt>でて</rt></ruby>くる<ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">su mi ma se n yo ku [聞] ku yo ne ma i ka i no ka i wa ni [出] te ku ru [感] ji</span>
+<span class="line-en">I noticed *sumimasen* everywhere. It's used constantly.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうなの。「<ruby>すみません<rt>すみません</rt></ruby>」は「すまない」という<ruby>言葉<rt>ことば</rt></ruby>からきていて、 「<ruby>私<rt>わたし</rt></ruby>の<ruby>心は<rt>こころは</rt></ruby><ruby>晴れ<rt>はれ</rt></ruby>ない」っていう<ruby>意味<rt>いみ</rt></ruby>があるの。 <ruby>謝る<rt>あやまる</rt></ruby>だけじゃなくて、<ruby>誰か<rt>だれか</rt></ruby>に<ruby>声<rt>こえ</rt></ruby>をかける<ruby>時<rt>とき</rt></ruby>も、<ruby>感謝<rt>かんしゃ</rt></ruby>を<ruby>表す<rt>あらわす</rt></ruby><ruby>時<rt>とき</rt></ruby>も<ruby>使う<rt>つかう</rt></ruby>。 「ありがとう」の<ruby>代わり<rt>かわり</rt></ruby>に<ruby>使う<rt>つかう</rt></ruby><ruby>人<rt>ひと</rt></ruby>もいるくらい。</span>
+<span class="line-romaji">so u na no su mi ma se n wa su ma na i to i u ko to ba ka ra ki te i te wa ta shi no [心] wa [晴] re na i t te i u i mi ga a ru no [謝] ru da ke ja na ku te [誰] ka ni [声] o ka ke ru [時] mo ka n sha o [表] su [時] mo [使] u a ri ga to u no [代] wa ri ni [使] u hi to mo i ru ku ra i</span>
+<span class="line-en">*Sumimasen* comes from a word meaning "it cannot be settled" — like your heart isn't at ease. It's used to get someone's attention, to apologize, and even to express gratitude. In some situations, it carries more weight than *arigatou* — like the person feels your kindness was too much to simply thank, so they say *sumimasen* instead, meaning they feel indebted.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、<ruby>深い<rt>ふかい</rt></ruby>な。「ありがとう」より<ruby>重い<rt>おもい</rt></ruby>こともあるんだ。</span>
+<span class="line-romaji">so re [深] i na a ri ga to u yo ri [重] i ko to mo a ru n da</span>
+<span class="line-en">So it's actually a heavier word sometimes than "thank you." I had no idea. I was just using it to get waiters' attention.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ、それも<ruby>正しい<rt>ただしい</rt></ruby><ruby>使い方<rt>つかいかた</rt></ruby>だよ。 <ruby>日本語<rt>にほんご</rt></ruby>って、<ruby>同じ<rt>おなじ</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>がいろんな<ruby>場面<rt>ばめん</rt></ruby>でいろんな<ruby>意味<rt>いみ</rt></ruby>を<ruby>持つ<rt>もつ</rt></ruby>の。 <ruby>文脈<rt>ぶんみゃく</rt></ruby>が<ruby>全て<rt>すべて</rt></ruby>、って<ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">fu fu so re mo [正] shi i [使] i [方] da yo ni ho n go t te [同] ji ko to ba ga i ro n na [場] [面] de i ro n na i mi o [持] tsu no bu n mya ku ga [全] te t te [感] ji</span>
+<span class="line-en">Ha! And that's a completely correct use. But it shows something important about Japanese — the same word can do very different things depending on context and tone. Japanese is deeply, deeply contextual.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="discovery4"><div class="section-label">✦ DISCOVERY FOUR: Communication Feels Different</div></div>
+<div class="section" data-section="discovery4">
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">でも、<ruby>日本語<rt>にほんご</rt></ruby>って<ruby>英語<rt>えいご</rt></ruby>と<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違う<rt>ちがう</rt></ruby>よね。 <ruby>文<rt>ぶん</rt></ruby>の<ruby>組み立て方<rt>くみたてかた</rt></ruby>が<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違う<rt>ちがう</rt></ruby>じゃん。</span>
+<span class="line-romaji">de mo ni ho n go t te e i go to [全] [然] [違] u yo ne bu n no ku mi ta te ka ta ga [全] [然] [違] u ja n</span>
+<span class="line-en">Okay, I do want to talk about this though — because Japanese sentence structure is genuinely wild compared to English. Like, everything's backwards?</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ、「<ruby>逆<rt>ぎゃく</rt></ruby>」に<ruby>感じる<rt>かんじる</rt></ruby>よね。 <ruby>英語<rt>えいご</rt></ruby>は「I eat sushi」だけど、 <ruby>日本語<rt>にほんご</rt></ruby>は「<ruby>私<rt>わたし</rt></ruby>は<ruby>寿司<rt>すし</rt></ruby>を<ruby>食べます<rt>たべます</rt></ruby>」— <ruby>動詞<rt>どうし</rt></ruby>が<ruby>最後<rt>さいご</rt></ruby>に<ruby>来る<rt>くる</rt></ruby>。</span>
+<span class="line-romaji">fu fu gya ku ni ka n ji ru yo ne e i go wa I e a t s u s h i da ke do ni ho n go wa wa ta shi wa su shi o ta be ma su do u shi ga sa i go ni [来] ru</span>
+<span class="line-en">It does feel reversed at first! In English you say "I eat sushi." In Japanese it's "Watashi wa sushi wo tabemasu" — the verb comes at the end. "I sushi eat."</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>最初<rt>さいしょ</rt></ruby>は<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>慣れ<rt>なれ</rt></ruby>なくて、<ruby>頭<rt>あたま</rt></ruby>の<ruby>中<rt>なか</rt></ruby>がぐるぐるしてた。</span>
+<span class="line-romaji">sa i sho wa [全] [然] [慣] re na ku te a ta ma no [中] ga gu ru gu ru shi te ta</span>
+<span class="line-en">I spent weeks feeling like my brain was reorganizing itself. Like little workers in there going "No no, we have to redo the whole filing system."</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">でもね、<ruby>慣れ<rt>なれ</rt></ruby>てくると、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>方が<rt>ほうが</rt></ruby><ruby>自然に<rt>しぜんに</rt></ruby><ruby>感じる<rt>かんじる</rt></ruby>ことがあるんだよ。 「<ruby>私<rt>わたし</rt></ruby>は...」って<ruby>言って<rt>いって</rt></ruby>から、ゆっくり<ruby>考え<rt>かんがえ</rt></ruby>られる。 <ruby>言いたい<rt>いいたい</rt></ruby>ことを<ruby>最後<rt>さいご</rt></ruby>に<ruby>決められる<rt>きめられる</rt></ruby>。</span>
+<span class="line-romaji">de mo ne [慣] re te ku ru to ni ho n go no [方] ga shi ze n ni ka n ji ru ko to ga a ru n da yo wa ta shi wa t te [言] t te ka ra yu k ku ri [考] e ra re ru i i ta i ko to o sa i go ni ki me ra re ru</span>
+<span class="line-en">But here's the thing — once you get used to it, there's something about the structure that actually feels more thoughtful. You establish the subject, you set up the context, and the most important thing — the action — comes at the very end. You build toward meaning.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>確かに<rt>たしかに</rt></ruby>、<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>話し<rt>はなし</rt></ruby>てる<ruby>人<rt>ひと</rt></ruby>って、なんか<ruby>落ち着い<rt>おちつい</rt></ruby>て<ruby>聞こ<rt>きこ</rt></ruby>える<ruby>気が<rt>きが</rt></ruby>する。</span>
+<span class="line-romaji">[確] ka ni ni ho n go de [話] shi te ru hi to t te na n ka [落] chi [着] i te [聞] ko e ru [気] ga su ru</span>
+<span class="line-en">You know, Japanese conversations do feel calmer to me. Like there's more... room in them somehow.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">それはね、<ruby>間<rt>あいだ</rt></ruby>（ま）の<ruby>文化<rt>ぶんか</rt></ruby>だと<ruby>思う<rt>おもう</rt></ruby>。 「<ruby>間<rt>あいだ</rt></ruby>」— <ruby>沈黙<rt>ちんもく</rt></ruby>や<ruby>余白<rt>よはく</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>にする<ruby>考え方<rt>かんがえかた</rt></ruby>。 <ruby>日本語<rt>にほんご</rt></ruby>ではね、<ruby>言わ<rt>いわ</rt></ruby>ないことにも<ruby>意味<rt>いみ</rt></ruby>があるの。</span>
+<span class="line-romaji">so re wa ne a i da ma no bu n ka da to [思] u a i da chi n mo ku ya yo wa ku o ta i se tsu ni su ru [考] e [方] ni ho n go de wa ne [言] wa na i ko to ni mo i mi ga a ru no</span>
+<span class="line-en">I think that's connected to something called *ma* （間）— the idea of space and silence having meaning. In Japanese communication, what you *don't* say can be just as important as what you do say.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、<ruby>英語<rt>えいご</rt></ruby>しか<ruby>知ら<rt>しら</rt></ruby>なかった<ruby>時<rt>とき</rt></ruby>は<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>気づ<rt>きづ</rt></ruby>かなかったな。</span>
+<span class="line-romaji">so re e i go shi ka [知] ra na ka t ta [時] wa [全] [然] [気] zu ka na ka t ta na</span>
+<span class="line-en">I would never have thought about that before. In English we're so busy filling every silence.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ぶ<rt>まなぶ</rt></ruby>と、コミュニケーションについての<ruby>考え方<rt>かんがえかた</rt></ruby>が <ruby>少し<rt>すこし</rt></ruby><ruby>変わ<rt>かわ</rt></ruby>るかもしれない。</span>
+<span class="line-romaji">so u ni ho n go o [学] bu to ko myu ni kee sho n ni tsu i te no [考] e [方] ga su ko shi [変] wa ru ka mo shi re na i</span>
+<span class="line-en">Learning Japanese can quietly change how you think about communication itself. Not just in Japanese — in every language you speak.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>の<ruby>敬語<rt>けいご</rt></ruby>って、<ruby>最初<rt>さいしょ</rt></ruby>すごく<ruby>難しか<rt>むずかしか</rt></ruby>った。 <ruby>同じ<rt>おなじ</rt></ruby>ことを<ruby>言う<rt>いう</rt></ruby>のに、<ruby>相手<rt>あいて</rt></ruby>によって<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違う<rt>ちがう</rt></ruby><ruby>言い方<rt>いいかた</rt></ruby>をするじゃん。</span>
+<span class="line-romaji">ni ho n go no ke i go t te sa i sho su go ku [難] shi ka t ta [同] ji ko to o [言] u no ni [相] [手] ni yo t te [全] [然] [違] u [言] i [方] o su ru ja n</span>
+<span class="line-en">Can we talk about keigo? Formal speech levels? Because nobody warned me about that. I thought I was learning Japanese and then found out there were multiple versions of it depending on who you're talking to.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ。そうだね、<ruby>敬語<rt>けいご</rt></ruby>は<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>中<rt>なか</rt></ruby>でも<ruby>難しい<rt>むずかしい</rt></ruby>ところの<ruby>一つ<rt>ひとつ</rt></ruby>。 でも<ruby>逆<rt>ぎゃく</rt></ruby>に<ruby>考える<rt>かんがえる</rt></ruby>と、<ruby>言葉<rt>ことば</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby>「あなたをどれだけ<ruby>大切<rt>たいせつ</rt></ruby>にしているか」が ちゃんと<ruby>表れ<rt>あらわれ</rt></ruby>てるって、<ruby>素敵<rt>すてき</rt></ruby>じゃない？</span>
+<span class="line-romaji">fu fu so u da ne ke i go wa ni ho n go no [中] de mo [難] shi i to ko ro no [一] tsu de mo gya ku ni ka n ga e ru to ko to ba no [中] ni a na ta o do re da ke ta i se tsu ni shi te i ru ka ga cha n to [表] re te ru t te [素] [敵] ja na i？</span>
+<span class="line-en">Ha. Yes, keigo — the formal speech system — is one of the more complex parts of Japanese. But I find it beautiful when you step back. The language literally has a built-in mechanism for expressing respect. How you speak to someone tells them exactly how you regard them. That's not a bug. That's a feature.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>確かに<rt>たしかに</rt></ruby>、<ruby>丁寧語<rt>ていねいご</rt></ruby>で<ruby>話さ<rt>はなさ</rt></ruby>れた<ruby>時<rt>とき</rt></ruby>って、なんか<ruby>大切<rt>たいせつ</rt></ruby>にされてる<ruby>感じ<rt>かんじ</rt></ruby>がするよね。</span>
+<span class="line-romaji">[確] ka ni te i ne i go de [話] sa re ta [時] t te na n ka ta i se tsu ni sa re te ru [感] ji ga su ru yo ne</span>
+<span class="line-en">It's true. When someone uses formal language with you, you feel it. You feel the consideration behind the words. It's not just politeness as a rule — it's politeness as care.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>では、<ruby>言葉<rt>ことば</rt></ruby>の<ruby>選び方<rt>えらびかた</rt></ruby>で、その<ruby>人<rt>ひと</rt></ruby>の<ruby>人<rt>ひと</rt></ruby><ruby>柄<rt>がら</rt></ruby>が<ruby>出る<rt>でる</rt></ruby>んだよね。 <ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>話す<rt>はなす</rt></ruby>ことは、<ruby>人<rt>ひと</rt></ruby>への<ruby>敬意<rt>けいい</rt></ruby>の<ruby>表れ<rt>あらわれ</rt></ruby>。</span>
+<span class="line-romaji">ni ho n go de wa ko to ba no [選] bi [方] de so no hi to no hi to [柄] ga [出] ru n da yo ne te i ne i ni [話] su ko to wa hi to e no ke i i no [表] re</span>
+<span class="line-en">In Japanese, the way you choose your words reveals a lot about your character. Speaking carefully is considered a form of respect — for yourself and for the person you're speaking to. It's woven into the grammar itself.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="discovery5"><div class="section-label">✦ DISCOVERY FIVE: Mistakes Are Part of the Joy</div></div>
+<div class="section" data-section="discovery5">
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ちょっと<ruby>聞い<rt>きい</rt></ruby>ていい？ <ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>で、<ruby>一番<rt>いちばん</rt></ruby><ruby>面白い<rt>おもしろい</rt></ruby><ruby>失敗<rt>しっぱい</rt></ruby>って<ruby>何だ<rt>なんだ</rt></ruby>った？</span>
+<span class="line-romaji">cho t to [聞] i te i i？ ni ho n go no be n kyo u de [一] [番] o mo shi ro i shi p pa i t te [何] da t ta？</span>
+<span class="line-en">Okay, I have to ask this — what was your funniest Japanese mistake? Because I have a story and I need to know I'm not alone.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あー、これは<ruby>話さ<rt>はなさ</rt></ruby>ないとね。 <ruby>何<rt>なに</rt></ruby>があったの、ポン？</span>
+<span class="line-romaji">aa ko re wa [話] sa na i to ne [何] ga a t ta no po n？</span>
+<span class="line-en">Oh, we absolutely have to do this. What happened?</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えっとね、<ruby>日本<rt>にほん</rt></ruby>のコンビニで、<ruby>店員<rt>てんいん</rt></ruby>さんに 「あなたは<ruby>温めます<rt>あたためます</rt></ruby>か？」って<ruby>言い<rt>いい</rt></ruby>たかったんだけど、 「<ruby>私<rt>わたし</rt></ruby>は<ruby>温めます<rt>あたためます</rt></ruby>か？」って<ruby>言っち<rt>いっち</rt></ruby>ゃったの。 「あなた」と「<ruby>私<rt>わたし</rt></ruby>」を<ruby>間違えて<rt>まちがえて</rt></ruby>。</span>
+<span class="line-romaji">e t to ne [日] [本] no ko n bi ni de [店] [員] sa n ni a na ta wa a ta ta me ma su ka？ t te [言] i ta ka t ta n da ke do wa ta shi wa a ta ta me ma su ka？ t te [言] c cha t ta no a na ta to wa ta shi o ma chi ga e te</span>
+<span class="line-en">Okay so, I was at a convenience store in Japan. I wanted to ask the staff to heat up my food — I'd practiced this! And I thought I said "would you like to warm this up?" But I mixed up the pronouns and basically asked myself if *I* wanted to warm up. And the staff member just stared at me for a second and then very kindly said yes, as if that had made complete sense.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふふ！でも、それってすごく<ruby>勇気<rt>ゆうき</rt></ruby>があることだよ。 <ruby>話し<rt>はなし</rt></ruby>かけたんだから。</span>
+<span class="line-romaji">fu fu fu！ de mo so re t te su go ku yu u ki ga a ru ko to da yo [話] shi ka ke ta n da ka ra</span>
+<span class="line-en">Ha! But here's the thing — you tried. That takes real courage.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">そうなんだよね。<ruby>最初<rt>さいしょ</rt></ruby>は<ruby>完璧<rt>かんぺき</rt></ruby>に<ruby>話せ<rt>はなせ</rt></ruby>ないと<ruby>恥ずかしい<rt>はずかしい</rt></ruby>って<ruby>思って<rt>おもって</rt></ruby>たけど、 <ruby>日本<rt>にほん</rt></ruby>に<ruby>行った<rt>いった</rt></ruby><ruby>時<rt>とき</rt></ruby>、<ruby>間違えて<rt>まちがえて</rt></ruby>も<ruby>笑っ<rt>わらっ</rt></ruby>てくれたり、<ruby>助け<rt>たすけ</rt></ruby>てくれたり。 <ruby>誰も<rt>だれも</rt></ruby><ruby>怒らなかった<rt>おこらなかった</rt></ruby>。</span>
+<span class="line-romaji">so u na n da yo ne sa i sho wa ka n pe ki ni [話] se na i to wa zu ka shi i t te [思] t te ta ke do [日] [本] ni [行] t ta [時] ma chi ga e te mo [笑] t te ku re ta ri [助] ke te ku re ta ri [誰] mo o ko ra na ka t ta</span>
+<span class="line-en">Right. I used to think I had to be perfect before I could try. But in Japan — every time I made a mistake, people were so kind about it. They'd help me, or they'd smile, or they'd gently say the right version so I could hear it without making me feel stupid.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">それがね、<ruby>日本語<rt>にほんご</rt></ruby><ruby>学習<rt>がくしゅう</rt></ruby>の<ruby>一番<rt>いちばん</rt></ruby>の<ruby>贈り物<rt>おくりもの</rt></ruby>だと<ruby>思う<rt>おもう</rt></ruby>。 <ruby>間<rt>あいだ</rt></ruby><ruby>違い<rt>ちがい</rt></ruby>を<ruby>通し<rt>とうし</rt></ruby>て、<ruby>本物<rt>ほんもの</rt></ruby>の<ruby>人<rt>ひと</rt></ruby><ruby>間<rt>あいだ</rt></ruby>と<ruby>繋がれる<rt>つながれる</rt></ruby>こと。</span>
+<span class="line-romaji">so re ga ne ni ho n go [学] [習] no [一] [番] no o ku ri mo no da to [思] u a i da [違] i o [通] shi te [本] [物] no hi to a i da to tsu na ga re ru ko to</span>
+<span class="line-en">I think that's actually one of the great gifts of learning any language — and Japanese especially. The mistakes aren't failures. They're connection points. Every mistake is a moment where a real person reaches across and helps you.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>確かに<rt>たしかに</rt></ruby>。<ruby>失敗<rt>しっぱい</rt></ruby>した<ruby>時の<rt>ときの</rt></ruby><ruby>方が<rt>ほうが</rt></ruby>、<ruby>覚え<rt>おぼえ</rt></ruby>てることが<ruby>多い<rt>おおい</rt></ruby><ruby>気が<rt>きが</rt></ruby>する。</span>
+<span class="line-romaji">[確] ka ni shi p pa i shi ta [時] no [方] ga [覚] e te ru ko to ga [多] i [気] ga su ru</span>
+<span class="line-en">And I remember the things I got wrong way more clearly than the things I got right. Failure is sticky. In the best way.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>私<rt>わたし</rt></ruby>の<ruby>失敗<rt>しっぱい</rt></ruby>はね、「はし」という<ruby>言葉<rt>ことば</rt></ruby>。 これ、<ruby>発音<rt>はつおん</rt></ruby>によって<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>意味<rt>いみ</rt></ruby>が<ruby>変わ<rt>かわ</rt></ruby>るの。 「<ruby>橋<rt>はし</rt></ruby>」（はし）は<ruby>橋<rt>はし</rt></ruby>。「<ruby>箸<rt>はし</rt></ruby>」（はし）は<ruby>食べる<rt>たべる</rt></ruby>ためのお<ruby>箸<rt>はし</rt></ruby>。「<ruby>端<rt>はし</rt></ruby>」（はし）は<ruby>端<rt>はし</rt></ruby>っこ。</span>
+<span class="line-romaji">wa ta shi no shi p pa i wa ne wa shi to i u ko to ba ko re wa tsu o n ni yo t te [全] [然] i mi ga [変] wa ru no wa shi wa shi wa ha shi wa shi wa shi wa ta be ru ta me no o wa shi wa shi wa shi wa ha shi k ko</span>
+<span class="line-en">My classic mistake was with the word *hashi*. Which can mean bridge, chopsticks, or edge — all depending on pitch and context. I once confidently asked someone to pass me the bridge.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えっ！<ruby>笑<rt>わらい</rt></ruby>！どんな<ruby>顔<rt>かお</rt></ruby>された？</span>
+<span class="line-romaji">e！ [笑]！ do n na [顔] sa re ta？</span>
+<span class="line-en">Haha! What did they do?!</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">テーブルをじっと<ruby>見て<rt>みて</rt></ruby>、それから<ruby>私<rt>わたし</rt></ruby>を<ruby>見て<rt>みて</rt></ruby>、それからまたテーブルを<ruby>見て<rt>みて</rt></ruby>た。 すごく<ruby>困っ<rt>こまっ</rt></ruby>た<ruby>顔<rt>かお</rt></ruby>で。</span>
+<span class="line-romaji">tee bu ru o ji t to [見] te so re ka ra wa ta shi o [見] te so re ka ra ma ta tee bu ru o [見] te ta su go ku [困] t ta [顔] de</span>
+<span class="line-en">They looked at the table. Then looked at me. Then looked at the table again. Very confused. Very polite. Very unsure what to do with me.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>最高<rt>さいこう</rt></ruby>のエピソードだよ！</span>
+<span class="line-romaji">sa i ko u no e pi soo do da yo！</span>
+<span class="line-en">That is the greatest story. I feel so much better about my mistakes now.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ほかにも、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>失敗<rt>しっぱい</rt></ruby>あるある、って<ruby>色々<rt>いろいろ</rt></ruby>あるよね。 「<ruby>暑い<rt>あつい</rt></ruby>」（あつい）と「<ruby>厚い<rt>あつい</rt></ruby>」（あつい）と「<ruby>熱い<rt>あつい</rt></ruby>」（あつい）。 <ruby>同じ<rt>おなじ</rt></ruby><ruby>読み方<rt>よみかた</rt></ruby>で<ruby>意味<rt>いみ</rt></ruby>が<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違う<rt>ちがう</rt></ruby>。</span>
+<span class="line-romaji">ho ka ni mo ni ho n go no shi p pa i a ru a ru t te [色] [々] a ru yo ne a tsu i a tsu i to a tsu i a tsu i to a tsu i a tsu i [同] ji [読] mi [方] de i mi ga [全] [然] [違] u</span>
+<span class="line-en">There are so many wonderful pitfalls. *Atsui* can mean hot weather, thick, or physically hot to the touch — same sound, completely different kanji, completely different meaning. Context is everything.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あとね、ぼく<ruby>一回<rt>いっかい</rt></ruby>「<ruby>彼女<rt>かのじょ</rt></ruby>」（かのじょ）と「<ruby>彼<rt>かれ</rt></ruby>」（かれ）を <ruby>紹介<rt>しょうかい</rt></ruby>する<ruby>時に<rt>ときに</rt></ruby><ruby>間違えて<rt>まちがえて</rt></ruby><ruby>使った<rt>つかった</rt></ruby>ことある。 「<ruby>彼女<rt>かのじょ</rt></ruby>がいる」って<ruby>言い<rt>いい</rt></ruby>たかっただけなのに。</span>
+<span class="line-romaji">a to ne bo ku [一] [回] ka no jo ka no jo to ka re ka re o [紹] [介] su ru [時] ni ma chi ga e te [使] t ta ko to a ru ka no jo ga i ru t te [言] i ta ka t ta da ke na no ni</span>
+<span class="line-en">Oh, I accidentally introduced someone's boyfriend as their girlfriend once because I mixed up *kare* and *kanojo*. The silence afterwards was very long.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ！でも、みんなその<ruby>経験<rt>けいけん</rt></ruby>を<ruby>通って<rt>とおって</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手く<rt>うまく</rt></ruby>なるんだよ。 <ruby>失敗<rt>しっぱい</rt></ruby>のない<ruby>日本語<rt>にほんご</rt></ruby><ruby>学習<rt>がくしゅう</rt></ruby>はないと<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">fu fu！ de mo mi n na so no [経] [験] o [通] t te ni ho n go ga u ma ku na ru n da yo shi p pa i no na i ni ho n go [学] [習] wa na i to [思] u</span>
+<span class="line-en">Ha! But truly, every single person who becomes good at Japanese walked through a very long gallery of hilarious mistakes to get there. The mistake is the lesson.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、すごく<ruby>励み<rt>はげみ</rt></ruby>になる<ruby>言葉<rt>ことば</rt></ruby>だな。 <ruby>失敗<rt>しっぱい</rt></ruby>していいんだ、って。</span>
+<span class="line-romaji">so re su go ku [励] mi ni na ru ko to ba da na shi p pa i shi te i i n da t te</span>
+<span class="line-en">That actually makes me feel a lot better about everything. Keep the mistakes coming.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="discovery6"><div class="section-label">✦ DISCOVERY SIX: The First Sentence You Truly Understand</div></div>
+<div class="section" data-section="discovery6">
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">でもね、<ruby>失敗<rt>しっぱい</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>をしたから、<ruby>逆<rt>ぎゃく</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>もしたい。 <ruby>初めて<rt>はじめて</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>が「わかった」と<ruby>感じ<rt>かんじ</rt></ruby>た<ruby>瞬間<rt>しゅんかん</rt></ruby>のこと。</span>
+<span class="line-romaji">de mo ne shi p pa i no [話] o shi ta ka ra gya ku no [話] mo shi ta i wa ji me te ni ho n go ga wa ka t ta to [感] ji ta shu n ka n no ko to</span>
+<span class="line-en">But since we're talking about the hard moments — I want to talk about the other side too. The first time Japanese really clicked for you.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あー、あれは<ruby>覚え<rt>おぼえ</rt></ruby>てるよ。 アニメを<ruby>見て<rt>みて</rt></ruby>た<ruby>時<rt>とき</rt></ruby>、<ruby>字幕<rt>じまく</rt></ruby>を<ruby>読む<rt>よむ</rt></ruby><ruby>前<rt>まえ</rt></ruby>に<ruby>一文<rt>いちぶん</rt></ruby>が<ruby>全部<rt>ぜんぶ</rt></ruby>わかった<ruby>時<rt>とき</rt></ruby>。 「<ruby>僕<rt>ぼく</rt></ruby>はここにいる」って<ruby>言った<rt>いった</rt></ruby>んだけど、 「ここにいる」が<ruby>全部<rt>ぜんぶ</rt></ruby>わかって、すごく<ruby>嬉しく<rt>うれしく</rt></ruby>て。 ちょっと<ruby>泣きそう<rt>なきそう</rt></ruby>になった。</span>
+<span class="line-romaji">aa a re wa [覚] e te ru yo a ni me o [見] te ta [時] ji ma ku o [読] mu [前] ni i chi bu n ga ze n bu wa ka t ta [時] bo ku wa ko ko ni i ru t te [言] t ta n da ke do ko ko ni i ru ga ze n bu wa ka t te su go ku [嬉] shi ku te cho t to na ki so u ni na t ta</span>
+<span class="line-en">I remember the exact moment. I was watching anime — I know, I know — and a character said something and I understood every word before the subtitle appeared. Just a simple sentence. "I'm here." And I just sat there like... I understood that. I actually understood that. I think I teared up a little. Don't judge me.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>全然<rt>ぜんぜん</rt></ruby>おかしくないよ。その<ruby>瞬間<rt>しゅんかん</rt></ruby>って、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>特別<rt>とくべつ</rt></ruby>だもん。 ちゃんと<ruby>感動<rt>かんどう</rt></ruby>していい。</span>
+<span class="line-romaji">[全] [然] o ka shi ku na i yo so no shu n ka n t te ho n to u ni [特] [別] da mo n cha n to [感] [動] shi te i i</span>
+<span class="line-en">Don't apologize for that. That moment is *everything*. You're allowed to feel that.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">なんか、ずっと<ruby>閉ま<rt>しま</rt></ruby>ってた<ruby>扉<rt>とびら</rt></ruby>が<ruby>少し<rt>すこし</rt></ruby><ruby>開い<rt>ひらい</rt></ruby>た<ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">na n ka zu t to [閉] ma t te ta to bi ra ga su ko shi [開] i ta [感] ji</span>
+<span class="line-en">It felt like a door had opened just a crack. And on the other side was this whole world that had always been there but I'd never been able to step into.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>私<rt>わたし</rt></ruby>が<ruby>初めて<rt>はじめて</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を「<ruby>感じ<rt>かんじ</rt></ruby>た」<ruby>瞬間<rt>しゅんかん</rt></ruby>は、 <ruby>日本<rt>にほん</rt></ruby>のおばあさんが<ruby>近所<rt>きんじょ</rt></ruby>の<ruby>子ども<rt>こども</rt></ruby>に<ruby>話し<rt>はなし</rt></ruby>かけてるのを<ruby>聞い<rt>きい</rt></ruby>た<ruby>時<rt>とき</rt></ruby>。 <ruby>英語<rt>えいご</rt></ruby>じゃないのに、<ruby>意味<rt>いみ</rt></ruby>がわかった。 それだけじゃなくて、その<ruby>人<rt>ひと</rt></ruby>がどれだけその<ruby>子ども<rt>こども</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>に<ruby>思って<rt>おもって</rt></ruby>るか、 <ruby>言葉<rt>ことば</rt></ruby>の<ruby>外<rt>そと</rt></ruby>の<ruby>気持ち<rt>きもち</rt></ruby>までわかった<ruby>気が<rt>きが</rt></ruby>した。</span>
+<span class="line-romaji">wa ta shi ga wa ji me te ni ho n go o [感] ji ta shu n ka n wa [日] [本] no o ba a sa n ga ki n jo no ko do mo ni [話] shi ka ke te ru no o [聞] i ta [時] e i go ja na i no ni i mi ga wa ka t ta so re da ke ja na ku te so no hi to ga do re da ke so no ko do mo o ta i se tsu ni [思] t te ru ka ko to ba no [外] no [気] [持] chi ma de wa ka t ta [気] ga shi ta</span>
+<span class="line-en">For me it was overhearing an elderly woman in Japan talking to a small child on the street. And I could follow it. I understood what she was saying. But more than that — I understood how she felt about that child. The warmth. The tenderness. Not just the words. Language carries so much more than vocabulary.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、すごくきれいな<ruby>話<rt>はなし</rt></ruby>だな。</span>
+<span class="line-romaji">so re su go ku ki re i na [話] da na</span>
+<span class="line-en">That's so beautiful.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>言語<rt>げんご</rt></ruby>を<ruby>学ぶ<rt>まなぶ</rt></ruby>ことって、<ruby>本当<rt>ほんとう</rt></ruby>は<ruby>人<rt>ひと</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>に<ruby>近づ<rt>ちかづ</rt></ruby>く<ruby>練習<rt>れんしゅう</rt></ruby>だと<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">[言] [語] o [学] bu ko to t te ho n to u wa hi to no [心] ni [近] zu ku re n shu u da to [思] u</span>
+<span class="line-en">I believe learning a language is practice in getting closer to other human hearts.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">じゃあ、<ruby>日本語<rt>にほんご</rt></ruby><ruby>学習<rt>がくしゅう</rt></ruby>を<ruby>始めた<rt>はじめた</rt></ruby>ばかりの<ruby>人<rt>ひと</rt></ruby>に、 <ruby>何か<rt>なにか</rt></ruby>アドバイスするとしたら<ruby>何を<rt>なにを</rt></ruby><ruby>伝え<rt>つたえ</rt></ruby>たい？</span>
+<span class="line-romaji">ja a ni ho n go [学] [習] o wa ji me ta ba ka ri no hi to ni [何] ka a do ba i su su ru to shi ta ra [何] o [伝] e ta i？</span>
+<span class="line-en">If you could say one thing to someone who just started learning Japanese — or who's thinking about starting — what would it be?</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>一つ<rt>ひとつ</rt></ruby>だけ<ruby>選ぶ<rt>えらぶ</rt></ruby>なら... 「<ruby>好き<rt>すき</rt></ruby>」から<ruby>始め<rt>はじめ</rt></ruby>てほしい。 <ruby>好き<rt>すき</rt></ruby>なアニメでも、<ruby>好き<rt>すき</rt></ruby>な<ruby>食べ物<rt>たべもの</rt></ruby>でも、<ruby>好き<rt>すき</rt></ruby>な<ruby>音楽<rt>おんがく</rt></ruby>でも。 <ruby>自分<rt>じぶん</rt></ruby>が<ruby>愛し<rt>いとし</rt></ruby>ているものを<ruby>入り口<rt>いりぐち</rt></ruby>にして。 そこから<ruby>自然に<rt>しぜんに</rt></ruby><ruby>広がって<rt>ひろがって</rt></ruby>いくから。</span>
+<span class="line-romaji">[一] tsu da ke e ra bu na ra su ki ka ra [始] me te ho shi i su ki na a ni me de mo su ki na ta be mo no de mo su ki na o n ga ku de mo [自] [分] ga [愛] shi te i ru mo no o [入] ri [口] ni shi te so ko ka ra shi ze n ni hi ro ga t te i ku ka ra</span>
+<span class="line-en">If I could only say one thing — start from love. Start from something you already love. Your favorite anime, a song you can't get out of your head, a dish you want to make from scratch, a place you've always wanted to visit. Use that love as your doorway. The language will feel less like work and more like following a thread that keeps leading you somewhere wonderful.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">いい<ruby>言葉<rt>ことば</rt></ruby>だな。<ruby>僕<rt>ぼく</rt></ruby>が<ruby>言う<rt>いう</rt></ruby>なら——「<ruby>遅くない<rt>おそくない</rt></ruby>」かな。 <ruby>日本語<rt>にほんご</rt></ruby>を<ruby>始め<rt>はじめ</rt></ruby>るのに、<ruby>遅す<rt>おそす</rt></ruby>ぎることはない。 どんな<ruby>年齢<rt>ねんれい</rt></ruby>でも、どんなレベルでも、<ruby>今日<rt>きょう</rt></ruby>が<ruby>一番<rt>いちばん</rt></ruby><ruby>早い<rt>はやい</rt></ruby><ruby>日<rt>ひ</rt></ruby>だって。</span>
+<span class="line-romaji">i i ko to ba da na bo ku ga [言] u na ra o so ku na i ka na ni ho n go o [始] me ru no ni [遅] su gi ru ko to wa na i do n na ne n re i de mo do n na re be ru de mo kyo u ga [一] [番] [早] i [日] da t te</span>
+<span class="line-en">Mine would be — it's not too late. Whatever age you are, whatever you think your abilities are, whatever story you've told yourself about "oh I'm not good at languages" — none of that is the whole truth. The best day to start is today. And the second best day is also today.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ、それもいい<ruby>言葉<rt>ことば</rt></ruby>ね。 あと<ruby>一つ<rt>ひとつ</rt></ruby><ruby>付け加え<rt>つけくわえ</rt></ruby>るなら——<ruby>毎日<rt>まいにち</rt></ruby><ruby>少し<rt>すこし</rt></ruby>だけでいい。 5<ruby>分<rt>ふん</rt></ruby>でも、1<ruby>単語<rt>たんご</rt></ruby>でも。<ruby>続ける<rt>つづける</rt></ruby>ことが<ruby>全て<rt>すべて</rt></ruby>だから。</span>
+<span class="line-romaji">fu fu so re mo i i ko to ba ne a to [一] tsu [付] ke [加] e ru na ra ma i ni chi su ko shi da ke de i i 5 [分] de mo 1 ta n go de mo tsu zu ke ru ko to ga [全] te da ka ra</span>
+<span class="line-en">I'll add one more — small and consistent beats big and sporadic. Five minutes every day is worth more than five hours once a month. Language learning rewards presence, not intensity. Just showing up, a little bit, every day. That's how fluency is built — one tiny brick at a time.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="discovery7"><div class="section-label">✦ DISCOVERY SEVEN: Japanese Changes How You See the World</div></div>
+<div class="section" data-section="discovery7">
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ん<rt>まなん</rt></ruby>でから、なんか<ruby>日常<rt>にちじょう</rt></ruby>が<ruby>変わ<rt>かわ</rt></ruby>った<ruby>気が<rt>きが</rt></ruby>しない？</span>
+<span class="line-romaji">ni ho n go o [学] n de ka ra na n ka [日] [常] ga [変] wa t ta [気] ga shi na i？</span>
+<span class="line-en">Can I say something that maybe sounds a little weird? Since I started learning Japanese, I feel like I notice things differently. Like, the world looks a little different.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>全然<rt>ぜんぜん</rt></ruby>おかしくないよ。<ruby>私<rt>わたし</rt></ruby>もそう<ruby>感じる<rt>かんじる</rt></ruby>。</span>
+<span class="line-romaji">[全] [然] o ka shi ku na i yo wa ta shi mo so u ka n ji ru</span>
+<span class="line-en">That's not weird at all. Tell me.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>木漏れ日<rt>こもれび</rt></ruby>って<ruby>言葉<rt>ことば</rt></ruby>を<ruby>知って<rt>しって</rt></ruby>から、<ruby>木<rt>き</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>から<ruby>差し込む<rt>さしこむ</rt></ruby><ruby>光<rt>ひかり</rt></ruby>を ちゃんと「<ruby>見る<rt>みる</rt></ruby>」ようになった。<ruby>前<rt>まえ</rt></ruby>は<ruby>気づ<rt>きづ</rt></ruby>いてたけど、 <ruby>名前<rt>なまえ</rt></ruby>がなかったから<ruby>通り<rt>とうり</rt></ruby><ruby>過ぎ<rt>すぎ</rt></ruby>てた<ruby>感じ<rt>かんじ</rt></ruby>。 でも<ruby>今<rt>いま</rt></ruby>は、「あ、<ruby>木漏れ日<rt>こもれび</rt></ruby>だ」って<ruby>立ち<rt>たち</rt></ruby><ruby>止ま<rt>とま</rt></ruby>れる。</span>
+<span class="line-romaji">ko mo re bi t te ko to ba o [知] t te ka ra [木] no a i da ka ra sa shi ko mu hi ka ri o cha n to [見] ru yo u ni na t ta [前] wa [気] zu i te ta ke do na ma e ga na ka t ta ka ra [通] ri [過] gi te ta [感] ji de mo [今] wa a ko mo re bi da t te [立] chi [止] ma re ru</span>
+<span class="line-en">Since I learned the word *komorebi*, I actually stop and look at that light through the trees. I've walked past it a thousand times. But now I have a word for it and somehow... I see it properly. Language gave me permission to really look.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。<ruby>言葉<rt>ことば</rt></ruby>は<ruby>注意<rt>ちゅうい</rt></ruby>を<ruby>向け<rt>むけ</rt></ruby>る<ruby>場所<rt>ばしょ</rt></ruby>を<ruby>教え<rt>おしえ</rt></ruby>てくれる。 <ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ぶ<rt>まなぶ</rt></ruby>と、<ruby>日本<rt>にほん</rt></ruby><ruby>人<rt>ひと</rt></ruby>の<ruby>方々<rt>かたがた</rt></ruby>が<ruby>大切<rt>たいせつ</rt></ruby>にしていることが、 <ruby>少し<rt>すこし</rt></ruby>ずつ<ruby>見え<rt>みえ</rt></ruby>てくる。</span>
+<span class="line-romaji">so u ko to ba wa [注] [意] o [向] ke ru [場] [所] o [教] e te ku re ru ni ho n go o [学] bu to [日] [本] hi to no [方] [々] ga ta i se tsu ni shi te i ru ko to ga su ko shi zu tsu [見] e te ku ru</span>
+<span class="line-en">Words direct our attention. Learning Japanese is like being handed a set of lenses that show you what Japanese people have been noticing and valuing for centuries. The seasons. The food. The relationships between people. The weight of obligations. The importance of silence.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「よろしくお<ruby>願い<rt>ねがい</rt></ruby>します」（よろしくおねがいします）も、 <ruby>英語<rt>えいご</rt></ruby>に<ruby>訳し<rt>やくし</rt></ruby>にくいけど、すごく<ruby>大事<rt>だいじ</rt></ruby>な<ruby>言葉<rt>ことば</rt></ruby>だよね。</span>
+<span class="line-romaji">yo ro shi ku o [願] i shi ma su yo ro shi ku o ne ga i shi ma su mo e i go ni [訳] shi ni ku i ke do su go ku [大] [事] na ko to ba da yo ne</span>
+<span class="line-en">*Yoroshiku onegaishimasu* （よろしくお願いします）— that one hit me hard. There's no real English equivalent and it's one of the most important phrases in Japanese.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうね。<ruby>出会っ<rt>であっ</rt></ruby>た<ruby>時<rt>とき</rt></ruby>、お<ruby>願い<rt>ねがい</rt></ruby>する<ruby>時<rt>とき</rt></ruby>、<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>何か<rt>なにか</rt></ruby>を<ruby>始め<rt>はじめ</rt></ruby>る<ruby>時に<rt>ときに</rt></ruby><ruby>使う<rt>つかう</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>。 「よろしく」には「どうか<ruby>良く<rt>よく</rt></ruby>してください」っていう<ruby>気持ち<rt>きもち</rt></ruby>が<ruby>入っ<rt>いっっ</rt></ruby>てる。 <ruby>相手<rt>あいて</rt></ruby>を<ruby>信頼<rt>しんらい</rt></ruby>して、<ruby>関係<rt>かんけい</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>にしたいっていう<ruby>気持ち<rt>きもち</rt></ruby>。</span>
+<span class="line-romaji">so u ne [出] [会] t ta [時] o [願] i su ru [時] i s sho ni [何] ka o [始] me ru [時] ni [使] u ko to ba yo ro shi ku ni wa do u ka [良] ku shi te ku da sa i t te i u [気] [持] chi ga [入] t te ru [相] [手] o [信] [頼] shi te ka n ke i o ta i se tsu ni shi ta i t te i u [気] [持] chi</span>
+<span class="line-en">It's used when you meet someone, when you start something together, when you ask a favor, when you begin a project. It carries this feeling of — I'm entrusting myself to you. Please take care of our relationship. It's a word that bows.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「お<ruby>辞儀<rt>じぎ</rt></ruby>する<ruby>言葉<rt>ことば</rt></ruby>」、いい<ruby>表現<rt>ひょうげん</rt></ruby>だね。</span>
+<span class="line-romaji">o [辞] [儀] su ru ko to ba i i hyo u ge n da ne</span>
+<span class="line-en">"A word that bows." I love that.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>にはそういう<ruby>言葉<rt>ことば</rt></ruby>がたくさんある。 <ruby>言葉<rt>ことば</rt></ruby><ruby>自体<rt>じたい</rt></ruby>が<ruby>文化<rt>ぶんか</rt></ruby>の<ruby>価値観<rt>かちかん</rt></ruby>を<ruby>持っ<rt>もっ</rt></ruby>てる。</span>
+<span class="line-romaji">ni ho n go ni wa so u i u ko to ba ga ta ku sa n a ru ko to ba [自] [体] ga bu n ka no [価] [値] [観] o [持] t te ru</span>
+<span class="line-en">Japanese has so many words like that. Words that carry posture. Words that carry history. And once you start feeling that, you carry it into how you speak in every language.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ん<rt>まなん</rt></ruby>でから、<ruby>季節<rt>きせつ</rt></ruby>の<ruby>感じ方<rt>かんじかた</rt></ruby>も<ruby>変わ<rt>かわ</rt></ruby>った<ruby>気が<rt>きが</rt></ruby>する。</span>
+<span class="line-romaji">ni ho n go o [学] n de ka ra [季] [節] no [感] ji [方] mo [変] wa t ta [気] ga su ru</span>
+<span class="line-en">Can I say something else? I feel like my relationship with seasons has changed since learning Japanese.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あー、それわかるな。<ruby>日本文化<rt>にほんぶんか</rt></ruby>って、<ruby>季節<rt>きせつ</rt></ruby>をとても<ruby>大切<rt>たいせつ</rt></ruby>にするから。</span>
+<span class="line-romaji">aa so re wa ka ru na ni ho n bu n ka t te [季] [節] o to te mo ta i se tsu ni su ru ka ra</span>
+<span class="line-en">I completely understand that. Japanese culture has an incredibly rich relationship with the seasons. There are specific words, foods, poems, rituals — all tied to each part of the year.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>花見<rt>はなみ</rt></ruby>」（はなみ）とか。<ruby>桜<rt>さくら</rt></ruby>の<ruby>季節<rt>きせつ</rt></ruby>に<ruby>外<rt>そと</rt></ruby>でお<ruby>花見<rt>はなみ</rt></ruby>するやつ。 それを<ruby>知って<rt>しって</rt></ruby>から、<ruby>春<rt>はる</rt></ruby>の<ruby>桜<rt>さくら</rt></ruby>が<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違っ<rt>ちがっ</rt></ruby>て<ruby>見え<rt>みえ</rt></ruby>るようになった。</span>
+<span class="line-romaji">[花] [見] wa na mi to ka sa ku ra no [季] [節] ni [外] de o [花] [見] su ru ya tsu so re o [知] t te ka ra [春] no sa ku ra ga [全] [然] [違] t te [見] e ru yo u ni na t ta</span>
+<span class="line-en">*Hanami*（花見）— the tradition of going outside to view cherry blossoms. Once I learned about it, the arrival of spring felt completely different. There's this whole cultural ritual built around just... sitting under flowers and appreciating them. That's it. That's the event. And it's beautiful.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本<rt>にほん</rt></ruby>にはね、「<ruby>旬<rt>じゅん</rt></ruby>」（しゅん）という<ruby>考え方<rt>かんがえかた</rt></ruby>があるの。 <ruby>食べ物<rt>たべもの</rt></ruby>も、<ruby>体験<rt>たいけん</rt></ruby>も、<ruby>一番<rt>いちばん</rt></ruby>いい<ruby>時期<rt>じき</rt></ruby>に<ruby>楽し<rt>たのし</rt></ruby>むこと。 その<ruby>季節<rt>きせつ</rt></ruby>にしか<ruby>食べ<rt>たべ</rt></ruby>られないもの、その<ruby>時期<rt>じき</rt></ruby>にしか<ruby>感じ<rt>かんじ</rt></ruby>られない<ruby>空気<rt>くうき</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>にすること。</span>
+<span class="line-romaji">[日] [本] ni wa ne [旬] shu n to i u [考] e [方] ga a ru no ta be mo no mo [体] [験] mo [一] [番] i i [時] [期] ni [楽] shi mu ko to so no [季] [節] ni shi ka [食] be ra re na i mo no so no [時] [期] ni shi ka [感] ji ra re na i [空] [気] o ta i se tsu ni su ru ko to</span>
+<span class="line-en">There's a concept called *shun* （旬）— the idea of seasonality. Not just for food, but for experiences, for moods, for life. Eating a persimmon in autumn because that's when it's perfect. Watching fireflies on a specific summer night because that window is short. *Shun* teaches you to pay attention to now. Because now is always passing.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>今<rt>いま</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>に」って、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby>ちゃんと<ruby>入っ<rt>いっっ</rt></ruby>てるんだね。</span>
+<span class="line-romaji">[今] o ta i se tsu ni t te ni ho n go no [中] ni cha n to [入] t te ru n da ne</span>
+<span class="line-en">That's such a profound way to live. "This moment is the right time for this thing, and it won't be forever." Japanese has that built into the way people think about eating lunch.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ぶ<rt>まなぶ</rt></ruby>って、<ruby>時間<rt>じかん</rt></ruby>との<ruby>付き合い<rt>つきあい</rt></ruby><ruby>方<rt>ほう</rt></ruby>も<ruby>教え<rt>おしえ</rt></ruby>てくれるんだよね。</span>
+<span class="line-romaji">so u ni ho n go o [学] bu t te ji ka n to no [付] ki [合] i [方] mo [教] e te ku re ru n da yo ne</span>
+<span class="line-en">Learning Japanese teaches you a different relationship with time. Slower. More attentive. More present. And I think that's one of the most quiet, underrated gifts of the whole journey.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="discovery8"><div class="section-label">✦ DISCOVERY EIGHT: The Community That Waits for You</div></div>
+<div class="section" data-section="discovery8">
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ん<rt>まなん</rt></ruby>でて、もう<ruby>一つ<rt>ひとつ</rt></ruby>よかったことがあって。 <ruby>日本語<rt>にほんご</rt></ruby><ruby>好き<rt>すき</rt></ruby>な<ruby>人<rt>ひと</rt></ruby>たちと<ruby>繋がれる<rt>つながれる</rt></ruby>ようになったこと。</span>
+<span class="line-romaji">ni ho n go o [学] n de te mo u [一] tsu yo ka t ta ko to ga a t te ni ho n go su ki na hi to ta chi to tsu na ga re ru yo u ni na t ta ko to</span>
+<span class="line-en">Okay, here's one more thing nobody told me about learning Japanese — the community that comes with it.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あ、それ<ruby>大事<rt>だいじ</rt></ruby>！</span>
+<span class="line-romaji">a so re [大] [事]！</span>
+<span class="line-en">Oh, say more. This is so true.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>してる<ruby>人<rt>ひと</rt></ruby>って、なんか<ruby>同じ<rt>おなじ</rt></ruby><ruby>匂い<rt>におい</rt></ruby>がするんだよね。 「<ruby>日本<rt>にほん</rt></ruby>が<ruby>好き<rt>すき</rt></ruby>」って<ruby>気持ち<rt>きもち</rt></ruby>で<ruby>繋がれる<rt>つながれる</rt></ruby><ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">ni ho n go o be n kyo u shi te ru hi to t te na n ka [同] ji [匂] i ga su ru n da yo ne [日] [本] ga su ki t te [気] [持] chi de tsu na ga re ru [感] ji</span>
+<span class="line-en">There's a kind of instant kinship with other people who learn Japanese. You meet someone at a language exchange event or an online class and within five minutes you're both going "Wait, have you tried watching this anime without subtitles?!" and the friendship is just there.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>日本語<rt>にほんご</rt></ruby><ruby>仲<rt>なか</rt></ruby><ruby>間<rt>あいだ</rt></ruby>」っていうか、<ruby>同じ<rt>おなじ</rt></ruby>ものを<ruby>愛し<rt>いとし</rt></ruby>てる<ruby>人<rt>ひと</rt></ruby>たちの<ruby>輪<rt>わ</rt></ruby>。</span>
+<span class="line-romaji">ni ho n go [仲] a i da t te i u ka [同] ji mo no o [愛] shi te ru hi to ta chi no [輪]</span>
+<span class="line-en">There's this whole quiet, global family of people who have been captured by the same language, the same culture, the same pull toward Japan. And once you start learning, you find them everywhere.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>言語<rt>げんご</rt></ruby><ruby>交換<rt>こうかん</rt></ruby>もすごくよかったよ。 <ruby>日本語<rt>にほんご</rt></ruby>を<ruby>練習<rt>れんしゅう</rt></ruby>したくて、<ruby>英語<rt>えいご</rt></ruby>を<ruby>練習<rt>れんしゅう</rt></ruby>したい<ruby>日本<rt>にほん</rt></ruby><ruby>人<rt>ひと</rt></ruby>と<ruby>話す<rt>はなす</rt></ruby>。 お<ruby>互いに<rt>たがいに</rt></ruby><ruby>教え<rt>おしえ</rt></ruby><ruby>合う<rt>あう</rt></ruby><ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">[言] [語] [交] [換] mo su go ku yo ka t ta yo ni ho n go o re n shu u shi ta ku te e i go o re n shu u shi ta i [日] [本] hi to to [話] su o [互] i ni [教] e [合] u [感] ji</span>
+<span class="line-en">Language exchange changed my learning completely. Finding Japanese speakers who want to practice English — and teaching each other, laughing at each other's mistakes, sharing what confuses you about the other's language. Those conversations taught me more than any textbook.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうだよね。<ruby>言語<rt>げんご</rt></ruby>は、<ruby>生き<rt>いき</rt></ruby>てる<ruby>人<rt>ひと</rt></ruby>と<ruby>練習<rt>れんしゅう</rt></ruby>してこそ、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>身に<rt>みに</rt></ruby>つくから。</span>
+<span class="line-romaji">so u da yo ne [言] [語] wa [生] ki te ru hi to to re n shu u shi te ko so ho n to u ni [身] ni tsu ku ka ra</span>
+<span class="line-en">Language is ultimately a living thing. It lives between people. You can learn all the grammar in the world, but until you use it with a real person — a real voice, a real laugh, a real misunderstanding that you work through together — it doesn't fully come alive.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>最初<rt>さいしょ</rt></ruby>のランゲージパートナーは、すごく<ruby>緊張し<rt>きんちょうし</rt></ruby>たけどね。 なんか、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>誰か<rt>だれか</rt></ruby>に<ruby>聞か<rt>きか</rt></ruby>せるって<ruby>怖く<rt>こわく</rt></ruby>て。</span>
+<span class="line-romaji">sa i sho no ra n gee ji paa to naa wa su go ku [緊] [張] shi ta ke do ne na n ka ni ho n go o [誰] ka ni [聞] ka se ru t te ko wa ku te</span>
+<span class="line-en">I was so nervous the first time I spoke Japanese with a real Japanese person. Not anime characters. A real human being. I prepared for like two hours and then said about five words before forgetting everything.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">でもやったんでしょ？それが<ruby>大事<rt>だいじ</rt></ruby>。</span>
+<span class="line-romaji">de mo ya t ta n de sho？ so re ga [大] [事]</span>
+<span class="line-en">But you did it. That's the whole thing.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">うん。そしたら<ruby>相手<rt>あいて</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が「<ruby>頑張っ<rt>がんばっ</rt></ruby>てるね！」って<ruby>言って<rt>いって</rt></ruby>くれて。 その<ruby>一言<rt>ひとこと</rt></ruby>で、なんか<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>報わ<rt>むくわ</rt></ruby>れた<ruby>気が<rt>きが</rt></ruby>した。</span>
+<span class="line-romaji">u n so shi ta ra [相] [手] no hi to ga [頑] [張] t te ru ne！ t te [言] t te ku re te so no [一] [言] de na n ka ze n bu [報] wa re ta [気] ga shi ta</span>
+<span class="line-en">And they said — *gambatte ne*. You're doing great, keep going. And I don't know why, but I nearly cried. Just those two words of encouragement in Japanese felt like being welcomed somewhere I'd been trying to reach for a long time.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>頑張っ<rt>がんばっ</rt></ruby>て」（がんばって）。この<ruby>言葉<rt>ことば</rt></ruby>もよく<ruby>使う<rt>つかう</rt></ruby>よね。</span>
+<span class="line-romaji">[頑] [張] t te ga n ba t te ko no ko to ba mo yo ku [使] u yo ne</span>
+<span class="line-en">*Ganbatte*（頑張って）— I want to talk about this word for a second because it doesn't quite mean what most people think.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「Good luck」ってよく<ruby>訳さ<rt>やくさ</rt></ruby>れるけど、なんか<ruby>違う<rt>ちがう</rt></ruby><ruby>気が<rt>きが</rt></ruby>する。</span>
+<span class="line-romaji">G o o d l u c k t te yo ku [訳] sa re ru ke do na n ka [違] u [気] ga su ru</span>
+<span class="line-en">I always thought it just meant "good luck" but it feels different somehow.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。「<ruby>頑張っ<rt>がんばっ</rt></ruby>て」は「<ruby>運<rt>うん</rt></ruby>を<ruby>祈る<rt>いのる</rt></ruby>」じゃなくて、 「あなたが<ruby>持っ<rt>もっ</rt></ruby>ている<ruby>力<rt>ちから</rt></ruby>を<ruby>信じ<rt>しんじ</rt></ruby>てる」に<ruby>近い<rt>ちかい</rt></ruby><ruby>気が<rt>きが</rt></ruby>する。 「やり<ruby>遂げ<rt>とげ</rt></ruby>られるよ。あなたなら<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>だから」って<ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">so u [頑] [張] t te wa [運] o [祈] ru ja na ku te a na ta ga [持] t te i ru [力] o [信] ji te ru ni [近] i [気] ga su ru ya ri [遂] ge ra re ru yo a na ta na ra [大] [丈] [夫] da ka ra t te [感] ji</span>
+<span class="line-en">*Ganbatte* is more like "I believe in the effort you're going to put in." It's not about luck — it's about trust. "I know you have what it takes. Go do the work." It's an expression of faith in someone's strength, not wishful thinking.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、すごくいい<ruby>言葉<rt>ことば</rt></ruby>だな。 <ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ん<rt>まなん</rt></ruby>でる<ruby>人<rt>ひと</rt></ruby><ruby>全員<rt>ぜんいん</rt></ruby>に<ruby>言いたい<rt>いいたい</rt></ruby>——<ruby>頑張っ<rt>がんばっ</rt></ruby>て！</span>
+<span class="line-romaji">so re su go ku i i ko to ba da na ni ho n go o [学] n de ru hi to [全] [員] ni i i ta i [頑] [張] t te！</span>
+<span class="line-en">That's such a better version of encouragement. And to everyone listening right now, wherever you are in your Japanese journey — *ganbatte*. We believe in you. Go do the work.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="closing"><div class="section-label">✦ OUTRO</div></div>
+<div class="section" data-section="closing">
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ねえ、<ruby>最初<rt>さいしょ</rt></ruby>のエピソードなのに、もう<ruby>終わり<rt>おわり</rt></ruby>たくないんだけど。</span>
+<span class="line-romaji">ne e sa i sho no e pi soo do na no ni mo u [終] wa ri ta ku na i n da ke do</span>
+<span class="line-en">Okay, I genuinely cannot believe this is the end of the first episode. I don't want it to be over.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ。でも、これはほんの<ruby>始まり<rt>はじまり</rt></ruby>だよ。 これからもっといろんな<ruby>話<rt>はなし</rt></ruby>ができるから。</span>
+<span class="line-romaji">fu fu de mo ko re wa ho n no [始] ma ri da yo ko re ka ra mo t to i ro n na [話] ga de ki ru ka ra</span>
+<span class="line-en">It's just the beginning. We have so much more to talk about.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>今日<rt>きょう</rt></ruby><ruby>話し<rt>はなし</rt></ruby>たこと、すごく<ruby>面白か<rt>おもしろか</rt></ruby>った。 「<ruby>木漏れ日<rt>こもれび</rt></ruby>」とか「<ruby>いただきます<rt>いただきます</rt></ruby>」とか「<ruby>物の哀れ<rt>もののあわれ</rt></ruby>」とか、 <ruby>日本語<rt>にほんご</rt></ruby>って<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>奥<rt>おく</rt></ruby>が<ruby>深い<rt>ふかい</rt></ruby>ね。</span>
+<span class="line-romaji">kyo u [話] shi ta ko to su go ku [面] [白] ka t ta ko mo re bi to ka i ta da ki ma su to ka mo no no a wa re to ka ni ho n go t te ho n to u ni [奥] ga [深] i ne</span>
+<span class="line-en">Today genuinely surprised me even after studying for a while. *Komorebi*, *itadakimasu*, *mono no aware*, *otsukaresama* — I keep thinking I know what I'm getting into with Japanese and it just keeps surprising me.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">それが<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>魅力<rt>みりょく</rt></ruby>だと<ruby>思う<rt>おもう</rt></ruby>。 <ruby>学べ<rt>まなべ</rt></ruby>ば<ruby>学ぶ<rt>まなぶ</rt></ruby>ほど、<ruby>新しい<rt>あたらしい</rt></ruby>ことが<ruby>見え<rt>みえ</rt></ruby>てくる。</span>
+<span class="line-romaji">so re ga ni ho n go no [魅] [力] da to [思] u [学] be ba [学] bu ho do [新] shi i ko to ga [見] e te ku ru</span>
+<span class="line-en">That's the thing about Japanese. Every layer you uncover reveals another one underneath. It's not a sprint. It's a long, beautiful walk.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>聴い<rt>きい</rt></ruby>てくれているみんなに<ruby>聞き<rt>きき</rt></ruby>たいんだけど—— <ruby>日本語<rt>にほんご</rt></ruby>や<ruby>日本文化<rt>にほんぶんか</rt></ruby>との<ruby>最初<rt>さいしょ</rt></ruby>の<ruby>出会い<rt>であい</rt></ruby>って<ruby>何だ<rt>なんだ</rt></ruby>った？ アニメ？<ruby>旅行<rt>りょこう</rt></ruby>？<ruby>食べ物<rt>たべもの</rt></ruby>？それとも<ruby>何か<rt>なにか</rt></ruby><ruby>別の<rt>べつの</rt></ruby>もの？</span>
+<span class="line-romaji">[聴] i te ku re te i ru mi n na ni [聞] ki ta i n da ke do ni ho n go ya ni ho n bu n ka to no sa i sho no [出] [会] i t te [何] da t ta？ a ni me？ ryo ko u？ ta be mo no？ so re to mo [何] ka [別] no mo no？</span>
+<span class="line-en">We'd love to ask everyone listening — what was your first connection to Japanese or Japan? Was it anime? Was it food? Travel? A song? Something unexpected?</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">コメントに<ruby>教え<rt>おしえ</rt></ruby>てくれると、すごく<ruby>嬉しい<rt>うれしい</rt></ruby>。 みんなのストーリーを<ruby>読む<rt>よむ</rt></ruby>のが<ruby>楽しみ<rt>たのしみ</rt></ruby>。</span>
+<span class="line-romaji">ko me n to ni [教] e te ku re ru to su go ku u re shi i mi n na no su too rii o [読] mu no ga [楽] shi mi</span>
+<span class="line-en">We'd genuinely love to hear your story in the comments. Every path to Japanese is different and every one of them is interesting.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">もし<ruby>今日<rt>きょう</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>が<ruby>楽しか<rt>たのしか</rt></ruby>ったら、チャンネル<ruby>登録<rt>とうろく</rt></ruby>してくれると<ruby>嬉しい<rt>うれしい</rt></ruby>な。 <ruby>次の<rt>つぎの</rt></ruby>エピソードを<ruby>見逃さ<rt>みのがさ</rt></ruby>ないために。</span>
+<span class="line-romaji">mo shi kyo u no [話] ga [楽] shi ka t ta ra cha n ne ru [登] [録] shi te ku re ru to u re shi i na [次] no e pi soo do o [見] [逃] sa na i ta me ni</span>
+<span class="line-en">And if you enjoyed today — if this felt like your kind of show — subscribing means you won't miss the next one. We'd love to have you come back.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>次の<rt>つぎの</rt></ruby>エピソードでは、<ruby>日本語<rt>にほんご</rt></ruby>のもっと<ruby>面白い<rt>おもしろい</rt></ruby><ruby>世界<rt>せかい</rt></ruby>に<ruby>連れ<rt>つれ</rt></ruby>て<ruby>行く<rt>いく</rt></ruby>よ。 <ruby>今日<rt>きょう</rt></ruby><ruby>来て<rt>きて</rt></ruby>くれて<ruby>本当<rt>ほんとう</rt></ruby>にありがとう。</span>
+<span class="line-romaji">[次] no e pi soo do de wa ni ho n go no mo t to o mo shi ro i se ka i ni [連] re te [行] ku yo kyo u [来] te ku re te ho n to u ni a ri ga to u</span>
+<span class="line-en">There's so much more we want to explore with you. Stories, words, culture, history, food, the things that make Japan feel like Japan — we want to share all of it. Thank you so much for spending this time with us.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>本当<rt>ほんとう</rt></ruby>にありがとう。<ruby>今日<rt>きょう</rt></ruby>は<ruby>最高<rt>さいこう</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>だった。</span>
+<span class="line-romaji">ho n to u ni a ri ga to u kyo u wa sa i ko u no [日] da t ta</span>
+<span class="line-en">Honestly, thank you. This first episode means so much. If you're the first person who ever listened to this show — hi. We see you. Thank you.</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">またね。</span>
+<span class="line-romaji">ma ta ne</span>
+<span class="line-en">Until next time.</span>
+</div>
+</div>
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">またね！<ruby>気を<rt>きを</rt></ruby>つけてね！</span>
+<span class="line-romaji">ma ta ne！ [気] o tsu ke te ne！</span>
+<span class="line-en">See you soon! Take care of yourselves!</span>
+</div>
+</div>
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>の<ruby>世界<rt>せかい</rt></ruby>で、またお<ruby>会い<rt>あい</rt></ruby>しましょう。</span>
+<span class="line-romaji">ni ho n go no se ka i de ma ta o [会] i shi ma sho u</span>
+<span class="line-en">We'll meet again in the world of Japanese. *[Soft music fades in and out]*</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="discovery10"><div class="section-label">✦ WORD GLOSSARY (Episode 1)</div></div>
+<div class="section" data-section="discovery10">
+</div>
+<div class="glossary" id="word-glossary">
+<h2>WORD GLOSSARY</h2>
+<p class="glossary-note">Key Japanese words from this episode. The small line above each Japanese sentence shows kana readings for important kanji terms, while the romaji line can be hidden or shown with the button above.</p>
+<div class="glossary-grid">
+<div class="glossary-card">
+<div class="glossary-word">日本語</div>
+<div class="glossary-reading">にほんご ・ nihongo</div>
+<div class="glossary-meaning">Japanese language</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">日本文化</div>
+<div class="glossary-reading">にほんぶんか ・ nihon bunka</div>
+<div class="glossary-meaning">Japanese culture</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">勉強</div>
+<div class="glossary-reading">べんきょう ・ benkyou</div>
+<div class="glossary-meaning">study / learning</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">初めて</div>
+<div class="glossary-reading">はじめて ・ hajimete</div>
+<div class="glossary-meaning">for the first time</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">気づく</div>
+<div class="glossary-reading">きづく ・ kizuku</div>
+<div class="glossary-meaning">to notice / realize</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">僕</div>
+<div class="glossary-reading">ぼく ・ boku</div>
+<div class="glossary-meaning">I / me, masculine</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">私</div>
+<div class="glossary-reading">わたし ・ watashi</div>
+<div class="glossary-meaning">I / me</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">興奮</div>
+<div class="glossary-reading">こうふん ・ koufun</div>
+<div class="glossary-meaning">excitement</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">隣</div>
+<div class="glossary-reading">となり ・ tonari</div>
+<div class="glossary-meaning">beside / next to</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">本当</div>
+<div class="glossary-reading">ほんとう ・ hontou</div>
+<div class="glossary-meaning">really / truly</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">嬉しい</div>
+<div class="glossary-reading">うれしい ・ ureshii</div>
+<div class="glossary-meaning">happy / glad</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">今日</div>
+<div class="glossary-reading">きょう ・ kyou</div>
+<div class="glossary-meaning">today</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">大好き</div>
+<div class="glossary-reading">だいすき ・ daisuki</div>
+<div class="glossary-meaning">love / really like</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">人</div>
+<div class="glossary-reading">ひと ・ hito</div>
+<div class="glossary-meaning">person / people</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">旅行</div>
+<div class="glossary-reading">りょこう ・ ryokou</div>
+<div class="glossary-meaning">travel</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">最初</div>
+<div class="glossary-reading">さいしょ ・ saisho</div>
+<div class="glossary-meaning">the beginning / first</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">怖く</div>
+<div class="glossary-reading">こわく ・ kowaku</div>
+<div class="glossary-meaning">scary / frightening</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">感じる</div>
+<div class="glossary-reading">かんじる ・ kanjiru</div>
+<div class="glossary-meaning">to feel</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">一緒</div>
+<div class="glossary-reading">いっしょ ・ issho</div>
+<div class="glossary-meaning">together</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">歩きたい</div>
+<div class="glossary-reading">あるきたい ・  arukitai</div>
+<div class="glossary-meaning">want to walk</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">授業</div>
+<div class="glossary-reading">じゅぎょう ・ jugyou</div>
+<div class="glossary-meaning">class / lesson</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">友達</div>
+<div class="glossary-reading">ともだち ・ tomodachi</div>
+<div class="glossary-meaning">friend</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">テーマ</div>
+<div class="glossary-reading">てーま ・ teema</div>
+<div class="glossary-meaning">theme / topic</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">興味</div>
+<div class="glossary-reading">きょうみ ・ kyoumi</div>
+<div class="glossary-meaning">interest</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">持った</div>
+<div class="glossary-reading">もった ・ motta</div>
+<div class="glossary-meaning">had / held</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">字幕</div>
+<div class="glossary-reading">じまく ・ jimaku</div>
+<div class="glossary-meaning">subtitles</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">言葉</div>
+<div class="glossary-reading">ことば ・ kotoba</div>
+<div class="glossary-meaning">word / language</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">意味</div>
+<div class="glossary-reading">いみ ・ imi</div>
+<div class="glossary-meaning">meaning</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">瞬間</div>
+<div class="glossary-reading">しゅんかん ・ shunkan</div>
+<div class="glossary-meaning">moment</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">最高</div>
+<div class="glossary-reading">さいこう ・ saikou</div>
+<div class="glossary-meaning">the best</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">感覚</div>
+<div class="glossary-reading">かんかく ・ kankaku</div>
+<div class="glossary-meaning">feeling / sensation</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">子ども</div>
+<div class="glossary-reading">こども ・ kodomo</div>
+<div class="glossary-meaning">child</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">頃</div>
+<div class="glossary-reading">ころ ・ koro</div>
+<div class="glossary-meaning">time / period</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">歌</div>
+<div class="glossary-reading">うた ・ uta</div>
+<div class="glossary-meaning">song</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">音楽</div>
+<div class="glossary-reading">おんがく ・ ongaku</div>
+<div class="glossary-meaning">music</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">表現</div>
+<div class="glossary-reading">ひょうげん ・ hyougen</div>
+<div class="glossary-meaning">expression</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">考える</div>
+<div class="glossary-reading">かんがえる ・ kangaeru</div>
+<div class="glossary-meaning">to think</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">母音</div>
+<div class="glossary-reading">ぼいん ・ boin</div>
+<div class="glossary-meaning">vowel</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">発音</div>
+<div class="glossary-reading">はつおん ・ hatsuon</div>
+<div class="glossary-meaning">pronunciation</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">ひらがな</div>
+<div class="glossary-reading">ひらがな ・ hiragana</div>
+<div class="glossary-meaning">Japanese phonetic script</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">カタカナ</div>
+<div class="glossary-reading">かたかな ・ katakana</div>
+<div class="glossary-meaning">Japanese phonetic script for loanwords</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">覚えた</div>
+<div class="glossary-reading">おぼえた ・ oboeta</div>
+<div class="glossary-meaning">learned / memorized</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">電車</div>
+<div class="glossary-reading">でんしゃ ・ densha</div>
+<div class="glossary-meaning">train</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">広告</div>
+<div class="glossary-reading">こうこく ・ koukoku</div>
+<div class="glossary-meaning">advertisement</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">単語</div>
+<div class="glossary-reading">たんご ・ tango</div>
+<div class="glossary-meaning">word / vocabulary</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">英語</div>
+<div class="glossary-reading">えいご ・ eigo</div>
+<div class="glossary-meaning">English</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">訳せない</div>
+<div class="glossary-reading">やくせない ・ yakusenai</div>
+<div class="glossary-meaning">cannot translate</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">木漏れ日</div>
+<div class="glossary-reading">こもれび ・ komorebi</div>
+<div class="glossary-meaning">sunlight filtering through trees</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">木の葉</div>
+<div class="glossary-reading">このは ・ konoha</div>
+<div class="glossary-meaning">tree leaves</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">間</div>
+<div class="glossary-reading">あいだ ・ aida</div>
+<div class="glossary-meaning">between / space</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">差し込む</div>
+<div class="glossary-reading">さしこむ ・ sashikomu</div>
+<div class="glossary-meaning">to shine through</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">光</div>
+<div class="glossary-reading">ひかり ・ hikari</div>
+<div class="glossary-meaning">light</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">自然</div>
+<div class="glossary-reading">しぜん ・ shizen</div>
+<div class="glossary-meaning">nature</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">大切</div>
+<div class="glossary-reading">たいせつ ・ taisetsu</div>
+<div class="glossary-meaning">important / precious</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">物の哀れ</div>
+<div class="glossary-reading">もののあわれ ・ mono no aware</div>
+<div class="glossary-meaning">bittersweet awareness of impermanence</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">美しい</div>
+<div class="glossary-reading">うつくしい ・ utsukushii</div>
+<div class="glossary-meaning">beautiful</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">消えて</div>
+<div class="glossary-reading">きえて ・ kiete</div>
+<div class="glossary-meaning">disappear / fade away</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">切ない</div>
+<div class="glossary-reading">せつない ・ setsunai</div>
+<div class="glossary-meaning">bittersweet / painful</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">温かい</div>
+<div class="glossary-reading">あたたかい ・ atatakai</div>
+<div class="glossary-meaning">warm</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">桜</div>
+<div class="glossary-reading">さくら ・ sakura</div>
+<div class="glossary-meaning">cherry blossoms</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">散る</div>
+<div class="glossary-reading">ちる ・ chiru</div>
+<div class="glossary-meaning">to fall / scatter</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">魔法</div>
+<div class="glossary-reading">まほう ・ mahou</div>
+<div class="glossary-meaning">magic</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">名前</div>
+<div class="glossary-reading">なまえ ・ namae</div>
+<div class="glossary-meaning">name</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">不完全</div>
+<div class="glossary-reading">ふかんぜん ・ fukanzen</div>
+<div class="glossary-meaning">imperfect</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">古い</div>
+<div class="glossary-reading">ふるい ・ furui</div>
+<div class="glossary-meaning">old</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">時間</div>
+<div class="glossary-reading">じかん ・ jikan</div>
+<div class="glossary-meaning">time</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">経った</div>
+<div class="glossary-reading">たった ・ tatta</div>
+<div class="glossary-meaning">passed / elapsed</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">美しさ</div>
+<div class="glossary-reading">うつくしさ ・ utsukushisa</div>
+<div class="glossary-meaning">beauty</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">茶碗</div>
+<div class="glossary-reading">ちゃわん ・ chawan</div>
+<div class="glossary-meaning">tea bowl / rice bowl</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">完璧</div>
+<div class="glossary-reading">かんぺき ・ kanpeki</div>
+<div class="glossary-meaning">perfect</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">学習者</div>
+<div class="glossary-reading">がくしゅうしゃ ・ gakushuusha</div>
+<div class="glossary-meaning">learner</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">文化</div>
+<div class="glossary-reading">ぶんか ・ bunka</div>
+<div class="glossary-meaning">culture</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">隠れてる</div>
+<div class="glossary-reading">かくれてる ・ kakureteru</div>
+<div class="glossary-meaning">hidden</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">いただきます</div>
+<div class="glossary-reading">いただきます ・ itadakimasu</div>
+<div class="glossary-meaning">said before eating, with gratitude</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">ご飯</div>
+<div class="glossary-reading">ごはん ・ gohan</div>
+<div class="glossary-meaning">meal / rice</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">食べる</div>
+<div class="glossary-reading">たべる ・ taberu</div>
+<div class="glossary-meaning">to eat</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">翻訳</div>
+<div class="glossary-reading">ほんやく ・ honyaku</div>
+<div class="glossary-meaning">translation</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">食べ物</div>
+<div class="glossary-reading">たべもの ・ tabemono</div>
+<div class="glossary-meaning">food</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">育てて</div>
+<div class="glossary-reading">そだてて ・ sodatete</div>
+<div class="glossary-meaning">to raise / grow</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">料理</div>
+<div class="glossary-reading">りょうり ・ ryouri</div>
+<div class="glossary-meaning">cooking / cuisine</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">命</div>
+<div class="glossary-reading">いのち ・ inochi</div>
+<div class="glossary-meaning">life</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">動物</div>
+<div class="glossary-reading">どうぶつ ・ doubutsu</div>
+<div class="glossary-meaning">animal</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">植物</div>
+<div class="glossary-reading">しょくぶつ ・ shokubutsu</div>
+<div class="glossary-meaning">plant</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">感謝</div>
+<div class="glossary-reading">かんしゃ ・ kansha</div>
+<div class="glossary-meaning">gratitude</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">住んでた</div>
+<div class="glossary-reading">すんでた ・ sundeta</div>
+<div class="glossary-meaning">was living</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">食事</div>
+<div class="glossary-reading">しょくじ ・ shokuji</div>
+<div class="glossary-meaning">meal</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">毎回</div>
+<div class="glossary-reading">まいかい ・ maikai</div>
+<div class="glossary-meaning">every time</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">関係</div>
+<div class="glossary-reading">かんけい ・ kankei</div>
+<div class="glossary-meaning">relationship</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">丁寧</div>
+<div class="glossary-reading">ていねい ・ teinei</div>
+<div class="glossary-meaning">polite / careful</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">お疲れ様</div>
+<div class="glossary-reading">おつかれさま ・ otsukaresama</div>
+<div class="glossary-meaning">phrase recognizing someone’s effort</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">仕事</div>
+<div class="glossary-reading">しごと ・ shigoto</div>
+<div class="glossary-meaning">work / job</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">終わった</div>
+<div class="glossary-reading">おわった ・ owatta</div>
+<div class="glossary-meaning">finished</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">頑張った</div>
+<div class="glossary-reading">がんばった ・ ganbatta</div>
+<div class="glossary-meaning">worked hard / tried hard</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">苦労</div>
+<div class="glossary-reading">くろう ・ kurou</div>
+<div class="glossary-meaning">hardship / effort</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">認め合う</div>
+<div class="glossary-reading">みとめあう ・ mitomeau</div>
+<div class="glossary-meaning">to acknowledge each other</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">ごめんなさい</div>
+<div class="glossary-reading">ごめんなさい ・ gomen nasai</div>
+<div class="glossary-meaning">I am sorry</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">すみません</div>
+<div class="glossary-reading">すみません ・ sumimasen</div>
+<div class="glossary-meaning">excuse me / sorry / thank you</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">文脈</div>
+<div class="glossary-reading">ぶんみゃく ・ bunmyaku</div>
+<div class="glossary-meaning">context</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">文</div>
+<div class="glossary-reading">ぶん ・ bun</div>
+<div class="glossary-meaning">sentence</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">組み立て方</div>
+<div class="glossary-reading">くみたてかた ・ kumitatekata</div>
+<div class="glossary-meaning">structure / way of building</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">逆</div>
+<div class="glossary-reading">ぎゃく ・ gyaku</div>
+<div class="glossary-meaning">reverse / opposite</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">寿司</div>
+<div class="glossary-reading">すし ・ sushi</div>
+<div class="glossary-meaning">sushi</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">食べます</div>
+<div class="glossary-reading">たべます ・ tabemasu</div>
+<div class="glossary-meaning">eat</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">動詞</div>
+<div class="glossary-reading">どうし ・ doushi</div>
+<div class="glossary-meaning">verb</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">最後</div>
+<div class="glossary-reading">さいご ・ saigo</div>
+<div class="glossary-meaning">end / last</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">頭</div>
+<div class="glossary-reading">あたま ・ atama</div>
+<div class="glossary-meaning">head / mind</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">自然に</div>
+<div class="glossary-reading">しぜんに ・ shizen ni</div>
+<div class="glossary-meaning">naturally</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">言いたい</div>
+<div class="glossary-reading">いいたい ・ iitai</div>
+<div class="glossary-meaning">want to say</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">決められる</div>
+<div class="glossary-reading">きめられる ・ kimerareru</div>
+<div class="glossary-meaning">can decide</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">会話</div>
+<div class="glossary-reading">かいわ ・ kaiwa</div>
+<div class="glossary-meaning">conversation</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">沈黙</div>
+<div class="glossary-reading">ちんもく ・ chinmoku</div>
+<div class="glossary-meaning">silence</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">余白</div>
+<div class="glossary-reading">よはく ・ yohaku</div>
+<div class="glossary-meaning">blank space / margin</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">敬語</div>
+<div class="glossary-reading">けいご ・ keigo</div>
+<div class="glossary-meaning">honorific / formal Japanese</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">丁寧語</div>
+<div class="glossary-reading">ていねいご ・ teineigo</div>
+<div class="glossary-meaning">polite speech</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">敬意</div>
+<div class="glossary-reading">けいい ・ keii</div>
+<div class="glossary-meaning">respect</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">失敗</div>
+<div class="glossary-reading">しっぱい ・ shippai</div>
+<div class="glossary-meaning">mistake / failure</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">面白い</div>
+<div class="glossary-reading">おもしろい ・ omoshiroi</div>
+<div class="glossary-meaning">interesting / funny</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">温めます</div>
+<div class="glossary-reading">あたためます ・ atatamemasu</div>
+<div class="glossary-meaning">warm up</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">間違えて</div>
+<div class="glossary-reading">まちがえて ・ machigaete</div>
+<div class="glossary-meaning">by mistake</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">勇気</div>
+<div class="glossary-reading">ゆうき ・ yuuki</div>
+<div class="glossary-meaning">courage</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">恥ずかしい</div>
+<div class="glossary-reading">はずかしい ・ hazukashii</div>
+<div class="glossary-meaning">embarrassing</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">怒らなかった</div>
+<div class="glossary-reading">おこらなかった ・ okoranakatta</div>
+<div class="glossary-meaning">did not get angry</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">贈り物</div>
+<div class="glossary-reading">おくりもの ・ okurimono</div>
+<div class="glossary-meaning">gift</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">繋がれる</div>
+<div class="glossary-reading">つながれる ・ tsunagareru</div>
+<div class="glossary-meaning">can connect</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">橋</div>
+<div class="glossary-reading">はし ・ hashi</div>
+<div class="glossary-meaning">bridge</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">箸</div>
+<div class="glossary-reading">はし ・ hashi</div>
+<div class="glossary-meaning">chopsticks</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">端</div>
+<div class="glossary-reading">はし ・ hashi</div>
+<div class="glossary-meaning">edge</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">暑い</div>
+<div class="glossary-reading">あつい ・ atsui</div>
+<div class="glossary-meaning">hot weather</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">厚い</div>
+<div class="glossary-reading">あつい ・ atsui</div>
+<div class="glossary-meaning">thick</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">熱い</div>
+<div class="glossary-reading">あつい ・ atsui</div>
+<div class="glossary-meaning">hot to the touch</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">彼女</div>
+<div class="glossary-reading">かのじょ ・ kanojo</div>
+<div class="glossary-meaning">she / girlfriend</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">彼</div>
+<div class="glossary-reading">かれ ・ kare</div>
+<div class="glossary-meaning">he / boyfriend</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">上手く</div>
+<div class="glossary-reading">うまく ・ umaku</div>
+<div class="glossary-meaning">well / skillfully</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">一文</div>
+<div class="glossary-reading">いちぶん ・ ichibun</div>
+<div class="glossary-meaning">one sentence</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">全部</div>
+<div class="glossary-reading">ぜんぶ ・ zenbu</div>
+<div class="glossary-meaning">all / everything</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">泣きそう</div>
+<div class="glossary-reading">なきそう ・ nakisou</div>
+<div class="glossary-meaning">about to cry</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">扉</div>
+<div class="glossary-reading">とびら ・ tobira</div>
+<div class="glossary-meaning">door</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">世界</div>
+<div class="glossary-reading">せかい ・ sekai</div>
+<div class="glossary-meaning">world</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">近所</div>
+<div class="glossary-reading">きんじょ ・ kinjo</div>
+<div class="glossary-meaning">neighborhood</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">練習</div>
+<div class="glossary-reading">れんしゅう ・ renshuu</div>
+<div class="glossary-meaning">practice</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">始めた</div>
+<div class="glossary-reading">はじめた ・ hajimeta</div>
+<div class="glossary-meaning">started</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">選ぶ</div>
+<div class="glossary-reading">えらぶ ・ erabu</div>
+<div class="glossary-meaning">choose</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">好き</div>
+<div class="glossary-reading">すき ・ suki</div>
+<div class="glossary-meaning">like / love</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">広がって</div>
+<div class="glossary-reading">ひろがって ・ hirogatte</div>
+<div class="glossary-meaning">expand / spread</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">遅くない</div>
+<div class="glossary-reading">おそくない ・ osokunai</div>
+<div class="glossary-meaning">not too late</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">年齢</div>
+<div class="glossary-reading">ねんれい ・ nenrei</div>
+<div class="glossary-meaning">age</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">毎日</div>
+<div class="glossary-reading">まいにち ・ mainichi</div>
+<div class="glossary-meaning">every day</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">少し</div>
+<div class="glossary-reading">すこし ・ sukoshi</div>
+<div class="glossary-meaning">a little</div>
+</div>
+<div class="glossary-card">
+<div class="glossary-word">続ける</div>
+<div class="glossary-reading">つづける ・ tsuzukeru</div>
+<div class="glossary-meaning">to continue</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function filterSection(section, event) {
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    if (event && event.target) event.target.classList.add('active');
+    document.querySelectorAll('.section, .section-divider').forEach(el => {
+      if (section === 'all' || el.dataset.section === section) el.classList.remove('hidden');
+      else el.classList.add('hidden');
+    });
+  }
+  function toggleRomaji() {
+    const wrap = document.querySelector('.script-wrap');
+    const btn = document.getElementById('romajiToggle');
+    wrap.classList.toggle('hide-romaji');
+    const visible = !wrap.classList.contains('hide-romaji');
+    btn.textContent = visible ? 'Romaji ON' : 'Romaji OFF';
+    btn.classList.toggle('active', visible);
+  }
+</script>
