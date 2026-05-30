@@ -1,0 +1,1707 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap');
+  :root {
+    --pon-bg:#E6F1FB; --pon-border:#B5D4F4; --pon-text:#0C447C;
+    --kitsu-bg:#E1F5EE; --kitsu-border:#9FE1CB; --kitsu-text:#085041;
+    --color-text-primary:#1f2933; --color-text-secondary:#52606d; --color-text-tertiary:#8292a3;
+    --color-border-tertiary:#d9e2ec; --color-border-secondary:#bcccdc;
+    --color-background-primary:#fff; --color-background-secondary:#f8fafc; --color-background-info:#e0f2fe; --color-text-info:#0369a1;
+    --border-radius-md:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0} body{font-family:'Noto Sans JP',sans-serif;background:#fff;color:var(--color-text-primary)}
+  .script-wrap{max-width:760px;margin:0 auto;padding:2rem 1.5rem 4rem;font-family:'Noto Sans JP',sans-serif}
+  .podcast-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:.5px solid var(--color-border-tertiary)}
+  .podcast-label{font-size:11px;font-weight:500;letter-spacing:.12em;color:var(--color-text-tertiary);text-transform:uppercase;margin-bottom:.5rem}
+  .podcast-title{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:700;line-height:1.5;margin-bottom:.75rem}
+  .episode-subtitle{font-size:13px;color:var(--color-text-secondary)}
+  .controls{position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:.5px solid var(--color-border-tertiary);padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem;z-index:10}
+  .filter-btn,.toggle-btn{font-size:12px;padding:5px 12px;border-radius:20px;border:.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:background .15s}
+  .filter-btn:hover,.toggle-btn:hover{background:var(--color-background-secondary)} .filter-btn.active,.toggle-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent;font-weight:500}
+  .toggle-btn{margin-left:auto}.section{margin-bottom:2rem}.section.hidden,.section-divider.hidden{display:none}
+  .section-label{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--color-text-tertiary);text-transform:uppercase;margin-bottom:1rem;padding:4px 10px;background:var(--color-background-secondary);border-radius:20px;border:.5px solid var(--color-border-tertiary)}
+  .line{display:flex;gap:12px;margin-bottom:1rem;align-items:flex-start}.speaker-tag{flex-shrink:0;width:52px;padding:3px 0;text-align:center;font-size:12px;font-weight:700;border-radius:6px;letter-spacing:.04em;margin-top:18px}
+  .speaker-pon .speaker-tag{background:var(--pon-bg);color:var(--pon-text);border:.5px solid var(--pon-border)}.speaker-kitsu .speaker-tag{background:var(--kitsu-bg);color:var(--kitsu-text);border:.5px solid var(--kitsu-border)}
+  .line-text{flex:1;font-size:15px;line-height:1.85;color:var(--color-text-primary)}.speaker-pon .line-text{border-left:2px solid var(--pon-border);padding-left:12px}.speaker-kitsu .line-text{border-left:2px solid var(--kitsu-border);padding-left:12px}
+  .line-read{display:block;min-height:18px;font-size:11px;line-height:1.5;color:#9aa5b1;letter-spacing:.02em;margin-bottom:1px}.line-jp{display:block}.line-jp ruby rt{font-size:.58em;color:#718096;font-weight:500}.line-romaji{display:block;font-size:12px;color:#64748b;margin-top:3px;line-height:1.65}.hide-romaji .line-romaji{display:none}.line-en{display:block;font-size:13px;color:var(--color-text-secondary);margin-top:4px;font-style:italic;line-height:1.7}
+  .section-divider{display:flex;align-items:center;gap:12px;margin:2rem 0}.section-divider::before,.section-divider::after{content:'';flex:1;height:.5px;background:var(--color-border-tertiary)}
+  .glossary{margin-top:3rem;padding-top:2rem;border-top:.5px solid var(--color-border-tertiary)}.glossary h2{font-family:'Noto Serif JP',serif;font-size:20px;margin-bottom:.5rem}.glossary-note{font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.7}.glossary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.glossary-card{background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:14px;padding:12px}.glossary-word{font-weight:700;font-size:16px}.glossary-reading{font-size:12px;color:#64748b;margin-top:2px}.glossary-meaning{font-size:13px;color:var(--color-text-secondary);margin-top:6px;line-height:1.55}
+
+ruby {
+  ruby-position: over;
+}
+
+rt {
+  font-size: 15px;
+  color: #666;
+}
+
+</style>
+
+
+<style>
+.production-notes{font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:14px;padding:12px;margin-bottom:1.5rem;line-height:1.7}
+.production-notes strong{color:var(--color-text-primary)}
+</style>
+
+<div class="script-wrap">
+
+<div class="podcast-header">
+<div class="podcast-label">Japanese Story Podcast</div>
+<div class="podcast-title">なぜ<ruby>日本人<rt>にほんじん</rt></ruby>はそんなに「すみません」と<ruby>言う<rt>いう</rt></ruby>の？<br/>Why Japanese People Say &quot;Sumimasen&quot; So Much</div>
+<div class="episode-subtitle"><ruby>第<rt>だい</rt></ruby>２<ruby>話<rt>はなし</rt></ruby> ・ Episode 02</div>
+</div>
+
+<div class="controls">
+<button class="filter-btn active" onclick="filterSection('all', event)">すべて</button>
+<button class="filter-btn" onclick="filterSection('opening', event)">INTRO</button>
+<button class="filter-btn" onclick="filterSection('section1', event)">PART ONE: The Most Bas</button>
+<button class="filter-btn" onclick="filterSection('section2', event)">PART TWO: The Many Liv</button>
+<button class="filter-btn" onclick="filterSection('section3', event)">PART THREE: Where Does</button>
+<button class="filter-btn" onclick="filterSection('section4', event)">PART FOUR: Real Situat</button>
+<button class="filter-btn" onclick="filterSection('section5', event)">PART FIVE: The Story T</button>
+<button class="filter-btn" onclick="filterSection('section6', event)">PART SIX: The Cultural</button>
+<button class="filter-btn" onclick="filterSection('section7', event)">PART SEVEN: Convenienc</button>
+<button class="filter-btn" onclick="filterSection('section8', event)">PART EIGHT: When Forei</button>
+<button class="filter-btn" onclick="filterSection('section9', event)">PART NINE: The Funny S</button>
+<button class="filter-btn" onclick="filterSection('section10', event)">PART TEN: The Emotiona</button>
+<button class="filter-btn" onclick="filterSection('section11', event)">OUTRO</button>
+<button class="toggle-btn active" id="romajiToggle" onclick="toggleRomaji()">Romaji ON</button>
+</div>
+<div class="production-notes"><strong>PRODUCTION NOTES</strong><br/>Running time: ~45 minutes<br/>Characters: Pon (male, energetic, curious, beginner-intermediate learner), Kitsu (female, calm, warm, knowledgeable, grew up with Japanese)<br/>Tone: Cozy, conversational, story-driven — like two friends sharing coffee on a rainy afternoon<br/>Theme: One single word. Infinite depth.</div>
+<div class="section" data-section="opening">
+<div class="section-label">▶ INTRO</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">みなさん、こんにちは！ようこそ！<br/><ruby>今日<rt>きょう</rt></ruby>も<ruby>来て<rt>きて</rt></ruby>くれてありがとう！</span>
+<span class="line-romaji">minasan 、 konnichiha ！ youkoso ！ kyou mo kite kuretearigatou ！</span>
+<span class="line-en">Hey everyone — hello! Welcome back!<br/>Thank you so much for coming back to us today.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">こんにちは。<ruby>今日<rt>きょう</rt></ruby>も<ruby>来て<rt>きて</rt></ruby>くれて、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>嬉しい<rt>うれしい</rt></ruby>よ。</span>
+<span class="line-romaji">konnichiha 。 kyou mo kite kurete 、 hontou ni ureshii yo 。</span>
+<span class="line-en">Hello. We are genuinely so happy you&#x27;re here.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ここは「Japanese Story Podcast」。<br/><ruby>日本語<rt>にほんご</rt></ruby>と<ruby>日本文化<rt>にほんぶんか</rt></ruby>が<ruby>好き<rt>すき</rt></ruby>な<ruby>人<rt>ひと</rt></ruby>たちのための<ruby>番組<rt>ばんぐみ</rt></ruby>だよ。</span>
+<span class="line-romaji">kokoha 「Japanese Story Podcast」。 nihongo to nihonbunka ga suki na hito tachinotameno bangumi dayo 。</span>
+<span class="line-en">This is the Japanese Story Podcast —<br/>a show for anyone who loves Japanese, is curious about it,<br/>or just has this quiet, unexplainable pull toward Japan<br/>and wants to understand it a little better.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>今日<rt>きょう</rt></ruby><ruby>聴い<rt>きい</rt></ruby>てるみんな、どこにいるのかな？<br/><ruby>朝<rt>あさ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>、こんにちは。<ruby>昼<rt>ひる</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>、こんにちは。<br/><ruby>夜<rt>よる</rt></ruby>に<ruby>聴い<rt>きい</rt></ruby>てる<ruby>人<rt>ひと</rt></ruby>は、<ruby>今日<rt>きょう</rt></ruby>もお<ruby>疲れ<rt>つかれ</rt></ruby><ruby>様<rt>さま</rt></ruby>。</span>
+<span class="line-romaji">kyou kii teruminna 、 dokoniirunokana ？ asa no hito 、 konnichiha 。 hiru no hito 、 konnichiha 。 yoru ni kii teru hito ha 、 kyou moo tsukare sama 。</span>
+<span class="line-en">I wonder where everyone is listening from today.<br/>If it&#x27;s morning for you — good morning. Start the day with us.<br/>If it&#x27;s afternoon — hello. Taking a little break? Good.<br/>And if it&#x27;s evening — you&#x27;ve made it through another day. Welcome. Rest with us for a while.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>前回<rt>ぜんかい</rt></ruby>のエピソード1を<ruby>聴い<rt>きい</rt></ruby>てくれた<ruby>人<rt>ひと</rt></ruby>、ありがとう！<br/>コメントや<ruby>感想<rt>かんそう</rt></ruby>、すごく<ruby>嬉しか<rt>うれしか</rt></ruby>った。<br/><ruby>本当<rt>ほんとう</rt></ruby>にびっくりした。</span>
+<span class="line-romaji">zenkai no episoodo 1 wo kii tekureta hito 、 arigatou ！ komento ya kansou 、 sugoku ureshika tta 。 hontou nibikkurishita 。</span>
+<span class="line-en">For everyone who listened to Episode 1 — thank you.<br/>We honestly didn&#x27;t know what to expect,<br/>and the response has been incredible.<br/>Reading your comments made us both really, genuinely happy.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>初めて<rt>はじめて</rt></ruby><ruby>来て<rt>きて</rt></ruby>くれた<ruby>人<rt>ひと</rt></ruby>も、ようこそ！<br/>ここは<ruby>教室<rt>きょうしつ</rt></ruby>じゃないから、<ruby>安心し<rt>あんしんし</rt></ruby>てね。<br/><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>知ら<rt>しら</rt></ruby>なくても<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>大丈夫<rt>だいじょうぶ</rt></ruby>。</span>
+<span class="line-romaji">hajimete kite kureta hito mo 、 youkoso ！ kokoha kyoushitsu janaikara 、 anshinshi tene 。 nihongo wo shira nakutemo zenzen daijoubu 。</span>
+<span class="line-en">And if this is your very first time here — welcome.<br/>This is not a classroom. This is not a textbook.<br/>You don&#x27;t need to know any Japanese to enjoy this show.<br/>You just need to be a little bit curious. That&#x27;s all.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ポン、です。<ruby>今日<rt>きょう</rt></ruby>もよろしく。</span>
+<span class="line-romaji">pon 、 desu 。 kyou moyoroshiku 。</span>
+<span class="line-en">I&#x27;m Pon. Happy to be here as always.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">キツです。<ruby>今日<rt>きょう</rt></ruby>のエピソード、<ruby>私<rt>わたし</rt></ruby>、すごく<ruby>楽しみ<rt>たのしみ</rt></ruby>にしてた。</span>
+<span class="line-romaji">kitsu desu 。 kyou no episoodo 、 watashi 、 sugoku tanoshimi nishiteta 。</span>
+<span class="line-en">I&#x27;m Kitsu. And I have been genuinely looking forward to this episode.<br/>Today&#x27;s topic is one of my favorites.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">そうそう、<ruby>今日<rt>きょう</rt></ruby>のテーマ、<ruby>言って<rt>いって</rt></ruby>もいい？</span>
+<span class="line-romaji">sousou 、 kyou no teema 、 itte moii ？</span>
+<span class="line-en">Can I introduce the topic? Let me do it.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">どうぞ。</span>
+<span class="line-romaji">douzo 。</span>
+<span class="line-en">Go ahead.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>今日<rt>きょう</rt></ruby>のテーマは——<br/>「すみません」！</span>
+<span class="line-romaji">kyou no teema ha —— 「 sumimasen 」！</span>
+<span class="line-en">Today&#x27;s topic is —<br/>*Sumimasen*.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ。シンプルに<ruby>言って<rt>いって</rt></ruby>くれた。</span>
+<span class="line-romaji">fufu 。 shinpuru ni itte kureta 。</span>
+<span class="line-en">Nice and simple. I like it.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">なんでこのテーマにしようと<ruby>思った<rt>おもった</rt></ruby>かって<ruby>言う<rt>いう</rt></ruby>とね、<br/>ちょっと<ruby>前<rt>まえ</rt></ruby>に<ruby>日本<rt>にほん</rt></ruby>に<ruby>行った<rt>いった</rt></ruby>んだけど、<br/>その<ruby>時に<rt>ときに</rt></ruby><ruby>気づ<rt>きづ</rt></ruby>いたことがあって。</span>
+<span class="line-romaji">nandekono teema nishiyouto omotta katte iu tone 、 chotto mae ni nihon ni itta ndakedo 、 sono tokini kizu itakotogaatte 。</span>
+<span class="line-en">So here&#x27;s how this topic started for me.<br/>I was in Japan a little while back —<br/>and I noticed something everywhere I went.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>何<rt>なに</rt></ruby>に<ruby>気づ<rt>きづ</rt></ruby>いたの？</span>
+<span class="line-romaji">nani ni kizu itano ？</span>
+<span class="line-en">What did you notice?</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">もう、どこでも「すみません」が<ruby>聞こ<rt>きこ</rt></ruby>えるんだよ。<br/>コンビニでも、<ruby>電車<rt>でんしゃ</rt></ruby>でも、レストランでも。<br/><ruby>最初<rt>さいしょ</rt></ruby>は「あ、みんなそんなに<ruby>謝る<rt>あやまる</rt></ruby>の？」って<ruby>思って<rt>おもって</rt></ruby>。</span>
+<span class="line-romaji">mou 、 dokodemo 「 sumimasen 」 ga kiko erundayo 。 konbini demo 、 densha demo 、 resutoran demo 。 saisho ha 「 a 、 minnasonnani ayamaru no ？」 tte omotte 。</span>
+<span class="line-en">*Sumimasen* was everywhere.<br/>Convenience stores, trains, restaurants, the street.<br/>I kept hearing it constantly and at first I thought —<br/>&quot;Wait, why is everyone apologizing all the time?&quot;<br/>Are Japanese people always in trouble? Did I miss something?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あはははは！それ、すごくわかる。<br/><ruby>外国人<rt>がいこくじん</rt></ruby>みんな<ruby>最初<rt>さいしょ</rt></ruby>そう<ruby>思う<rt>おもう</rt></ruby>よ。</span>
+<span class="line-romaji">ahahahaha ！ sore 、 sugokuwakaru 。 gaikokujin minna saisho sou omou yo 。</span>
+<span class="line-en">Ha! I hear this from so many people visiting Japan for the first time.<br/>&quot;Everyone kept saying sorry. Why was everyone apologizing?!&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">でも<ruby>途中<rt>とちゅう</rt></ruby>で、あれ？「すみません」って<ruby>謝っ<rt>あやまっ</rt></ruby>てるわけじゃないな、って<ruby>気づ<rt>きづ</rt></ruby>いて。<br/>「これ、もっと<ruby>深い<rt>ふかい</rt></ruby><ruby>意味<rt>いみ</rt></ruby>があるんじゃないか」って<ruby>思い<rt>おもい</rt></ruby><ruby>始め<rt>はじめ</rt></ruby>たんだよね。</span>
+<span class="line-romaji">demo tochuu de 、 are ？「 sumimasen 」 tte ayamatsu teruwakejanaina 、 tte kizu ite 。 「 kore 、 motto fukai imi gaarunjanaika 」 tte omoi hajime tandayone 。</span>
+<span class="line-en">And then gradually I started to realize —<br/>they weren&#x27;t all apologizing.<br/>Something else was happening.<br/>Something I didn&#x27;t have a word for in English.<br/>And I couldn&#x27;t stop thinking about it.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">その<ruby>感覚<rt>かんかく</rt></ruby>、<ruby>正しい<rt>ただしい</rt></ruby>よ。<br/>「すみません」ってね、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>面白い<rt>おもしろい</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>なの。<br/><ruby>一言<rt>ひとこと</rt></ruby>なのに、<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違う<rt>ちがう</rt></ruby><ruby>意味<rt>いみ</rt></ruby>で<ruby>使わ<rt>つかわ</rt></ruby>れるから。</span>
+<span class="line-romaji">sono kankaku 、 tadashii yo 。 「 sumimasen 」 ttene 、 hontou ni omoshiroi kotoba nano 。 hitokoto nanoni 、 zenzen chigau imi de tsukawa rerukara 。</span>
+<span class="line-en">That instinct is completely right.<br/>*Sumimasen* is one of the most fascinating words in the Japanese language<br/>because it does so many different things —<br/>and almost none of them translate neatly into English.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">でしょ！？<ruby>気に<rt>きに</rt></ruby>なってしょうがなかったんだよ。<br/><ruby>今日は<rt>きょうは</rt></ruby>それを<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>解き<rt>とき</rt></ruby>ほぐしていこうよ。</span>
+<span class="line-romaji">desho ！？ kini natteshouganakattandayo 。 kyouha sorewo zenbu toki hogushiteikouyo 。</span>
+<span class="line-en">Right?! I couldn&#x27;t let it go.<br/>So today — let&#x27;s unpack all of it.<br/>Let&#x27;s really look at this word and figure out what&#x27;s actually happening<br/>every time a Japanese person says *sumimasen*.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">いいよ。じゃあ、<ruby>一緒に<rt>いっしょに</rt></ruby>「すみません」の<ruby>世界<rt>せかい</rt></ruby>に<ruby>入っ<rt>はいっ</rt></ruby>ていこう。</span>
+<span class="line-romaji">iiyo 。 jaa 、 isshoni 「 sumimasen 」 no sekai ni haitsu teikou 。</span>
+<span class="line-en">Let&#x27;s do it. Let&#x27;s step into the world of *sumimasen*.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section1"><div class="section-label">✦ PART ONE: The Most Basic Meaning — But It&#x27;s Already Interesting</div></div>
+<div class="section" data-section="section1">
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">まず<ruby>一番基本的<rt>いちばんきほんてき</rt></ruby>なところから<ruby>聞か<rt>きか</rt></ruby>せて。<br/>「すみません」って、<ruby>辞書<rt>じしょ</rt></ruby>に<ruby>何て<rt>なんて</rt></ruby><ruby>書い<rt>かい</rt></ruby>てある？</span>
+<span class="line-romaji">mazu ichibankihonteki natokorokara kika sete 。 「 sumimasen 」 tte 、 jisho ni nante kai tearu ？</span>
+<span class="line-en">Okay, let&#x27;s start from the very beginning.<br/>If you look up *sumimasen* in a dictionary, what does it say?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">たいていは「excuse me」とか「I&#x27;m sorry」って<ruby>書い<rt>かい</rt></ruby>てある。</span>
+<span class="line-romaji">taiteiha 「excuse me」 toka 「I&#x27;m sorry」 tte kai tearu 。</span>
+<span class="line-en">Usually it says &quot;excuse me&quot; or &quot;I&#x27;m sorry.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">そうだよね。それが<ruby>普通<rt>ふつう</rt></ruby>の<ruby>答え<rt>こたえ</rt></ruby>だよね。</span>
+<span class="line-romaji">soudayone 。 sorega futsuu no kotae dayone 。</span>
+<span class="line-en">Right. That&#x27;s the answer most people give. That&#x27;s what most textbooks say.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">でもね、そこで<ruby>止ま<rt>とま</rt></ruby>っちゃうと、<ruby>本当<rt>ほんとう</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>を<ruby>半分<rt>はんぶん</rt></ruby>しか<ruby>理解<rt>りかい</rt></ruby>できないの。<br/>「すみません」は<ruby>確かに<rt>たしかに</rt></ruby><ruby>謝る<rt>あやまる</rt></ruby><ruby>時に<rt>ときに</rt></ruby>も<ruby>使う<rt>つかう</rt></ruby>。<br/>でもそれだけじゃない。</span>
+<span class="line-romaji">demone 、 sokode toma tchauto 、 hontou no imi wo hanbun shika rikai dekinaino 。 「 sumimasen 」 ha tashikani ayamaru tokini mo tsukau 。 demosoredakejanai 。</span>
+<span class="line-en">But if you stop there, you&#x27;re only getting half the picture.<br/>Yes, *sumimasen* is used to apologize.<br/>But that&#x27;s maybe — maybe — a third of what it actually does.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">え、そうなの？！</span>
+<span class="line-romaji">e 、 sounano ？！</span>
+<span class="line-en">Wait — seriously? A third?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。ちょっと<ruby>例<rt>れい</rt></ruby>を<ruby>出し<rt>だし</rt></ruby>ていい？</span>
+<span class="line-romaji">sou 。 chotto rei wo dashi teii ？</span>
+<span class="line-en">Really. Let me give you a few examples and see if you can feel the difference.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">うん、うん。<ruby>聞き<rt>きき</rt></ruby>たい。</span>
+<span class="line-romaji">un 、 un 。 kiki tai 。</span>
+<span class="line-en">Yes. Let&#x27;s hear them.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">たとえばね、<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で、<ruby>誰か<rt>だれか</rt></ruby>の<ruby>足<rt>あし</rt></ruby>を<ruby>踏ん<rt>ふん</rt></ruby>じゃった。<br/>その<ruby>時に<rt>ときに</rt></ruby><ruby>言う<rt>いう</rt></ruby>「すみません」。<br/>これは<ruby>謝っ<rt>あやまっ</rt></ruby>てる。</span>
+<span class="line-romaji">tatoebane 、 densha no naka de 、 dareka no ashi wo fun jatta 。 sono tokini iu 「 sumimasen 」。 koreha ayamatsu teru 。</span>
+<span class="line-en">Imagine you&#x27;re on the train and you accidentally step on someone&#x27;s foot.<br/>You turn to them and say — *sumimasen*.<br/>That&#x27;s an apology. Clear.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">うん、それはわかる。</span>
+<span class="line-romaji">un 、 sorehawakaru 。</span>
+<span class="line-en">Okay, yes. That one makes sense.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">でも<ruby>次<rt>つぎ</rt></ruby>。<br/>レストランで、ウェイターさんに<ruby>声<rt>こえ</rt></ruby>をかける<ruby>時<rt>とき</rt></ruby>。<br/>「すみませ〜ん！」って<ruby>言う<rt>いう</rt></ruby>。<br/>これは<ruby>謝っ<rt>あやまっ</rt></ruby>てるの？</span>
+<span class="line-romaji">demo tsugi 。 resutoran de 、 ueitaa sanni koe wokakeru toki 。 「 sumimase 〜 n ！」 tte iu 。 koreha ayamatsu teruno ？</span>
+<span class="line-en">Now imagine you&#x27;re at a restaurant.<br/>The server is across the room.<br/>You want to order something.<br/>You call out — *sumimaseeeen!*<br/>Are you apologizing?</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あ、<ruby>違う<rt>ちがう</rt></ruby>ね。それは「ちょっと<ruby>来て<rt>きて</rt></ruby>」<ruby>的な<rt>てきな</rt></ruby><ruby>感じ<rt>かんじ</rt></ruby>？</span>
+<span class="line-romaji">a 、 chigau ne 。 soreha 「 chotto kite 」 tekina kanji ？</span>
+<span class="line-en">No... that&#x27;s more like &quot;hey, excuse me, over here&quot;?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう！<ruby>注意<rt>ちゅうい</rt></ruby>を<ruby>引く<rt>ひく</rt></ruby>、<ruby>呼び<rt>よび</rt></ruby>かける<ruby>感じ<rt>かんじ</rt></ruby>。<br/><ruby>英語<rt>えいご</rt></ruby>で<ruby>言う<rt>いう</rt></ruby>と「excuse me」に<ruby>近い<rt>ちかい</rt></ruby>。</span>
+<span class="line-romaji">sou ！ chuui wo hiku 、 yobi kakeru kanji 。 eigo de iu to 「excuse me」 ni chikai 。</span>
+<span class="line-en">Exactly. You&#x27;re getting someone&#x27;s attention.<br/>In English that would be &quot;excuse me&quot; — but it&#x27;s the same Japanese word.<br/>Same *sumimasen*.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あー、なるほどなるほど。</span>
+<span class="line-romaji">aa 、 naruhodonaruhodo 。</span>
+<span class="line-en">Okay — I see it. Same word, different function.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">で、<ruby>次<rt>つぎ</rt></ruby>。<br/><ruby>誰か<rt>だれか</rt></ruby>が<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>持っ<rt>もっ</rt></ruby>てくれた。<ruby>助け<rt>たすけ</rt></ruby>てくれた。<br/>その<ruby>時に<rt>ときに</rt></ruby>「すみません、ありがとうございます」って<ruby>言う<rt>いう</rt></ruby>。<br/>これは<ruby>謝っ<rt>あやまっ</rt></ruby>てる？</span>
+<span class="line-romaji">de 、 tsugi 。 dareka ga nimotsu wo motsu tekureta 。 tasuke tekureta 。 sono tokini 「 sumimasen 、 arigatougozaimasu 」 tte iu 。 koreha ayamatsu teru ？</span>
+<span class="line-en">Now someone has just helped you carry a heavy bag.<br/>They went out of their way.<br/>They smile and hand it to you.<br/>And you say — *sumimasen, arigatou gozaimasu*.<br/>Apologizing?</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">んー…これはちょっと<ruby>違う<rt>ちがう</rt></ruby><ruby>気が<rt>きが</rt></ruby>するなあ。<br/><ruby>感謝し<rt>かんしゃし</rt></ruby>てる<ruby>感じ<rt>かんじ</rt></ruby>がする。</span>
+<span class="line-romaji">nn … korehachotto chigau kiga surunaa 。 kanshashi teru kanji gasuru 。</span>
+<span class="line-en">No... this one feels like gratitude. Not apology.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>正解<rt>せいかい</rt></ruby>！<br/>でも<ruby>使って<rt>つかって</rt></ruby>る<ruby>言葉<rt>ことば</rt></ruby>は<ruby>全部<rt>ぜんぶ</rt></ruby>「すみません」。</span>
+<span class="line-romaji">seikai ！ demo tsukatte ru kotoba ha zenbu 「 sumimasen 」。</span>
+<span class="line-en">Correct. And yet — the same word.<br/>Same *sumimasen*, used in all three situations.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えー！！<ruby>一つ<rt>ひとつ</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>で<ruby>三つ<rt>みっつ</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>が<ruby>違う<rt>ちがう</rt></ruby>の？！</span>
+<span class="line-romaji">ee ！！ hitotsu no kotoba de mittsu no imi ga chigau no ？！</span>
+<span class="line-en">Wait. ONE word. Apology, attention-calling, gratitude.<br/>That&#x27;s wild. That&#x27;s genuinely wild.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">それだけじゃないよ。<br/>もっとあるの。</span>
+<span class="line-romaji">soredakejanaiyo 。 mottoaruno 。</span>
+<span class="line-en">And we&#x27;re just getting started.<br/>There&#x27;s more.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">もっと？！</span>
+<span class="line-romaji">motto ？！</span>
+<span class="line-en">More?!</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section2"><div class="section-label">✦ PART TWO: The Many Lives of Sumimasen</div></div>
+<div class="section" data-section="section2">
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「すみません」の<ruby>使い方<rt>つかいかた</rt></ruby>ね、<ruby>大きく<rt>おおきく</rt></ruby><ruby>分け<rt>わけ</rt></ruby>ると、こんな<ruby>感じ<rt>かんじ</rt></ruby>かな。<br/><ruby>一つ目<rt>ひとつめ</rt></ruby>は、<ruby>謝る<rt>あやまる</rt></ruby><ruby>時<rt>とき</rt></ruby>。<br/><ruby>二つ目<rt>ふたつめ</rt></ruby>は、<ruby>注意<rt>ちゅうい</rt></ruby>を<ruby>引く<rt>ひく</rt></ruby><ruby>時<rt>とき</rt></ruby>。<br/><ruby>三つ<rt>みっつ</rt></ruby><ruby>目<rt>め</rt></ruby>は、<ruby>助け<rt>たすけ</rt></ruby>を<ruby>求め<rt>もとめ</rt></ruby>る<ruby>時<rt>とき</rt></ruby>。<br/><ruby>四つ<rt>よっつ</rt></ruby><ruby>目<rt>め</rt></ruby>は、<ruby>助け<rt>たすけ</rt></ruby>てもらった<ruby>時<rt>とき</rt></ruby>。<br/><ruby>五つ<rt>いつつ</rt></ruby><ruby>目<rt>め</rt></ruby>は、お<ruby>礼<rt>れい</rt></ruby>を<ruby>言う<rt>いう</rt></ruby><ruby>時<rt>とき</rt></ruby>。</span>
+<span class="line-romaji">「 sumimasen 」 no tsukaikata ne 、 ookiku wake ruto 、 konna kanji kana 。 hitotsume ha 、 ayamaru toki 。 futatsume ha 、 chuui wo hiku toki 。 mittsu me ha 、 tasuke wo motome ru toki 。 yottsu me ha 、 tasuke temoratta toki 。 itsutsu me ha 、 o rei wo iu toki 。</span>
+<span class="line-en">If we try to map out the uses of *sumimasen*, roughly —<br/>First: apologizing.<br/>Second: getting someone&#x27;s attention.<br/>Third: asking for help or a favor.<br/>Fourth: when someone has just helped you.<br/>Fifth: expressing gratitude, especially when someone went out of their way.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>五つ<rt>いつつ</rt></ruby>も！</span>
+<span class="line-romaji">itsutsu mo ！</span>
+<span class="line-en">Five! Five different uses!</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">でもね、よーく<ruby>見る<rt>みる</rt></ruby>と、<ruby>全部<rt>ぜんぶ</rt></ruby>に<ruby>共通<rt>きょうつう</rt></ruby>することがあるんだよ。</span>
+<span class="line-romaji">demone 、 yooku miru to 、 zenbu ni kyoutsuu surukotogaarundayo 。</span>
+<span class="line-en">But here&#x27;s the thing — if you look closely at all five,<br/>there&#x27;s something in common underneath all of them.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">え、<ruby>何<rt>なに</rt></ruby>？<ruby>何<rt>なに</rt></ruby>が<ruby>共通<rt>きょうつう</rt></ruby>してるの？</span>
+<span class="line-romaji">e 、 nani ？ nani ga kyoutsuu shiteruno ？</span>
+<span class="line-en">What? What&#x27;s the connection?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>全部<rt>ぜんぶ</rt></ruby>、<ruby>相手<rt>あいて</rt></ruby>のことを<ruby>考え<rt>かんがえ</rt></ruby>てる<ruby>言葉<rt>ことば</rt></ruby>なの。<br/><ruby>相手<rt>あいて</rt></ruby>が<ruby>自分<rt>じぶん</rt></ruby>のために<ruby>何か<rt>なにか</rt></ruby>をしてくれた、<br/>または<ruby>何か<rt>なにか</rt></ruby>をしてしまった<ruby>時<rt>とき</rt></ruby>。<br/>「あなたのことを、ちゃんと<ruby>気に<rt>きに</rt></ruby>していますよ」っていう<ruby>気持ち<rt>きもち</rt></ruby>。</span>
+<span class="line-romaji">zenbu 、 aite nokotowo kangae teru kotoba nano 。 aite ga jibun notameni nanika woshitekureta 、 mataha nanika woshiteshimatta toki 。 「 anatanokotowo 、 chanto kini shiteimasuyo 」 tteiu kimochi 。</span>
+<span class="line-en">Every single one of those uses involves acknowledging the other person.<br/>Either they did something for you, or you did something to them.<br/>Either way, you&#x27;re saying — *I see you. I&#x27;m aware of you.*<br/>&quot;I know that you are a person who matters in this moment.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">うわ……。それ、<ruby>深い<rt>ふかい</rt></ruby>な。<br/>なんか<ruby>急に<rt>きゅうに</rt></ruby>、ただの<ruby>言葉<rt>ことば</rt></ruby>じゃない<ruby>感じ<rt>かんじ</rt></ruby>がしてきた。</span>
+<span class="line-romaji">uwa ……。 sore 、 fukai na 。 nanka kyuuni 、 tadano kotoba janai kanji gashitekita 。</span>
+<span class="line-en">Wow.<br/>That just... reframed everything.<br/>It&#x27;s suddenly not just a word you say.<br/>It&#x27;s a whole way of seeing other people.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。それが「すみません」の<ruby>本当<rt>ほんとう</rt></ruby>の<ruby>核心<rt>かくしん</rt></ruby>だと<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">sou 。 sorega 「 sumimasen 」 no hontou no kakushin dato omou 。</span>
+<span class="line-en">That&#x27;s what I believe is at the heart of *sumimasen*.<br/>It&#x27;s about awareness. It&#x27;s about acknowledgment.<br/>It&#x27;s about not pretending the other person isn&#x27;t there.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">なんか…<ruby>英語<rt>えいご</rt></ruby>でそれ<ruby>一言<rt>ひとこと</rt></ruby>で<ruby>言え<rt>いえ</rt></ruby>る<ruby>言葉<rt>ことば</rt></ruby>って、ないよね？</span>
+<span class="line-romaji">nanka … eigo desore hitokoto de ie ru kotoba tte 、 naiyone ？</span>
+<span class="line-en">We don&#x27;t have a single word for that in English, do we?<br/>Like there&#x27;s no English equivalent that covers all five of those situations<br/>with one clean, natural-sounding word.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ないんだよね。それが<ruby>言語<rt>げんご</rt></ruby>の<ruby>違い<rt>ちがい</rt></ruby>の<ruby>面白い<rt>おもしろい</rt></ruby>ところだと<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">naindayone 。 sorega gengo no chigai no omoshiroi tokorodato omou 。</span>
+<span class="line-en">There really isn&#x27;t.<br/>And that absence — the fact that English doesn&#x27;t have it —<br/>actually tells you something about the difference in how these two cultures<br/>think about social interaction.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、もう<ruby>少し<rt>すこし</rt></ruby><ruby>話し<rt>はなし</rt></ruby>てほしい。<br/>なんで<ruby>日本語<rt>にほんご</rt></ruby>にはこういう<ruby>言葉<rt>ことば</rt></ruby>があって、<ruby>英語<rt>えいご</rt></ruby>にはないの？</span>
+<span class="line-romaji">sore 、 mou sukoshi hanashi tehoshii 。 nande nihongo nihakouiu kotoba gaatte 、 eigo nihanaino ？</span>
+<span class="line-en">I want to dig into that.<br/>Why does Japanese have a word that covers all of this<br/>and English doesn&#x27;t?</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section3"><div class="section-label">✦ PART THREE: Where Does Sumimasen Come From?</div></div>
+<div class="section" data-section="section3">
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">まずね、「すみません」の<ruby>元の<rt>もとの</rt></ruby><ruby>意味<rt>いみ</rt></ruby>を<ruby>知る<rt>しる</rt></ruby>と<ruby>面白い<rt>おもしろい</rt></ruby>と<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">mazune 、「 sumimasen 」 no motono imi wo shiru to omoshiroi to omou 。</span>
+<span class="line-en">Let&#x27;s go back to the origins of the word for a second,<br/>because I think this actually explains a lot.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えっ、<ruby>語源<rt>ごげん</rt></ruby>？！おもしろそう。</span>
+<span class="line-romaji">etsu 、 gogen ？！ omoshirosou 。</span>
+<span class="line-en">Oh — etymology? Yes. I&#x27;m in.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「すみません」って、「<ruby>済む<rt>すむ</rt></ruby>」（すむ）という<ruby>動詞<rt>どうし</rt></ruby>からきてるの。<br/>「<ruby>済む<rt>すむ</rt></ruby>」は「<ruby>終わ<rt>おわ</rt></ruby>る」「<ruby>解決<rt>かいけつ</rt></ruby>する」「<ruby>落ち着く<rt>おちつく</rt></ruby>」みたいな<ruby>意味<rt>いみ</rt></ruby>。</span>
+<span class="line-romaji">「 sumimasen 」 tte 、「 sumu 」（ sumu ） toiu doushi karakiteruno 。 「 sumu 」 ha 「 owa ru 」「 kaiketsu suru 」「 ochitsuku 」 mitaina imi 。</span>
+<span class="line-en">*Sumimasen* comes from the verb *sumu* （<ruby>済む<rt>すむ</rt></ruby>）.<br/>And *sumu* means something like — to settle, to be resolved, to come to a close.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えっ、それがどう<ruby>繋が<rt>つなが</rt></ruby>るの？</span>
+<span class="line-romaji">etsu 、 soregadou tsunaga runo ？</span>
+<span class="line-en">Wait — how does that connect?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「すみません」って、<ruby>直訳<rt>ちょくやく</rt></ruby>すると、<br/>「<ruby>済みません<rt>すみません</rt></ruby>」——「これでは<ruby>済ま<rt>すま</rt></ruby>ない」「<ruby>解決<rt>かいけつ</rt></ruby>しない」みたいな<ruby>感じ<rt>かんじ</rt></ruby>。<br/>「あなたに<ruby>何か<rt>なにか</rt></ruby>してもらったことが、<ruby>私<rt>わたし</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で<ruby>終わ<rt>おわ</rt></ruby>っていない」。<br/>「まだ、<ruby>気に<rt>きに</rt></ruby>なっている」。</span>
+<span class="line-romaji">「 sumimasen 」 tte 、 chokuyaku suruto 、 「 sumimasen 」——「 koredeha suma nai 」「 kaiketsu shinai 」 mitaina kanji 。 「 anatani nanika shitemorattakotoga 、 watashi no naka de owa tteinai 」。 「 mada 、 kini natteiru 」。</span>
+<span class="line-en">So *sumimasen* literally translates to something like —<br/>&quot;This does not settle.&quot;<br/>&quot;This is not resolved.&quot;<br/>&quot;What you did for me — I cannot simply let it pass.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えええ……</span>
+<span class="line-romaji">eee ……</span>
+<span class="line-en">Oh wow.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">つまり「あなたがしてくれたことが、<ruby>私<rt>わたし</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby>まだ<ruby>残っ<rt>のこっ</rt></ruby>ている」。<br/>「<ruby>忘れ<rt>わすれ</rt></ruby>ていないよ」。<br/>「ちゃんと<ruby>受け取っ<rt>うけとっ</rt></ruby>たよ」。<br/>そういう<ruby>気持ち<rt>きもち</rt></ruby>なんだよね。</span>
+<span class="line-romaji">tsumari 「 anatagashitekuretakotoga 、 watashi no kokoro no nakani mada nokotsu teiru 」。 「 wasure teinaiyo 」。 「 chanto uketotsu tayo 」。 souiu kimochi nandayone 。</span>
+<span class="line-en">In other words — &quot;What you did for me is still with me.&quot;<br/>&quot;I haven&#x27;t forgotten it.&quot;<br/>&quot;I received it. I hold it.&quot;<br/>The word literally says: &quot;This is not something I can just let go.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">すごい……。<br/>「ありがとう」より<ruby>重い<rt>おもい</rt></ruby>かもしれない、<ruby>場合<rt>ばあい</rt></ruby>によっては。</span>
+<span class="line-romaji">sugoi ……。 「 arigatou 」 yori omoi kamoshirenai 、 baai niyotteha 。</span>
+<span class="line-en">That&#x27;s... more powerful than I expected.<br/>In some situations, that might actually be more meaningful than just &quot;thank you.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう<ruby>思う<rt>おもう</rt></ruby>。<br/>「ありがとう」は「ありがたい」——「なかなかない、<ruby>希少<rt>きしょう</rt></ruby>だ」という<ruby>意味<rt>いみ</rt></ruby>から。<br/><ruby>感謝<rt>かんしゃ</rt></ruby>の<ruby>表現<rt>ひょうげん</rt></ruby>。<br/>でも「すみません」は、もう<ruby>少し<rt>すこし</rt></ruby>——<ruby>自分<rt>じぶん</rt></ruby>の<ruby>内側<rt>うちがわ</rt></ruby>に<ruby>向い<rt>むい</rt></ruby>てる<ruby>感じ<rt>かんじ</rt></ruby>がする。<br/>「<ruby>私<rt>わたし</rt></ruby>が<ruby>感じ<rt>かんじ</rt></ruby>ていること」を<ruby>言葉<rt>ことば</rt></ruby>にしてる。</span>
+<span class="line-romaji">sou omou 。 「 arigatou 」 ha 「 arigatai 」——「 nakanakanai 、 kishou da 」 toiu imi kara 。 kansha no hyougen 。 demo 「 sumimasen 」 ha 、 mou sukoshi —— jibun no uchigawa ni mui teru kanji gasuru 。 「 watashi ga kanji teirukoto 」 wo kotoba nishiteru 。</span>
+<span class="line-en">*Arigatou* comes from *arigatai* — &quot;rare, precious, hard to come by.&quot;<br/>It&#x27;s gratitude directed outward. &quot;You gave me something rare.&quot;<br/>But *sumimasen* turns inward. It says something about the speaker.<br/>&quot;I cannot simply move past what you did.&quot;<br/>It&#x27;s the difference between &quot;thank you&quot; and &quot;this moved me.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>待っ<rt>まっ</rt></ruby>て<ruby>待っ<rt>まっ</rt></ruby>て。<ruby>頭<rt>あたま</rt></ruby>の<ruby>中<rt>なか</rt></ruby>でいろいろ<ruby>繋が<rt>つなが</rt></ruby>ってきた。<br/>だから「すみません」って、<ruby>時々<rt>ときどき</rt></ruby>「ありがとう」より<ruby>感情<rt>かんじょう</rt></ruby>が<ruby>深い<rt>ふかい</rt></ruby><ruby>感じ<rt>かんじ</rt></ruby>がするんだ。</span>
+<span class="line-romaji">matsu te matsu te 。 atama no naka deiroiro tsunaga ttekita 。 dakara 「 sumimasen 」 tte 、 tokidoki 「 arigatou 」 yori kanjou ga fukai kanji gasurunda 。</span>
+<span class="line-en">Wait — this is connecting things for me.<br/>That&#x27;s why sometimes when a Japanese person says *sumimasen*<br/>after you&#x27;ve helped them with something small,<br/>it feels more weighted than a simple thank you would.<br/>Because the word literally says &quot;I&#x27;m not letting this go.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう、まさに。<br/><ruby>言葉<rt>ことば</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby><ruby>気持ち<rt>きもち</rt></ruby>が<ruby>入っ<rt>はいっ</rt></ruby>てるの。<br/><ruby>言葉<rt>ことば</rt></ruby>が<ruby>感情<rt>かんじょう</rt></ruby>を<ruby>持っ<rt>もっ</rt></ruby>てる。</span>
+<span class="line-romaji">sou 、 masani 。 kotoba no nakani kimochi ga haitsu teruno 。 kotoba ga kanjou wo motsu teru 。</span>
+<span class="line-en">Exactly. The feeling is built into the structure of the word.<br/>You don&#x27;t have to add extra tone or emotion.<br/>The word itself is already carrying it.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section4"><div class="section-label">✦ PART FOUR: Real Situations — Let&#x27;s Play a Game</div></div>
+<div class="section" data-section="section4">
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">じゃあ、ちょっとゲームをしない？<br/>キツが<ruby>場面<rt>ばめん</rt></ruby>を<ruby>言って<rt>いって</rt></ruby>、<ruby>僕<rt>ぼく</rt></ruby>が「すみません」って<ruby>言う<rt>いう</rt></ruby>シーンかどうか<ruby>当て<rt>あて</rt></ruby>る。<br/>みんなも<ruby>一緒に<rt>いっしょに</rt></ruby><ruby>考え<rt>かんがえ</rt></ruby>てみてね。</span>
+<span class="line-romaji">jaa 、 chotto geemu woshinai ？ kitsu ga bamen wo itte 、 boku ga 「 sumimasen 」 tte iu shiin kadouka ate ru 。 minnamo isshoni kangae temitene 。</span>
+<span class="line-en">Okay, can we do something fun here?<br/>I want to do a little game.<br/>Kitsu, you give me a situation —<br/>and I&#x27;ll try to figure out what the *sumimasen* means in that context.<br/>And everyone at home — try it with me.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">いいよ。じゃあ<ruby>最初<rt>さいしょ</rt></ruby>の<ruby>場面<rt>ばめん</rt></ruby>。<br/>エレベーターに<ruby>乗ろ<rt>のろ</rt></ruby>うとしたら、ドアが<ruby>閉ま<rt>しま</rt></ruby>りかけてた。<br/><ruby>中に<rt>なかに</rt></ruby>いた<ruby>人<rt>ひと</rt></ruby>がボタンを<ruby>押し<rt>おし</rt></ruby>て<ruby>待っ<rt>まっ</rt></ruby>ててくれた。<br/><ruby>乗っ<rt>のっ</rt></ruby>た<ruby>時に<rt>ときに</rt></ruby><ruby>何て<rt>なんて</rt></ruby><ruby>言う<rt>いう</rt></ruby>？</span>
+<span class="line-romaji">iiyo 。 jaa saisho no bamen 。 erebeetaa ni noro utoshitara 、 doa ga shima rikaketeta 。 nakani ita hito ga botan wo oshi te matsu tetekureta 。 notsu ta tokini nante iu ？</span>
+<span class="line-en">Okay. First situation.<br/>You&#x27;re rushing to an elevator and the doors are about to close.<br/>Someone inside reaches over and holds the door open for you.<br/>You step in. What do you say?</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「すみません！」——これは、「<ruby>迷惑<rt>めいわく</rt></ruby>をかけてごめん」と「ありがとう」が<ruby>混ざ<rt>まざ</rt></ruby>ってる<ruby>感じ<rt>かんじ</rt></ruby>？</span>
+<span class="line-romaji">「 sumimasen ！」—— koreha 、「 meiwaku wokaketegomen 」 to 「 arigatou 」 ga maza tteru kanji ？</span>
+<span class="line-en">*Sumimasen!* — and here, it&#x27;s a mix of &quot;sorry for making you wait&quot;<br/>and &quot;thank you for holding it&quot; at the same time?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>完璧<rt>かんぺき</rt></ruby>！<br/>それ、<ruby>英語<rt>えいご</rt></ruby>だと<ruby>二つ<rt>ふたつ</rt></ruby>の<ruby>文<rt>ぶん</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>なんだよね。<br/>「Sorry to hold you up, thank you so much!」みたいな。<br/><ruby>日本語<rt>にほんご</rt></ruby>は<ruby>一言<rt>ひとこと</rt></ruby>でそれが<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>言え<rt>いえ</rt></ruby>る。</span>
+<span class="line-romaji">kanpeki ！ sore 、 eigo dato futatsu no bun ga hitsuyou nandayone 。 「Sorry to hold you up, thank you so much!」 mitaina 。 nihongo ha hitokoto desorega zenbu ie ru 。</span>
+<span class="line-en">Perfect!<br/>And notice — in English you&#x27;d need two separate phrases.<br/>&quot;Sorry to hold you up — and thank you so much!&quot;<br/>Japanese compresses both feelings into one word.<br/>*Sumimasen* carries the apology and the gratitude simultaneously.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">うわ、<ruby>効率的<rt>こうりつてき</rt></ruby>だな……！</span>
+<span class="line-romaji">uwa 、 kouritsuteki dana ……！</span>
+<span class="line-en">That&#x27;s... incredibly efficient actually.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>次の<rt>つぎの</rt></ruby><ruby>場面<rt>ばめん</rt></ruby>。<br/><ruby>道<rt>みち</rt></ruby>を<ruby>歩い<rt>あるい</rt></ruby>てたら、<ruby>見知ら<rt>みしら</rt></ruby>ぬ<ruby>人<rt>ひと</rt></ruby>の<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>落ち<rt>おち</rt></ruby>た。<br/><ruby>拾っ<rt>ひろっ</rt></ruby>てあげた。<ruby>相手<rt>あいて</rt></ruby>がなんて<ruby>言う<rt>いう</rt></ruby>と<ruby>思う<rt>おもう</rt></ruby>？</span>
+<span class="line-romaji">tsugino bamen 。 michi wo arui tetara 、 mishira nu hito no nimotsu ga ochi ta 。 hirotsu teageta 。 aite ganante iu to omou ？</span>
+<span class="line-en">Next situation.<br/>You&#x27;re walking down the street.<br/>A stranger drops something.<br/>You pick it up and hand it back to them.<br/>What do they say?</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「あ、すみません！」——<br/>これは<ruby>完全<rt>かんぜん</rt></ruby>に<ruby>感謝<rt>かんしゃ</rt></ruby>だね。<ruby>謝っ<rt>あやまっ</rt></ruby>てるわけじゃない。</span>
+<span class="line-romaji">「 a 、 sumimasen ！」—— koreha kanzen ni kansha dane 。 ayamatsu teruwakejanai 。</span>
+<span class="line-en">*&quot;Ah, sumimasen!&quot;* — and this one is pure gratitude, right?<br/>They&#x27;re not really apologizing. They&#x27;re just — receiving your kindness.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう！でもよく<ruby>見る<rt>みる</rt></ruby>とね、<ruby>少し<rt>すこし</rt></ruby><ruby>謝り<rt>あやまり</rt></ruby>も<ruby>入っ<rt>はいっ</rt></ruby>てるの。<br/>「あなたに<ruby>手間<rt>てま</rt></ruby>をかけさせてしまった」っていう<ruby>気持ち<rt>きもち</rt></ruby>が。<br/>それを「すみません」<ruby>一言<rt>ひとこと</rt></ruby>で<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>言って<rt>いって</rt></ruby>る。</span>
+<span class="line-romaji">sou ！ demoyoku miru tone 、 sukoshi ayamari mo haitsu teruno 。 「 anatani tema wokakesaseteshimatta 」 tteiu kimochi ga 。 sorewo 「 sumimasen 」 hitokoto de zenbu itte ru 。</span>
+<span class="line-en">Yes — but there&#x27;s a micro-apology in there too.<br/>&quot;I caused you to stop and do something for me.<br/>I created a small inconvenience.&quot;<br/>*Sumimasen* acknowledges both the gratitude and the slight guilt simultaneously.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>一言<rt>ひとこと</rt></ruby>にそんなに<ruby>情報量<rt>じょうほうりょう</rt></ruby>が<ruby>入っ<rt>はいっ</rt></ruby>てるなんて……。<br/><ruby>日本語<rt>にほんご</rt></ruby>って、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>言葉<rt>ことば</rt></ruby>が<ruby>濃い<rt>こい</rt></ruby>。</span>
+<span class="line-romaji">hitokoto nisonnani jouhouryou ga haitsu terunante ……。 nihongo tte 、 hontou ni kotoba ga koi 。</span>
+<span class="line-en">How is that much information packed into one word?<br/>Japanese is so dense. Like, emotionally dense.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">もう<ruby>一個<rt>いっこ</rt></ruby><ruby>行く<rt>いく</rt></ruby>？</span>
+<span class="line-romaji">mou ikko iku ？</span>
+<span class="line-en">One more?</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">うん！</span>
+<span class="line-romaji">un ！</span>
+<span class="line-en">Yes, absolutely.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">コンビニで、<ruby>店員<rt>てんいん</rt></ruby>さんに<ruby>領収書<rt>りょうしゅうしょ</rt></ruby>をお<ruby>願い<rt>ねがい</rt></ruby>する<ruby>時<rt>とき</rt></ruby>。<br/>ちょっと<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>頼み<rt>たのみ</rt></ruby>ごとをする<ruby>時<rt>とき</rt></ruby>。<br/><ruby>何て<rt>なんて</rt></ruby><ruby>言う<rt>いう</rt></ruby>？</span>
+<span class="line-romaji">konbini de 、 ten&#x27;in sanni ryoushuusho woo negai suru toki 。 chotto tokubetsu na tanomi gotowosuru toki 。 nante iu ？</span>
+<span class="line-en">You&#x27;re at a convenience store.<br/>You need to ask the cashier for a receipt.<br/>Just a small extra request. Nothing major.<br/>What do you say?</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「すみません、<ruby>領収書<rt>りょうしゅうしょ</rt></ruby>をもらえますか？」——<br/>これはなんか…<ruby>頼む<rt>たのむ</rt></ruby><ruby>前<rt>まえ</rt></ruby>の、クッションみたいな<ruby>感じ<rt>かんじ</rt></ruby>？</span>
+<span class="line-romaji">「 sumimasen 、 ryoushuusho womoraemasuka ？」—— korehananka … tanomu mae no 、 kusshon mitaina kanji ？</span>
+<span class="line-en">*Sumimasen, ryoushuusho wo moraemasu ka?*<br/>&quot;Excuse me, could I get a receipt?&quot;<br/>And here it&#x27;s more like a... buffer? A cushion before the request?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう！いいこと<ruby>言った<rt>いった</rt></ruby>。<br/>「すみません」には、<ruby>相手<rt>あいて</rt></ruby>への<ruby>気遣い<rt>きづかい</rt></ruby>が<ruby>入っ<rt>はいっ</rt></ruby>てる。<br/>「あなたの<ruby>時間<rt>じかん</rt></ruby>を<ruby>少し<rt>すこし</rt></ruby><ruby>取ら<rt>とら</rt></ruby>せますよ」っていう<ruby>前置き<rt>まえおき</rt></ruby>。<br/><ruby>突然<rt>とつぜん</rt></ruby><ruby>頼む<rt>たのむ</rt></ruby>より、ずっと<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>感じ<rt>かんじ</rt></ruby>る。</span>
+<span class="line-romaji">sou ！ iikoto itta 。 「 sumimasen 」 niha 、 aite heno kizukai ga haitsu teru 。 「 anatano jikan wo sukoshi tora semasuyo 」 tteiu maeoki 。 totsuzen tanomu yori 、 zutto teinei ni kanji ru 。</span>
+<span class="line-en">Yes! That&#x27;s exactly it.<br/>*Sumimasen* here is an acknowledgment before the request.<br/>&quot;I&#x27;m about to take a moment of your time, and I want you to know I&#x27;m aware of that.&quot;<br/>It softens the ask. It says the other person&#x27;s time matters.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>英語<rt>えいご</rt></ruby>だと「Hey, can I get a receipt?」って<ruby>普通<rt>ふつう</rt></ruby>に<ruby>言う<rt>いう</rt></ruby>けど、<br/><ruby>日本語<rt>にほんご</rt></ruby>だと<ruby>最初<rt>さいしょ</rt></ruby>に<ruby>相手<rt>あいて</rt></ruby>のことを<ruby>考え<rt>かんがえ</rt></ruby>てから<ruby>頼む<rt>たのむ</rt></ruby><ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">eigo dato 「Hey, can I get a receipt?」 tte futsuu ni iu kedo 、 nihongo dato saisho ni aite nokotowo kangae tekara tanomu kanji 。</span>
+<span class="line-en">In English we&#x27;d just go straight to &quot;Hey, can I get a receipt?&quot;<br/>No preamble, no acknowledgment.<br/>But in Japanese you pause first — you acknowledge the other person first —<br/>and then you make the request.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。その<ruby>順番<rt>じゅんばん</rt></ruby>が<ruby>大事<rt>だいじ</rt></ruby>なんだよ。<br/><ruby>相手<rt>あいて</rt></ruby>を<ruby>気に<rt>きに</rt></ruby>かけているということを、<ruby>先に<rt>さきに</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>にする。</span>
+<span class="line-romaji">sou 。 sono junban ga daiji nandayo 。 aite wo kini kaketeirutoiukotowo 、 sakini kotoba nisuru 。</span>
+<span class="line-en">The order matters.<br/>You acknowledge first. Then you ask.<br/>That&#x27;s not just manners — it reflects a specific way of moving through the world.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section5"><div class="section-label">✦ PART FIVE: The Story That Changed How I See It</div></div>
+<div class="section" data-section="section5">
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ねえ、これ<ruby>聞い<rt>きい</rt></ruby>ていい？<br/><ruby>日本<rt>にほん</rt></ruby>に<ruby>住ん<rt>すん</rt></ruby>でた<ruby>時<rt>とき</rt></ruby>か、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>使って<rt>つかって</rt></ruby>た<ruby>時に<rt>ときに</rt></ruby>、<br/>「すみません」が<ruby>一番<rt>いちばん</rt></ruby><ruby>印象<rt>いんしょう</rt></ruby>に<ruby>残っ<rt>のこっ</rt></ruby>た<ruby>瞬間<rt>しゅんかん</rt></ruby>って<ruby>何か<rt>なにか</rt></ruby>ある？</span>
+<span class="line-romaji">nee 、 kore kii teii ？ nihon ni sun deta toki ka 、 nihongo wo tsukatte ta tokini 、 「 sumimasen 」 ga ichiban inshou ni nokotsu ta shunkan tte nanika aru ？</span>
+<span class="line-en">Can I ask you something personal?<br/>Is there a moment you remember — a specific moment —<br/>where *sumimasen* really hit you differently?<br/>Where you felt the full weight of it?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あるよ。すごく<ruby>覚え<rt>おぼえ</rt></ruby>てる<ruby>話<rt>はなし</rt></ruby>がある。</span>
+<span class="line-romaji">aruyo 。 sugoku oboe teru hanashi gaaru 。</span>
+<span class="line-en">Yes. There&#x27;s one story I always think about.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>聞か<rt>きか</rt></ruby>せて！</span>
+<span class="line-romaji">kika sete ！</span>
+<span class="line-en">Tell me.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>前<rt>まえ</rt></ruby>に<ruby>東京<rt>とうきょう</rt></ruby>に<ruby>住ん<rt>すん</rt></ruby>でた<ruby>友達<rt>ともだち</rt></ruby>から<ruby>聞い<rt>きい</rt></ruby>た<ruby>話<rt>はなし</rt></ruby>なんだけど。<br/><ruby>彼女<rt>かのじょ</rt></ruby>、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>して<ruby>数ヶ月<rt>すうかげつ</rt></ruby>で<ruby>日本<rt>にほん</rt></ruby>に<ruby>行った<rt>いった</rt></ruby>んだよね。<br/>ある<ruby>日<rt>にち</rt></ruby>、<ruby>重い<rt>おもい</rt></ruby>スーツケースを<ruby>持っ<rt>もっ</rt></ruby>て、<ruby>駅<rt>えき</rt></ruby>の<ruby>階段<rt>かいだん</rt></ruby>を<ruby>一人<rt>ひとり</rt></ruby>で<ruby>下り<rt>くだり</rt></ruby>ようとしてた。</span>
+<span class="line-romaji">mae ni toukyou ni sun deta tomodachi kara kii ta hanashi nandakedo 。 kanojo 、 nihongo wo benkyou shite suukagetsu de nihon ni itta ndayone 。 aru nichi 、 omoi suutsukeesu wo motsu te 、 eki no kaidan wo hitori de kudari youtoshiteta 。</span>
+<span class="line-en">This is actually a story a friend told me —<br/>she&#x27;d been studying Japanese for a few months when she went to Tokyo.<br/>One day she was alone at a train station,<br/>carrying a massive suitcase, trying to get down the stairs.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あ、それ<ruby>大変<rt>たいへん</rt></ruby>だよね。<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>駅<rt>えき</rt></ruby>、<ruby>大きい<rt>おおきい</rt></ruby>し、<ruby>階段<rt>かいだん</rt></ruby><ruby>多い<rt>おおい</rt></ruby>し。</span>
+<span class="line-romaji">a 、 sore taihen dayone 。 toukyou no eki 、 ookii shi 、 kaidan ooi shi 。</span>
+<span class="line-en">Tokyo station stairs are no joke.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうなの。もう、ガタガタしながら<ruby>頑張っ<rt>がんばっ</rt></ruby>て<ruby>降り<rt>おり</rt></ruby>ようとしてたら、<br/><ruby>突然<rt>とつぜん</rt></ruby>、おじさんが<ruby>現れ<rt>あらわれ</rt></ruby>て「あ、<ruby>手伝い<rt>てつだい</rt></ruby>ましょうか」って<ruby>言って<rt>いって</rt></ruby>、<br/><ruby>一緒に<rt>いっしょに</rt></ruby><ruby>持っ<rt>もっ</rt></ruby>てくれたんだって。</span>
+<span class="line-romaji">sounano 。 mou 、 gatagata shinagara ganbatsu te ori youtoshitetara 、 totsuzen 、 ojisanga araware te 「 a 、 tetsudai mashouka 」 tte itte 、 isshoni motsu tekuretandatte 。</span>
+<span class="line-en">She was struggling — really struggling —<br/>when suddenly an older man appeared beside her,<br/>wordlessly took one side of the suitcase,<br/>and helped her carry it all the way down.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">えー！<ruby>優しい<rt>やさしい</rt></ruby>。</span>
+<span class="line-romaji">ee ！ yasashii 。</span>
+<span class="line-en">Aw.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>下<rt>した</rt></ruby>まで<ruby>降り<rt>おり</rt></ruby>たら、そのおじさん、ぺこっとお<ruby>辞儀<rt>じぎ</rt></ruby>して<br/>「お<ruby>気を<rt>きを</rt></ruby>つけて」って<ruby>言って<rt>いって</rt></ruby>、サッといなくなったんだって。</span>
+<span class="line-romaji">shita made ori tara 、 sonoojisan 、 pekottoo jigi shite 「 o kiwo tsukete 」 tte itte 、 satsu toinakunattandatte 。</span>
+<span class="line-en">When they reached the bottom,<br/>he bowed gently, said *o-ki wo tsukete* — &quot;take care&quot; —<br/>and just walked away. Didn&#x27;t wait for anything.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">え、お<ruby>礼<rt>れい</rt></ruby>も<ruby>受け取ら<rt>うけとら</rt></ruby>ないで？</span>
+<span class="line-romaji">e 、 o rei mo uketora naide ？</span>
+<span class="line-en">He didn&#x27;t even wait for a thank you?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。で、<ruby>友達<rt>ともだち</rt></ruby>は<ruby>咄嗟<rt>とっさ</rt></ruby>に、<ruby>覚え<rt>おぼえ</rt></ruby>たての「すみません！」って<ruby>言った<rt>いった</rt></ruby>んだって。<br/>ちゃんとした「ありがとうございます」じゃなくて。<br/>まだ<ruby>日本語<rt>にほんご</rt></ruby>に<ruby>自信<rt>じしん</rt></ruby>がなかったから。</span>
+<span class="line-romaji">sou 。 de 、 tomodachi ha tossa ni 、 oboe tateno 「 sumimasen ！」 tte itta ndatte 。 chantoshita 「 arigatougozaimasu 」 janakute 。 mada nihongo ni jishin ganakattakara 。</span>
+<span class="line-en">And my friend — she only knew a little Japanese at the time —<br/>said *sumimasen* in that moment. Not *arigatou*.<br/>She didn&#x27;t feel like she had the right words yet.<br/>But *sumimasen* just came out.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それでどうなったの？</span>
+<span class="line-romaji">sorededounattano ？</span>
+<span class="line-en">What happened?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そのおじさん、<ruby>振り返っ<rt>ふりかえっ</rt></ruby>て、すごく<ruby>温かい<rt>あたたかい</rt></ruby><ruby>顔<rt>かお</rt></ruby>で<ruby>微笑ん<rt>ほほえん</rt></ruby>だんだって。<br/>「ちゃんとわかってる」みたいな<ruby>顔<rt>かお</rt></ruby>で。<br/><ruby>日本語<rt>にほんご</rt></ruby><ruby>一言<rt>ひとこと</rt></ruby>で、<ruby>伝わ<rt>つたわ</rt></ruby>ったって。</span>
+<span class="line-romaji">sonoojisan 、 furikaetsu te 、 sugoku atatakai kao de hohoen dandatte 。 「 chantowakatteru 」 mitaina kao de 。 nihongo hitokoto de 、 tsutawa ttatte 。</span>
+<span class="line-en">The man turned around.<br/>And he smiled — this warm, understanding smile.<br/>Like her one word had communicated everything.<br/>&quot;I know you&#x27;re trying. I know you meant it.&quot;<br/>And he nodded, and was gone.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">うわあ……</span>
+<span class="line-romaji">uwaa ……</span>
+<span class="line-en">I love that.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>友達<rt>ともだち</rt></ruby>が<ruby>言って<rt>いって</rt></ruby>たのが、「その<ruby>一言<rt>ひとこと</rt></ruby>が、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>続け<rt>つづけ</rt></ruby>る<ruby>理由<rt>りゆう</rt></ruby>になった」って。<br/><ruby>言葉<rt>ことば</rt></ruby>で<ruby>繋が<rt>つなが</rt></ruby>れた<ruby>気が<rt>きが</rt></ruby>した、って。</span>
+<span class="line-romaji">tomodachi ga itte tanoga 、「 sono hitokoto ga 、 nihongo wo tsuzuke ru riyuu ninatta 」 tte 。 kotoba de tsunaga reta kiga shita 、 tte 。</span>
+<span class="line-en">And she told me — that single word, that single *sumimasen*,<br/>was the moment she decided she would never stop learning Japanese.<br/>Because it had connected her to a real person, in a real moment,<br/>in a real way.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">その<ruby>話<rt>はなし</rt></ruby>、なんか<ruby>泣き<rt>なき</rt></ruby>そうになる……。<br/><ruby>言葉<rt>ことば</rt></ruby>って、こういう<ruby>瞬間<rt>しゅんかん</rt></ruby>のためにあるんだなって<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">sono hanashi 、 nanka naki souninaru ……。 kotoba tte 、 kouiu shunkan notameniarundanatte omou 。</span>
+<span class="line-en">That story gets me every time.<br/>That&#x27;s what language is for, isn&#x27;t it?<br/>Not for tests. Not for grammar drills.<br/>For moments exactly like that one.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section6"><div class="section-label">✦ PART SIX: The Cultural Deep Dive</div></div>
+<div class="section" data-section="section6">
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ちょっと<ruby>聞き<rt>きき</rt></ruby>たいんだけど、なんで<ruby>日本<rt>にほん</rt></ruby>にこういう<ruby>文化<rt>ぶんか</rt></ruby>が<ruby>育っ<rt>そだっ</rt></ruby>たんだろう？<br/>「すみません」みたいな<ruby>言葉<rt>ことば</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>になるくらい、<br/><ruby>相手<rt>あいて</rt></ruby>のことを<ruby>気に<rt>きに</rt></ruby>する<ruby>文化<rt>ぶんか</rt></ruby>って、どこからきたんだろう。</span>
+<span class="line-romaji">chotto kiki taindakedo 、 nande nihon nikouiu bunka ga sodatsu tandarou ？ 「 sumimasen 」 mitaina kotoba ga hitsuyou ninarukurai 、 aite nokotowo kini suru bunka tte 、 dokokarakitandarou 。</span>
+<span class="line-en">Okay, I want to zoom out a little here.<br/>Because the existence of this word isn&#x27;t accidental, right?<br/>It comes from somewhere.<br/>Why did Japan develop a culture where people are so aware of others&#x27; effort?<br/>Where did *sumimasen* come from, culturally speaking?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">いい<ruby>質問<rt>しつもん</rt></ruby>。これ、すごく<ruby>面白い<rt>おもしろい</rt></ruby>ところなの。</span>
+<span class="line-romaji">ii shitsumon 。 kore 、 sugoku omoshiroi tokoronano 。</span>
+<span class="line-en">This is one of my favorite things to think about.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>話し<rt>はなし</rt></ruby>て、<ruby>話し<rt>はなし</rt></ruby>て！</span>
+<span class="line-romaji">hanashi te 、 hanashi te ！</span>
+<span class="line-en">Tell me everything.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本<rt>にほん</rt></ruby>はね、<ruby>昔<rt>むかし</rt></ruby>から<ruby>島<rt>しま</rt></ruby><ruby>国<rt>くに</rt></ruby>で、<ruby>農業<rt>のうぎょう</rt></ruby>を<ruby>中心<rt>ちゅうしん</rt></ruby>にした<ruby>社会<rt>しゃかい</rt></ruby>だったの。<br/><ruby>田んぼ<rt>たんぼ</rt></ruby>って、<ruby>一人<rt>ひとり</rt></ruby>じゃ<ruby>作れ<rt>つくれ</rt></ruby>ない。<br/><ruby>村<rt>むら</rt></ruby><ruby>全員<rt>ぜんいん</rt></ruby>で<ruby>水<rt>みず</rt></ruby>を<ruby>分け<rt>わけ</rt></ruby>て、<ruby>一緒に<rt>いっしょに</rt></ruby><ruby>育て<rt>そだて</rt></ruby>て、<ruby>一緒に<rt>いっしょに</rt></ruby><ruby>収穫<rt>しゅうかく</rt></ruby>する。<br/>だから「みんなと<ruby>仲良く<rt>なかよく</rt></ruby>やっていく」ことが<ruby>生き<rt>いき</rt></ruby>ていくために<ruby>必要<rt>ひつよう</rt></ruby>だった。</span>
+<span class="line-romaji">nihon hane 、 mukashi kara shima kuni de 、 nougyou wo chuushin nishita shakai dattano 。 tanbo tte 、 hitori ja tsukure nai 。 mura zen&#x27;in de mizu wo wake te 、 isshoni sodate te 、 isshoni shuukaku suru 。 dakara 「 minnato nakayoku yatteiku 」 kotoga iki teikutameni hitsuyou datta 。</span>
+<span class="line-en">Japan is an island nation that historically had a very rice-farming-based society.<br/>And rice farming can&#x27;t be done alone.<br/>You share water. You share labor. You harvest together.<br/>Your survival literally depended on maintaining good relationships with your neighbors.<br/>The village wasn&#x27;t just a social unit — it was a survival unit.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あー、だから「<ruby>和<rt>わ</rt></ruby>」（わ）の<ruby>文化<rt>ぶんか</rt></ruby>が<ruby>大事<rt>だいじ</rt></ruby>なんだね。<br/>「みんなで<ruby>仲<rt>なか</rt></ruby>よく」っていう。</span>
+<span class="line-romaji">aa 、 dakara 「 wa 」（ wa ） no bunka ga daiji nandane 。 「 minnade naka yoku 」 tteiu 。</span>
+<span class="line-en">So that&#x27;s where *wa* comes from — the concept of harmony.<br/>If you damage relationships in that context,<br/>you&#x27;re not just being rude. You&#x27;re threatening something essential.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。「<ruby>迷惑<rt>めいわく</rt></ruby>をかけない」という<ruby>意識<rt>いしき</rt></ruby>が、<ruby>深く<rt>ふかく</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby><ruby>根<rt>ね</rt></ruby>づいてるの。<br/><ruby>相手<rt>あいて</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>取っ<rt>とっ</rt></ruby>たら、<ruby>相手<rt>あいて</rt></ruby>の<ruby>手間<rt>てま</rt></ruby>をかけさせたら、<br/>それをちゃんと<ruby>認め<rt>みとめ</rt></ruby>る。「<ruby>気に<rt>きに</rt></ruby>していますよ」って<ruby>言う<rt>いう</rt></ruby>。</span>
+<span class="line-romaji">sou 。「 meiwaku wokakenai 」 toiu ishiki ga 、 fukaku bunka no nakani ne zuiteruno 。 aite no jikan wo totsu tara 、 aite no tema wokakesasetara 、 sorewochanto mitome ru 。「 kini shiteimasuyo 」 tte iu 。</span>
+<span class="line-en">Exactly. The awareness of not being a burden — *meiwaku wo kakenai* —<br/>is deeply embedded in Japanese culture.<br/>If you take someone&#x27;s time, if you create extra work for them,<br/>you acknowledge it. You don&#x27;t pretend it didn&#x27;t happen.<br/>*Sumimasen* is how you voice that acknowledgment.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">じゃあ「すみません」って<ruby>言わ<rt>いわ</rt></ruby>ないと、<ruby>相手<rt>あいて</rt></ruby>への<ruby>敬意<rt>けいい</rt></ruby>が<ruby>感じ<rt>かんじ</rt></ruby>られない、ってこと？</span>
+<span class="line-romaji">jaa 「 sumimasen 」 tte iwa naito 、 aite heno keii ga kanji rarenai 、 ttekoto ？</span>
+<span class="line-en">So not saying *sumimasen* when you should would feel... disrespectful?<br/>Like, cold?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう<ruby>感じ<rt>かんじ</rt></ruby>る<ruby>人<rt>ひと</rt></ruby>は<ruby>多い<rt>おおい</rt></ruby>と<ruby>思う<rt>おもう</rt></ruby>。<br/><ruby>特に<rt>とくに</rt></ruby><ruby>年上<rt>としうえ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>や、<ruby>初対面<rt>しょたいめん</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>対し<rt>たいし</rt></ruby>ては。<br/>「この<ruby>人<rt>ひと</rt></ruby>、<ruby>私<rt>わたし</rt></ruby>のことを<ruby>気に<rt>きに</rt></ruby>してないのかな」って<ruby>思わ<rt>おもわ</rt></ruby>れることもある。</span>
+<span class="line-romaji">sou kanji ru hito ha ooi to omou 。 tokuni toshiue no hito ya 、 shotaimen no hito ni taishi teha 。 「 kono hito 、 watashi nokotowo kini shitenainokana 」 tte omowa rerukotomoaru 。</span>
+<span class="line-en">Many people would feel it, yes.<br/>Especially with elders or strangers.<br/>The absence of *sumimasen* can feel like indifference.<br/>&quot;This person didn&#x27;t notice what I did. Or didn&#x27;t care.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>外国人旅行者<rt>がいこくじんりょこうしゃ</rt></ruby>が<ruby>日本<rt>にほん</rt></ruby>に<ruby>行って<rt>いって</rt></ruby>、<br/><ruby>何も<rt>なにも</rt></ruby><ruby>知らず<rt>しらず</rt></ruby>に「thank you」に<ruby>当た<rt>あた</rt></ruby>ることを<ruby>言わ<rt>いわ</rt></ruby>ないままだと、<br/><ruby>無礼<rt>ぶれい</rt></ruby>に<ruby>見え<rt>みえ</rt></ruby>ることもあるんだね。</span>
+<span class="line-romaji">gaikokujinryokousha ga nihon ni itte 、 nanimo shirazu ni 「thank you」 ni ata rukotowo iwa naimamadato 、 burei ni mie rukotomoarundane 。</span>
+<span class="line-en">So foreign visitors who don&#x27;t know this —<br/>who don&#x27;t say *sumimasen* when they should —<br/>might accidentally come across as rude, even if they don&#x27;t mean to be.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうなることもある。でも<ruby>日本人<rt>にほんじん</rt></ruby>はたいてい<ruby>優しい<rt>やさしい</rt></ruby>から、<br/><ruby>外国人<rt>がいこくじん</rt></ruby>だとわかれば<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>気に<rt>きに</rt></ruby>しないよ。<br/>でも<ruby>知って<rt>しって</rt></ruby>ると、<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違う<rt>ちがう</rt></ruby><ruby>体験<rt>たいけん</rt></ruby>になる。</span>
+<span class="line-romaji">sounarukotomoaru 。 demo nihonjin hataitei yasashii kara 、 gaikokujin datowakareba zenzen kini shinaiyo 。 demo shitte ruto 、 zenzen chigau taiken ninaru 。</span>
+<span class="line-en">It can happen. But Japanese people are also very understanding of visitors.<br/>If they know you&#x27;re a foreigner, they typically won&#x27;t judge.<br/>But knowing *sumimasen* — using it even imperfectly —<br/>changes the experience completely.<br/>Suddenly doors open. Smiles come easier.<br/>People recognize you as someone who is genuinely trying to meet them.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それって<ruby>旅行者<rt>りょこうしゃ</rt></ruby>にとって<ruby>最強<rt>さいきょう</rt></ruby>の<ruby>武器<rt>ぶき</rt></ruby>じゃない？<br/><ruby>文法<rt>ぶんぽう</rt></ruby>とか<ruby>何も<rt>なにも</rt></ruby><ruby>知ら<rt>しら</rt></ruby>なくても、「すみません」を<ruby>知って<rt>しって</rt></ruby>るだけで<ruby>違う<rt>ちがう</rt></ruby>、みたいな。</span>
+<span class="line-romaji">sorette ryokousha nitotte saikyou no buki janai ？ bunpou toka nanimo shira nakutemo 、「 sumimasen 」 wo shitte rudakede chigau 、 mitaina 。</span>
+<span class="line-en">That makes *sumimasen* like the most powerful tool in a traveler&#x27;s kit.<br/>You don&#x27;t need to be fluent. You don&#x27;t need perfect grammar.<br/>You just need to understand when to use this one word<br/>and what it communicates when you do.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>本当<rt>ほんとう</rt></ruby>にそう<ruby>思う<rt>おもう</rt></ruby>。<br/>「すみません」<ruby>一言<rt>ひとこと</rt></ruby>で、<br/>「<ruby>私<rt>わたし</rt></ruby>はあなたのことを<ruby>気に<rt>きに</rt></ruby>しています」と<ruby>伝え<rt>つたえ</rt></ruby>られるから。</span>
+<span class="line-romaji">hontou nisou omou 。 「 sumimasen 」 hitokoto de 、 「 watashi haanatanokotowo kini shiteimasu 」 to tsutae rarerukara 。</span>
+<span class="line-en">I genuinely believe that.<br/>Because at its core, *sumimasen* says —<br/>&quot;I see you. I know you put in effort. I&#x27;m not taking you for granted.&quot;<br/>That message crosses every language barrier.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section7"><div class="section-label">✦ PART SEVEN: Convenience Stores, Trains, and Everyday Japan</div></div>
+<div class="section" data-section="section7">
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">コンビニの<ruby>話<rt>はなし</rt></ruby>をしてもいい？<br/><ruby>日本<rt>にほん</rt></ruby>のコンビニって<ruby>独特<rt>どくとく</rt></ruby>のカルチャーがあるじゃない。</span>
+<span class="line-romaji">konbini no hanashi woshitemoii ？ nihon no konbini tte dokutoku no karuchaa gaarujanai 。</span>
+<span class="line-en">Can we talk about convenience stores for a second?<br/>Because Japan&#x27;s convenience store culture is something else.<br/>And *sumimasen* lives there in such a specific way.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あー、コンビニは<ruby>最高<rt>さいこう</rt></ruby>の<ruby>例<rt>れい</rt></ruby>だと<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">aa 、 konbini ha saikou no rei dato omou 。</span>
+<span class="line-en">Konbini culture is the perfect case study for this.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本<rt>にほん</rt></ruby>のコンビニに<ruby>初めて<rt>はじめて</rt></ruby><ruby>入っ<rt>はいっ</rt></ruby>た<ruby>時<rt>とき</rt></ruby>、なんか<ruby>違う<rt>ちがう</rt></ruby>なって<ruby>感じ<rt>かんじ</rt></ruby>たんだよね。<br/><ruby>入っ<rt>はいっ</rt></ruby>たら「いらっしゃいませ！」って<ruby>大きい<rt>おおきい</rt></ruby><ruby>声<rt>こえ</rt></ruby>で<ruby>言わ<rt>いわ</rt></ruby>れるし、<br/>すごく<ruby>丁寧<rt>ていねい</rt></ruby>にレジをしてくれるし。<br/>なんか、<ruby>感謝し<rt>かんしゃし</rt></ruby>たいような<ruby>気持ち<rt>きもち</rt></ruby>になって。</span>
+<span class="line-romaji">nihon no konbini ni hajimete haitsu ta toki 、 nanka chigau natte kanji tandayone 。 haitsu tara 「 irasshaimase ！」 tte ookii koe de iwa rerushi 、 sugoku teinei ni reji woshitekurerushi 。 nanka 、 kanshashi taiyouna kimochi ninatte 。</span>
+<span class="line-en">The first time I walked into a Japanese convenience store I genuinely felt something.<br/>&quot;Irasshaimase!&quot; — this loud, energetic welcome.<br/>Then the cashier is so precise, so careful.<br/>They fold the bag a specific way.<br/>They count back your change carefully.<br/>I left feeling like I should thank *them*.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本<rt>にほん</rt></ruby>のサービス<ruby>文化<rt>ぶんか</rt></ruby>は「おもてなし」って<ruby>言葉<rt>ことば</rt></ruby>でよく<ruby>説明さ<rt>せつめいさ</rt></ruby>れるよね。<br/>「おもてなし」は<ruby>相手<rt>あいて</rt></ruby>のことを<ruby>先に<rt>さきに</rt></ruby><ruby>考え<rt>かんがえ</rt></ruby>ること。<br/>もてなす<ruby>側<rt>がわ</rt></ruby>が<ruby>自分<rt>じぶん</rt></ruby>を<ruby>消し<rt>けし</rt></ruby>て、<ruby>相手<rt>あいて</rt></ruby>に<ruby>集中<rt>しゅうちゅう</rt></ruby>する<ruby>感じ<rt>かんじ</rt></ruby>。</span>
+<span class="line-romaji">nihon no saabisu bunka ha 「 omotenashi 」 tte kotoba deyoku setsumeisa reruyone 。 「 omotenashi 」 ha aite nokotowo sakini kangae rukoto 。 motenasu gawa ga jibun wo keshi te 、 aite ni shuuchuu suru kanji 。</span>
+<span class="line-en">Japan&#x27;s service culture is often described with the word *omotenashi* （おもてなし）.<br/>It&#x27;s a concept of selfless hospitality —<br/>not just doing your job, but anticipating what the other person needs<br/>before they even ask for it.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>自分<rt>じぶん</rt></ruby>を<ruby>消し<rt>けし</rt></ruby>て<ruby>相手<rt>あいて</rt></ruby>に<ruby>集中<rt>しゅうちゅう</rt></ruby>する」か……。<br/>それって、コンビニの<ruby>店員<rt>てんいん</rt></ruby>さんだけじゃなくて、<br/><ruby>普通<rt>ふつう</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>たちも<ruby>持っ<rt>もっ</rt></ruby>てる<ruby>感覚<rt>かんかく</rt></ruby>なの？</span>
+<span class="line-romaji">「 jibun wo keshi te aite ni shuuchuu suru 」 ka ……。 sorette 、 konbini no ten&#x27;in sandakejanakute 、 futsuu no hito tachimo motsu teru kankaku nano ？</span>
+<span class="line-en">&quot;Erase yourself and focus on the other person.&quot;<br/>That&#x27;s a profound way to describe a service philosophy.<br/>But is that just customer service culture? Or is it in everyday people too?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>普通<rt>ふつう</rt></ruby>の<ruby>日常<rt>にちじょう</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby>も<ruby>全然<rt>ぜんぜん</rt></ruby>ある。<br/><ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅れ<rt>おくれ</rt></ruby>たら、<ruby>車内放送<rt>しゃないほうそう</rt></ruby>でものすごく<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>謝る<rt>あやまる</rt></ruby>。<br/>「ご<ruby>迷惑<rt>めいわく</rt></ruby>をおかけして<ruby>誠に<rt>まことに</rt></ruby><ruby>申し訳<rt>もうしわけ</rt></ruby>ございません」って。</span>
+<span class="line-romaji">futsuu no nichijou no nakani mo zenzen aru 。 densha ga okure tara 、 shanaihousou demonosugoku teinei ni ayamaru 。 「 go meiwaku wookakeshite makotoni moushiwake gozaimasen 」 tte 。</span>
+<span class="line-en">It&#x27;s absolutely in everyday life.<br/>When a train is delayed in Japan, the announcement doesn&#x27;t just say &quot;the train is late.&quot;<br/>The apology is elaborate, specific, and deeply sincere.<br/>&quot;We sincerely apologize for the great inconvenience this has caused.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あー、わかる！<ruby>僕<rt>ぼく</rt></ruby>も<ruby>聞い<rt>きい</rt></ruby>たことある。<br/>なんか、<ruby>鉄道会社<rt>てつどうがいしゃ</rt></ruby>がすごく<ruby>申し訳<rt>もうしわけ</rt></ruby>なさそうにするんだよね。</span>
+<span class="line-romaji">aa 、 wakaru ！ boku mo kii takotoaru 。 nanka 、 tetsudougaisha gasugoku moushiwake nasasounisurundayone 。</span>
+<span class="line-en">I&#x27;ve heard those announcements. They&#x27;re remarkable.<br/>The level of remorse communicated over a three-minute train delay<br/>would make you think something catastrophic had happened.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>外国人<rt>がいこくじん</rt></ruby>からするとびっくりするかもしれないけど、<br/><ruby>日本<rt>にほん</rt></ruby>では「みんなの<ruby>時間<rt>じかん</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>にする」という<ruby>意識<rt>いしき</rt></ruby>がすごく<ruby>強い<rt>つよい</rt></ruby>から。<br/><ruby>誰か<rt>だれか</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>無駄<rt>むだ</rt></ruby>にしたことは、ちゃんと<ruby>謝ら<rt>あやまら</rt></ruby>ないといけない。</span>
+<span class="line-romaji">gaikokujin karasurutobikkurisurukamoshirenaikedo 、 nihon deha 「 minnano jikan wo taisetsu nisuru 」 toiu ishiki gasugoku tsuyoi kara 。 dareka no jikan wo muda nishitakotoha 、 chanto ayamara naitoikenai 。</span>
+<span class="line-en">To someone from outside Japan it can feel extreme.<br/>But in a culture where everyone&#x27;s time is genuinely respected —<br/>where *meiwaku*, inconvenience, is taken seriously —<br/>a late train is not a small thing.<br/>People had to adjust. Plans shifted.<br/>The acknowledgment is proportionate to the impact.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「すみません」の<ruby>文化<rt>ぶんか</rt></ruby>が、<ruby>鉄道会社<rt>てつどうがいしゃ</rt></ruby>の<ruby>放送<rt>ほうそう</rt></ruby>にまで<ruby>入っ<rt>はいっ</rt></ruby>てるわけか。</span>
+<span class="line-romaji">「 sumimasen 」 no bunka ga 、 tetsudougaisha no housou nimade haitsu teruwakeka 。</span>
+<span class="line-en">So the *sumimasen* mindset is literally in the train announcements.<br/>It&#x27;s not just individual — it&#x27;s institutional.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そうなの。それが<ruby>面白い<rt>おもしろい</rt></ruby>ところだと<ruby>思う<rt>おもう</rt></ruby>。<br/><ruby>言語<rt>げんご</rt></ruby>が<ruby>文化<rt>ぶんか</rt></ruby>で、<ruby>文化<rt>ぶんか</rt></ruby>が<ruby>言語<rt>げんご</rt></ruby>なんだよね。<br/>「すみません」<ruby>一言<rt>ひとこと</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby>、<ruby>社会全体<rt>しゃかいぜんたい</rt></ruby>の<ruby>価値観<rt>かちかん</rt></ruby>が<ruby>入っ<rt>はいっ</rt></ruby>てる。</span>
+<span class="line-romaji">sounano 。 sorega omoshiroi tokorodato omou 。 gengo ga bunka de 、 bunka ga gengo nandayone 。 「 sumimasen 」 hitokoto no nakani 、 shakaizentai no kachikan ga haitsu teru 。</span>
+<span class="line-en">Right. The language and the culture are inseparable.<br/>*Sumimasen* isn&#x27;t just a word individuals use.<br/>It reflects how the entire society is organized —<br/>around awareness, around acknowledgment, around never pretending<br/>that someone else&#x27;s effort didn&#x27;t cost them something.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section8"><div class="section-label">✦ PART EIGHT: When Foreigners Use Sumimasen</div></div>
+<div class="section" data-section="section8">
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>外国人<rt>がいこくじん</rt></ruby>が「すみません」を<ruby>使う<rt>つかう</rt></ruby><ruby>時<rt>とき</rt></ruby>って、どんな<ruby>感じ<rt>かんじ</rt></ruby>になるの？<br/><ruby>日本人<rt>にほんじん</rt></ruby>にとって、どう<ruby>聞こ<rt>きこ</rt></ruby>える？</span>
+<span class="line-romaji">gaikokujin ga 「 sumimasen 」 wo tsukau toki tte 、 donna kanji ninaruno ？ nihonjin nitotte 、 dou kiko eru ？</span>
+<span class="line-en">Okay, I want to ask about this from the other side.<br/>When a foreigner uses *sumimasen* —<br/>what does that sound like to a Japanese person?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">すごく<ruby>嬉しく<rt>うれしく</rt></ruby><ruby>感じ<rt>かんじ</rt></ruby>ると<ruby>思う<rt>おもう</rt></ruby>。<br/><ruby>発音<rt>はつおん</rt></ruby>が<ruby>完璧<rt>かんぺき</rt></ruby>じゃなくても<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>大丈夫<rt>だいじょうぶ</rt></ruby>。<br/>「この<ruby>人<rt>ひと</rt></ruby>、<ruby>気を<rt>きを</rt></ruby><ruby>使って<rt>つかって</rt></ruby>くれてる」って<ruby>伝わ<rt>つたわ</rt></ruby>るから。</span>
+<span class="line-romaji">sugoku ureshiku kanji ruto omou 。 hatsuon ga kanpeki janakutemo zenzen daijoubu 。 「 kono hito 、 kiwo tsukatte kureteru 」 tte tsutawa rukara 。</span>
+<span class="line-en">I think it feels genuinely touching to most Japanese people.<br/>Even if the pronunciation isn&#x27;t perfect.<br/>Even if it comes with a foreign accent.<br/>Because the word itself communicates &quot;I know what this word means.<br/>I know it&#x27;s about acknowledging you. And I want to.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">じゃあ、<ruby>多少<rt>たしょう</rt></ruby><ruby>間違っ<rt>まちがっ</rt></ruby>ても<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>？</span>
+<span class="line-romaji">jaa 、 tashou machigatsu temo daijoubu ？</span>
+<span class="line-en">So even a slightly wrong or awkward *sumimasen* still works?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>全然<rt>ぜんぜん</rt></ruby><ruby>大丈夫<rt>だいじょうぶ</rt></ruby>！<br/>むしろ、ちょっと<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby>に<ruby>言って<rt>いって</rt></ruby>る<ruby>感じ<rt>かんじ</rt></ruby>が、かわいいって<ruby>思わ<rt>おもわ</rt></ruby>れることも<ruby>多い<rt>おおい</rt></ruby>。<br/><ruby>日本人<rt>にほんじん</rt></ruby>は、<ruby>外国人<rt>がいこくじん</rt></ruby>が<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>話そ<rt>はなそ</rt></ruby>うとすることをすごく<ruby>応援<rt>おうえん</rt></ruby>してくれる<ruby>人<rt>ひと</rt></ruby>が<ruby>多い<rt>おおい</rt></ruby>。</span>
+<span class="line-romaji">zenzen daijoubu ！ mushiro 、 chotto isshoukenmei ni itte ru kanji ga 、 kawaiitte omowa rerukotomo ooi 。 nihonjin ha 、 gaikokujin ga nihongo wo hanaso utosurukotowosugoku ouen shitekureru hito ga ooi 。</span>
+<span class="line-en">Completely fine!<br/>In fact, the effort often comes across as endearing.<br/>Japanese people tend to be incredibly warm and encouraging toward foreigners<br/>who are genuinely trying to engage with their language.<br/>That effort is visible. And it matters.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">それ、すごく<ruby>背中<rt>せなか</rt></ruby>を<ruby>押し<rt>おし</rt></ruby>てくれる<ruby>言葉<rt>ことば</rt></ruby>だな。<br/><ruby>日本語<rt>にほんご</rt></ruby>って<ruby>難しい<rt>むずかしい</rt></ruby>なって<ruby>思って<rt>おもって</rt></ruby>、<ruby>諦め<rt>あきらめ</rt></ruby>そうになることもあるから。</span>
+<span class="line-romaji">sore 、 sugoku senaka wo oshi tekureru kotoba dana 。 nihongo tte muzukashii natte omotte 、 akirame souninarukotomoarukara 。</span>
+<span class="line-en">That&#x27;s so encouraging to hear.<br/>Because sometimes when you&#x27;re learning Japanese<br/>and you look at a wall of kanji or you try to remember the right conjugation<br/>and everything falls apart — you wonder if it&#x27;s worth it.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>は<ruby>難しい<rt>むずかしい</rt></ruby>よ。<ruby>本当<rt>ほんとう</rt></ruby>に。<br/>でも「すみません」<ruby>一言<rt>ひとこと</rt></ruby>から、<ruby>日本語<rt>にほんご</rt></ruby>との<ruby>旅<rt>たび</rt></ruby>が<ruby>始め<rt>はじめ</rt></ruby>られる。<br/><ruby>完璧<rt>かんぺき</rt></ruby>じゃなくていい。<ruby>伝え<rt>つたえ</rt></ruby>ようとする<ruby>気持ち<rt>きもち</rt></ruby>が、<ruby>言葉<rt>ことば</rt></ruby>になるから。</span>
+<span class="line-romaji">nihongo ha muzukashii yo 。 hontou ni 。 demo 「 sumimasen 」 hitokoto kara 、 nihongo tono tabi ga hajime rareru 。 kanpeki janakuteii 。 tsutae youtosuru kimochi ga 、 kotoba ninarukara 。</span>
+<span class="line-en">Japanese is hard. I won&#x27;t pretend it isn&#x27;t.<br/>But the beautiful thing about *sumimasen* is that it&#x27;s a beginning.<br/>You can start there.<br/>One word. One genuine attempt.<br/>And that word says so much about you —<br/>&quot;I see people. I acknowledge effort. I&#x27;m trying to meet you where you are.&quot;<br/>That&#x27;s not a small thing.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section9"><div class="section-label">✦ PART NINE: The Funny Side of Sumimasen</div></div>
+<div class="section" data-section="section9">
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ねえ、ちょっと<ruby>笑え<rt>わらえ</rt></ruby>る<ruby>話<rt>はなし</rt></ruby>もしていい？<br/>「すみません」にまつわる<ruby>面白い<rt>おもしろい</rt></ruby><ruby>誤解<rt>ごかい</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>がある。</span>
+<span class="line-romaji">nee 、 chotto warae ru hanashi moshiteii ？ 「 sumimasen 」 nimatsuwaru omoshiroi gokai no hanashi gaaru 。</span>
+<span class="line-en">Can we take a slight detour here?<br/>Because there are some genuinely funny misunderstandings<br/>that happen around *sumimasen* with visitors to Japan.<br/>And I have a personal one.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あはは！<ruby>聞き<rt>きき</rt></ruby>たい！</span>
+<span class="line-romaji">ahaha ！ kiki tai ！</span>
+<span class="line-en">Oh, I want to hear this.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本<rt>にほん</rt></ruby>に<ruby>行って<rt>いって</rt></ruby>すぐの<ruby>頃ね<rt>ごろね</rt></ruby>、ある<ruby>日<rt>にち</rt></ruby>レストランで<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が「すみません」って<ruby>言い<rt>いい</rt></ruby>ながら<br/>ちょっと<ruby>席<rt>せき</rt></ruby>をずらしてたんだよ。<br/><ruby>僕<rt>ぼく</rt></ruby>、「あ、この<ruby>人<rt>ひと</rt></ruby>、<ruby>怒っ<rt>いかっ</rt></ruby>てるのかな？」って<ruby>思って<rt>おもって</rt></ruby>。<br/>なぜか<ruby>謝ら<rt>あやまら</rt></ruby>れてる<ruby>気に<rt>きに</rt></ruby>なって、すごく<ruby>慌て<rt>あわて</rt></ruby>た。</span>
+<span class="line-romaji">nihon ni itte suguno gorone 、 aru nichi resutoran de tonari no hito ga 「 sumimasen 」 tte ii nagara chotto seki wozurashitetandayo 。 boku 、「 a 、 kono hito 、 ikatsu terunokana ？」 tte omotte 。 nazeka ayamara reteru kini natte 、 sugoku awate ta 。</span>
+<span class="line-en">Very shortly after arriving in Japan,<br/>I was at a restaurant and the person at the table next to me<br/>said *sumimasen* while shuffling their chair.<br/>And I immediately panicked — I thought they were apologizing to me.<br/>I thought I had done something wrong!<br/>I started looking around frantically going &quot;What did I do?! What did I do?!&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あはははは！それ、<ruby>本当<rt>ほんとう</rt></ruby>にあるある！</span>
+<span class="line-romaji">ahahahaha ！ sore 、 hontou niaruaru ！</span>
+<span class="line-en">Ha! Oh no!</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">で、「あ、ご、ごめんなさい！？」って、<ruby>自分<rt>じぶん</rt></ruby>も<ruby>謝り<rt>あやまり</rt></ruby><ruby>始め<rt>はじめ</rt></ruby>て。<br/>なんか<ruby>謝り<rt>あやまり</rt></ruby><ruby>合い<rt>あい</rt></ruby>になっちゃって。<br/><ruby>相手<rt>あいて</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>、<ruby>絶対<rt>ぜったい</rt></ruby><ruby>困っ<rt>こまっ</rt></ruby>てたと<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">de 、「 a 、 go 、 gomennasai ！？」 tte 、 jibun mo ayamari hajime te 。 nanka ayamari ai ninatchatte 。 aite no hito 、 zettai komatsu tetato omou 。</span>
+<span class="line-en">So I also started apologizing! In English!<br/>&quot;I&#x27;m so sorry, I&#x27;m sorry!&quot;<br/>And this poor person just looked at me completely confused.<br/>They were just making space to get through. That was it.<br/>They weren&#x27;t apologizing to me at all.<br/>We had this bizarre two-minute mutual apology loop<br/>and no one knew what was happening.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">もう、その<ruby>光景<rt>こうけい</rt></ruby>が<ruby>目に<rt>めに</rt></ruby><ruby>浮か<rt>うか</rt></ruby>ぶ……！</span>
+<span class="line-romaji">mou 、 sono koukei ga meni uka bu ……！</span>
+<span class="line-en">I&#x27;m picturing this and it&#x27;s perfect.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">あとね、コンビニで「すみません」って<ruby>言った<rt>いった</rt></ruby>ら、<br/><ruby>店員<rt>てんいん</rt></ruby>さんがすごく<ruby>丁寧<rt>ていねい</rt></ruby>に「はい、どうぞ」って<ruby>対応<rt>たいおう</rt></ruby>してくれたんだけど、<br/>その<ruby>後に<rt>のちに</rt></ruby><ruby>何を<rt>なにを</rt></ruby><ruby>言え<rt>いえ</rt></ruby>ばいいかわからなくて、<br/>また「すみません」って<ruby>言っち<rt>いっち</rt></ruby>ゃって。<br/>それがループになって。</span>
+<span class="line-romaji">atone 、 konbini de 「 sumimasen 」 tte itta ra 、 ten&#x27;in sangasugoku teinei ni 「 hai 、 douzo 」 tte taiou shitekuretandakedo 、 sono nochini naniwo ie baiikawakaranakute 、 mata 「 sumimasen 」 tte itchi yatte 。 sorega ruupu ninatte 。</span>
+<span class="line-en">And then another time — at a convenience store —<br/>I said *sumimasen* to get the cashier&#x27;s attention.<br/>They turned to me immediately, very attentive.<br/>And then I forgot what I was going to say.<br/>So I just said *sumimasen* again.<br/>And they were so patient and kind about it.<br/>I think I said *sumimasen* four times in a row with no actual request in between.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">あはははは！！<br/>でも<ruby>店員<rt>てんいん</rt></ruby>さん、<ruby>絶対<rt>ぜったい</rt></ruby>やさしく<ruby>待っ<rt>まっ</rt></ruby>てくれたと<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">ahahahaha ！！ demo ten&#x27;in san 、 zettai yasashiku matsu tekuretato omou 。</span>
+<span class="line-en">The cashier absolutely just waited calmly through all of it.<br/>*That* is Japanese customer service.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>本当<rt>ほんとう</rt></ruby>にそう！<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>嫌な<rt>いやな</rt></ruby><ruby>顔<rt>かお</rt></ruby>しなかった。<br/>むしろちょっと<ruby>微笑ん<rt>ほほえん</rt></ruby>でた<ruby>気が<rt>きが</rt></ruby>した。</span>
+<span class="line-romaji">hontou nisou ！ zenzen iyana kao shinakatta 。 mushirochotto hohoen deta kiga shita 。</span>
+<span class="line-en">Not a single impatient look. Just this quiet, patient smile.<br/>I was embarrassed but also genuinely impressed.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「すみません」を<ruby>言い過ぎ<rt>いいすぎ</rt></ruby>ても、<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>失礼<rt>しつれい</rt></ruby>じゃない。<br/>むしろ<ruby>気を<rt>きを</rt></ruby><ruby>使って<rt>つかって</rt></ruby>る<ruby>人<rt>ひと</rt></ruby>だと<ruby>思わ<rt>おもわ</rt></ruby>れる。</span>
+<span class="line-romaji">「 sumimasen 」 wo iisugi temo 、 zenzen shitsurei janai 。 mushiro kiwo tsukatte ru hito dato omowa reru 。</span>
+<span class="line-en">Saying *sumimasen* too much is never a problem.<br/>It never sounds excessive to a Japanese ear.<br/>If anything, it signals that you&#x27;re a considerate person.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">じゃあ<ruby>日本旅行<rt>にほんりょこう</rt></ruby>に<ruby>行く<rt>いく</rt></ruby><ruby>人<rt>ひと</rt></ruby>は、「すみません」を<ruby>練習<rt>れんしゅう</rt></ruby>してから<ruby>行く<rt>いく</rt></ruby>べき？</span>
+<span class="line-romaji">jaa nihonryokou ni iku hito ha 、「 sumimasen 」 wo renshuu shitekara iku beki ？</span>
+<span class="line-en">So the practical advice for anyone traveling to Japan is —<br/>just learn *sumimasen*?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>絶対<rt>ぜったい</rt></ruby>に！<br/>「すみません」<ruby>一言<rt>ひとこと</rt></ruby><ruby>知って<rt>しって</rt></ruby>るだけで、<ruby>旅行<rt>りょこう</rt></ruby>が<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>変わ<rt>かわ</rt></ruby>ると<ruby>思う<rt>おもう</rt></ruby>。<br/>レストランで<ruby>呼べ<rt>よべ</rt></ruby>る、<ruby>道<rt>みち</rt></ruby>を<ruby>聞け<rt>きけ</rt></ruby>る、<ruby>助け<rt>たすけ</rt></ruby>を<ruby>求め<rt>もとめ</rt></ruby>られる。<br/>しかも、ちゃんと<ruby>気持ち<rt>きもち</rt></ruby>も<ruby>伝わ<rt>つたわ</rt></ruby>る。</span>
+<span class="line-romaji">zettai ni ！ 「 sumimasen 」 hitokoto shitte rudakede 、 ryokou ga zenzen kawa ruto omou 。 resutoran de yobe ru 、 michi wo kike ru 、 tasuke wo motome rareru 。 shikamo 、 chanto kimochi mo tsutawa ru 。</span>
+<span class="line-en">Absolutely, without question.<br/>*Sumimasen* unlocks so much of Japan as a traveler.<br/>You can get a server&#x27;s attention. Ask for directions. Ask for help.<br/>And with every use, you&#x27;re also communicating<br/>&quot;I respect your time. I see your effort.&quot;<br/>Which is exactly what Japanese people will appreciate most.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section10"><div class="section-label">✦ PART TEN: The Emotional Core — What Sumimasen Really Is</div></div>
+<div class="section" data-section="section10">
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ねえ、<ruby>今日<rt>きょう</rt></ruby><ruby>話し<rt>はなし</rt></ruby>てきて、なんか<ruby>一つ<rt>ひとつ</rt></ruby><ruby>大き<rt>おおき</rt></ruby>なことが<ruby>見え<rt>みえ</rt></ruby>てきた<ruby>気が<rt>きが</rt></ruby>する。</span>
+<span class="line-romaji">nee 、 kyou hanashi tekite 、 nanka hitotsu ooki nakotoga mie tekita kiga suru 。</span>
+<span class="line-en">Okay. We&#x27;ve been talking about this for a while now.<br/>And I feel like something has been slowly coming into focus.<br/>Can I try to say what I think *sumimasen* really is?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">うん、<ruby>言って<rt>いって</rt></ruby>みて。</span>
+<span class="line-romaji">un 、 itte mite 。</span>
+<span class="line-en">Go ahead.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>最初<rt>さいしょ</rt></ruby>は「この<ruby>言葉<rt>ことば</rt></ruby>、<ruby>謝っ<rt>あやまっ</rt></ruby>てるのかありがとうなのかわからない」って<ruby>思って<rt>おもって</rt></ruby>たんだけど。<br/>でも<ruby>今日<rt>きょう</rt></ruby><ruby>話し<rt>はなし</rt></ruby>てたら、なんか、どっちも<ruby>正解<rt>せいかい</rt></ruby>じゃないかもしれないって<ruby>思え<rt>おもえ</rt></ruby>てきて。</span>
+<span class="line-romaji">saisho ha 「 kono kotoba 、 ayamatsu terunokaarigatounanokawakaranai 」 tte omotte tandakedo 。 demo kyou hanashi tetara 、 nanka 、 dotchimo seikai janaikamoshirenaitte omoe tekite 。</span>
+<span class="line-en">I came into this episode thinking —<br/>&quot;Why do Japanese people apologize so much?&quot;<br/>And somewhere in this conversation, I realized —<br/>they&#x27;re not apologizing. Or they&#x27;re not *just* apologizing.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">どういうこと？</span>
+<span class="line-romaji">douiukoto ？</span>
+<span class="line-en">Say more.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「すみません」って、もしかしたら——<br/>「あなたが<ruby>私<rt>わたし</rt></ruby>のためにしてくれたことを、<ruby>私<rt>わたし</rt></ruby>はちゃんと<ruby>受け取り<rt>うけとり</rt></ruby>ました」<br/>「あなたの<ruby>努力<rt>どりょく</rt></ruby>を、なかったことにしません」<br/>「あなたのことを、<ruby>気に<rt>きに</rt></ruby>しています」<br/>そういう<ruby>言葉<rt>ことば</rt></ruby>なんじゃないかって。</span>
+<span class="line-romaji">「 sumimasen 」 tte 、 moshikashitara —— 「 anataga watashi notamenishitekuretakotowo 、 watashi hachanto uketori mashita 」 「 anatano doryoku wo 、 nakattakotonishimasen 」 「 anatanokotowo 、 kini shiteimasu 」 souiu kotoba nanjanaikatte 。</span>
+<span class="line-en">What if *sumimasen* is really about saying —<br/>&quot;I received what you did for me.&quot;<br/>&quot;I&#x27;m not going to let it pass unacknowledged.&quot;<br/>&quot;Your effort was real and I know it.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">……それ、すごくいい<ruby>言い方<rt>いいかた</rt></ruby>だと<ruby>思う<rt>おもう</rt></ruby>。<br/><ruby>本当<rt>ほんとう</rt></ruby>に。</span>
+<span class="line-romaji">…… sore 、 sugokuii iikata dato omou 。 hontou ni 。</span>
+<span class="line-en">That&#x27;s... that&#x27;s a beautiful way to put it.<br/>I mean that.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">なんか、<ruby>英語<rt>えいご</rt></ruby>だと「thank you」ってすぐ<ruby>言え<rt>いえ</rt></ruby>るじゃない。<br/>でも「すみません」って、<ruby>何か<rt>なにか</rt></ruby>もっと、もらった<ruby>気持ち<rt>きもち</rt></ruby>に<ruby>近い<rt>ちかい</rt></ruby>ような。<br/>「あなたがしてくれたことが、<ruby>私<rt>わたし</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby><ruby>入っ<rt>はいっ</rt></ruby>てきた」みたいな。</span>
+<span class="line-romaji">nanka 、 eigo dato 「thank you」 ttesugu ie rujanai 。 demo 「 sumimasen 」 tte 、 nanika motto 、 moratta kimochi ni chikai youna 。 「 anatagashitekuretakotoga 、 watashi no nakani haitsu tekita 」 mitaina 。</span>
+<span class="line-en">In English we say &quot;thank you&quot; and it moves on quickly.<br/>It&#x27;s clean and complete.<br/>But *sumimasen* feels like the feeling lingers.<br/>Like you&#x27;re carrying something the other person gave you.<br/>&quot;What you did touched me and I&#x27;m taking it with me.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">「<ruby>感謝<rt>かんしゃ</rt></ruby>」と「<ruby>受け取る<rt>うけとる</rt></ruby>」の<ruby>間に<rt>まに</rt></ruby>ある<ruby>言葉<rt>ことば</rt></ruby>、かな。<br/>「ありがとう」は<ruby>感謝<rt>かんしゃ</rt></ruby>を<ruby>渡す<rt>わたす</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>。<br/>「すみません」は<ruby>感謝<rt>かんしゃ</rt></ruby>を<ruby>受け取っ<rt>うけとっ</rt></ruby>たことを<ruby>伝え<rt>つたえ</rt></ruby>る<ruby>言葉<rt>ことば</rt></ruby>。</span>
+<span class="line-romaji">「 kansha 」 to 「 uketoru 」 no mani aru kotoba 、 kana 。 「 arigatou 」 ha kansha wo watasu kotoba 。 「 sumimasen 」 ha kansha wo uketotsu takotowo tsutae ru kotoba 。</span>
+<span class="line-en">Maybe *sumimasen* sits between gratitude and receiving.<br/>*Arigatou* sends the gratitude outward — &quot;I am grateful.&quot;<br/>*Sumimasen* reflects it inward — &quot;I received your kindness and it settled in me.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">……なんか、<ruby>泣き<rt>なき</rt></ruby>そう。これ、ポッドキャストなのに。</span>
+<span class="line-romaji">…… nanka 、 naki sou 。 kore 、 poddokyasuto nanoni 。</span>
+<span class="line-en">I&#x27;m not going to lie — this is getting me a little emotional.<br/>We started talking about a word and ended up somewhere much deeper.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>言葉<rt>ことば</rt></ruby>って、そういうものだと<ruby>思う<rt>おもう</rt></ruby>。<br/><ruby>表面<rt>ひょうめん</rt></ruby>を<ruby>掘る<rt>ほる</rt></ruby>と、<ruby>下に<rt>したに</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>がある。<br/><ruby>文化<rt>ぶんか</rt></ruby>を<ruby>掘る<rt>ほる</rt></ruby>と、<ruby>下に<rt>したに</rt></ruby><ruby>人<rt>ひと</rt></ruby>がいる。<br/><ruby>人<rt>ひと</rt></ruby>を<ruby>掘る<rt>ほる</rt></ruby>と、<ruby>下に<rt>したに</rt></ruby><ruby>気持ち<rt>きもち</rt></ruby>がある。</span>
+<span class="line-romaji">kotoba tte 、 souiumonodato omou 。 hyoumen wo horu to 、 shitani bunka gaaru 。 bunka wo horu to 、 shitani hito gairu 。 hito wo horu to 、 shitani kimochi gaaru 。</span>
+<span class="line-en">That&#x27;s what language does, though.<br/>You scratch the surface and find culture underneath.<br/>You scratch the culture and find people underneath.<br/>You scratch the people and find feelings underneath.<br/>And the feelings are always the same.<br/>The details are different. The feelings are the same.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">「すみません」って、<ruby>日本<rt>にほん</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>たちが<ruby>何百年<rt>なんびゃくねん</rt></ruby>もかけて<ruby>作っ<rt>つくっ</rt></ruby>た<br/>「あなたのことを<ruby>見て<rt>みて</rt></ruby>います」って<ruby>言う<rt>いう</rt></ruby>ための<ruby>言葉<rt>ことば</rt></ruby>なんだね。</span>
+<span class="line-romaji">「 sumimasen 」 tte 、 nihon no hito tachiga nanbyakunen mokakete tsukutsu ta 「 anatanokotowo mite imasu 」 tte iu tameno kotoba nandane 。</span>
+<span class="line-en">*Sumimasen* is the Japanese language&#x27;s way of saying<br/>&quot;You are not invisible to me.&quot;<br/>&quot;What you did was real.&quot;<br/>&quot;I see you.&quot;</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そう。そして、それを<ruby>一言<rt>ひとこと</rt></ruby>で<ruby>言え<rt>いえ</rt></ruby>るって、<br/>なんてすごいことだろうって<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">sou 。 soshite 、 sorewo hitokoto de ie rutte 、 nantesugoikotodaroutte omou 。</span>
+<span class="line-en">And the fact that an entire culture built one word<br/>to carry all of that —<br/>I find that extraordinary.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>今日<rt>きょう</rt></ruby>「すみません」って<ruby>言う<rt>いう</rt></ruby>たびに、もう<ruby>昔<rt>むかし</rt></ruby>と<ruby>同じ<rt>おなじ</rt></ruby><ruby>気持ち<rt>きもち</rt></ruby>で<ruby>言え<rt>いえ</rt></ruby>ない<ruby>気が<rt>きが</rt></ruby>する。</span>
+<span class="line-romaji">kyou 「 sumimasen 」 tte iu tabini 、 mou mukashi to onaji kimochi de ie nai kiga suru 。</span>
+<span class="line-en">I&#x27;m going to feel this every time I say *sumimasen* now.<br/>I can&#x27;t unknow what this word actually means.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">それが<ruby>言葉<rt>ことば</rt></ruby>を<ruby>学ぶ<rt>まなぶ</rt></ruby>ことの<ruby>本当<rt>ほんとう</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>だと<ruby>思う<rt>おもう</rt></ruby>。<br/><ruby>言葉<rt>ことば</rt></ruby>がわかると、その<ruby>言葉<rt>ことば</rt></ruby>を<ruby>使う<rt>つかう</rt></ruby><ruby>人<rt>ひと</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>が<ruby>少し<rt>すこし</rt></ruby>わかる。</span>
+<span class="line-romaji">sorega kotoba wo manabu kotono hontou no imi dato omou 。 kotoba gawakaruto 、 sono kotoba wo tsukau hito no kokoro ga sukoshi wakaru 。</span>
+<span class="line-en">That&#x27;s the real meaning of learning a language.<br/>When you understand a word — truly understand it —<br/>you understand a little of the heart of the people who made it.</span>
+</div>
+</div>
+</div>
+<div class="section-divider" data-section="section11"><div class="section-label">✦ OUTRO</div></div>
+<div class="section" data-section="section11">
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">ねえ、もう<ruby>終わり<rt>おわり</rt></ruby>にしないといけないの？<br/><ruby>全然<rt>ぜんぜん</rt></ruby><ruby>終わり<rt>おわり</rt></ruby>たくない……。</span>
+<span class="line-romaji">nee 、 mou owari nishinaitoikenaino ？ zenzen owari takunai ……。</span>
+<span class="line-en">Do we have to wrap up? I genuinely don&#x27;t want this episode to end.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">ふふ。また<ruby>次の<rt>つぎの</rt></ruby>エピソードで<ruby>話せ<rt>はなせ</rt></ruby>るから。<br/>でも<ruby>今日は<rt>きょうは</rt></ruby><ruby>本当<rt>ほんとう</rt></ruby>に<ruby>良か<rt>よか</rt></ruby>った。</span>
+<span class="line-romaji">fufu 。 mata tsugino episoodo de hanase rukara 。 demo kyouha hontou ni yoka tta 。</span>
+<span class="line-en">There&#x27;s always the next episode.<br/>But today was really, really something.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">じゃあ<ruby>今日<rt>きょう</rt></ruby>のまとめをちょっとだけしようか。</span>
+<span class="line-romaji">jaa kyou nomatomewochottodakeshiyouka 。</span>
+<span class="line-en">Let me try to pull it together a little.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">うん。</span>
+<span class="line-romaji">un 。</span>
+<span class="line-en">Please.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>今日<rt>きょう</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>のポイント。<br/>「すみません」は「sorry」じゃない。<br/><ruby>謝る<rt>あやまる</rt></ruby><ruby>時に<rt>ときに</rt></ruby>も<ruby>使う<rt>つかう</rt></ruby>けど、それだけじゃない。<br/><ruby>注意<rt>ちゅうい</rt></ruby>を<ruby>引く<rt>ひく</rt></ruby><ruby>時<rt>とき</rt></ruby>、<ruby>頼む<rt>たのむ</rt></ruby><ruby>時<rt>とき</rt></ruby>、<ruby>感謝す<rt>かんしゃす</rt></ruby>る<ruby>時<rt>とき</rt></ruby>——<ruby>全部<rt>ぜんぶ</rt></ruby>「すみません」。</span>
+<span class="line-romaji">kyou no hanashi no pointo 。 「 sumimasen 」 ha 「sorry」 janai 。 ayamaru tokini mo tsukau kedo 、 soredakejanai 。 chuui wo hiku toki 、 tanomu toki 、 kanshasu ru toki —— zenbu 「 sumimasen 」。</span>
+<span class="line-en">Here&#x27;s what we figured out today.<br/>*Sumimasen* is not just &quot;sorry.&quot;<br/>Yes, it&#x27;s used to apologize.<br/>But it&#x27;s also used to get someone&#x27;s attention,<br/>to ask for a favor, to thank someone,<br/>to acknowledge someone&#x27;s effort.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">そして<ruby>全部<rt>ぜんぶ</rt></ruby>に<ruby>共通<rt>きょうつう</rt></ruby>することは、<br/><ruby>相手<rt>あいて</rt></ruby>のことを<ruby>気に<rt>きに</rt></ruby>しているということ。<br/>「あなたのことを、ちゃんと<ruby>見て<rt>みて</rt></ruby>います」という<ruby>気持ち<rt>きもち</rt></ruby>。</span>
+<span class="line-romaji">soshite zenbu ni kyoutsuu surukotoha 、 aite nokotowo kini shiteirutoiukoto 。 「 anatanokotowo 、 chanto mite imasu 」 toiu kimochi 。</span>
+<span class="line-en">And running through all of those uses is one thread —<br/>acknowledgment.<br/>&quot;I see you. I see what you did. I&#x27;m not letting it pass.&quot;<br/>*Sumimasen* is the language of noticing.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>言語<rt>げんご</rt></ruby>って、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>文化<rt>ぶんか</rt></ruby>の<ruby>窓<rt>まど</rt></ruby>だなって<ruby>思った<rt>おもった</rt></ruby>。<br/>「すみません」<ruby>一つ<rt>ひとつ</rt></ruby><ruby>調べ<rt>しらべ</rt></ruby>るだけで、<br/><ruby>日本人<rt>にほんじん</rt></ruby>の<ruby>考え方<rt>かんがえかた</rt></ruby>とか、<ruby>社会<rt>しゃかい</rt></ruby>の<ruby>価値観<rt>かちかん</rt></ruby>とか、<br/>すごくたくさんのことが<ruby>見え<rt>みえ</rt></ruby>てくる。</span>
+<span class="line-romaji">gengo tte 、 hontou ni bunka no mado danatte omotta 。 「 sumimasen 」 hitotsu shirabe rudakede 、 nihonjin no kangaekata toka 、 shakai no kachikan toka 、 sugokutakusannokotoga mie tekuru 。</span>
+<span class="line-en">Language really is a window into a culture.<br/>We spent a whole episode on one word<br/>and we found an entire worldview inside it.<br/>A way of moving through the world.<br/>A way of treating other people.<br/>All in one word.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>学ん<rt>まなん</rt></ruby>でいる<ruby>人<rt>ひと</rt></ruby>に<ruby>言い<rt>いい</rt></ruby>たいのは、<br/><ruby>間違え<rt>まちがえ</rt></ruby>ることを<ruby>怖が<rt>こわが</rt></ruby>らないで、ということ。<br/>「すみません」って<ruby>言って<rt>いって</rt></ruby>みて。<br/>발<ruby>音<rt>おと</rt></ruby>が<ruby>完璧<rt>かんぺき</rt></ruby>じゃなくても<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>。<br/><ruby>気持ち<rt>きもち</rt></ruby>が<ruby>込も<rt>こも</rt></ruby>っていれば、ちゃんと<ruby>伝わ<rt>つたわ</rt></ruby>るから。</span>
+<span class="line-romaji">nihongo wo manan deiru hito ni ii tainoha 、 machigae rukotowo kowaga ranaide 、 toiukoto 。 「 sumimasen 」 tte itte mite 。 발 oto ga kanpeki janakutemo daijoubu 。 kimochi ga komo tteireba 、 chanto tsutawa rukara 。</span>
+<span class="line-en">And to everyone learning Japanese —<br/>please, do not be afraid to try.<br/>Say *sumimasen*.<br/>Even if your pronunciation isn&#x27;t perfect.<br/>Even if you&#x27;re not sure if it&#x27;s the right moment.<br/>Because the attempt itself communicates something —<br/>&quot;I&#x27;m trying to meet you in your language.&quot;<br/>And that message always gets through.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>毎日<rt>まいにち</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby>、<ruby>文化<rt>ぶんか</rt></ruby>がある。<br/><ruby>文化<rt>ぶんか</rt></ruby>の<ruby>中に<rt>なかに</rt></ruby>、<ruby>人間<rt>にんげん</rt></ruby>がいる。<br/>それを<ruby>知って<rt>しって</rt></ruby>から<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>話す<rt>はなす</rt></ruby>と、<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>違う<rt>ちがう</rt></ruby>と<ruby>思う<rt>おもう</rt></ruby>。</span>
+<span class="line-romaji">mainichi no kotoba no nakani 、 bunka gaaru 。 bunka no nakani 、 ningen gairu 。 sorewo shitte kara nihongo wo hanasu to 、 zenzen chigau to omou 。</span>
+<span class="line-en">Every everyday word has a culture inside it.<br/>Every culture has people inside it.<br/>And knowing that — carrying that with you when you speak —<br/>changes everything about how the language feels.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>は<ruby>長い<rt>ながい</rt></ruby><ruby>旅<rt>たび</rt></ruby>だよ。<br/>でも「すみません」<ruby>一言<rt>ひとこと</rt></ruby>から<ruby>始め<rt>はじめ</rt></ruby>られる<ruby>旅<rt>たび</rt></ruby>でもある。</span>
+<span class="line-romaji">nihongo ha nagai tabi dayo 。 demo 「 sumimasen 」 hitokoto kara hajime rareru tabi demoaru 。</span>
+<span class="line-en">Japanese is a long journey.<br/>But it&#x27;s a journey you can start with one word.<br/>And that word says everything that matters.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>今日<rt>きょう</rt></ruby><ruby>聴い<rt>きい</rt></ruby>てくれているみんなに<ruby>聞き<rt>きき</rt></ruby>たいんだけど——<br/><ruby>日本<rt>にほん</rt></ruby>に<ruby>行った<rt>いった</rt></ruby>ことある<ruby>人<rt>ひと</rt></ruby>は、「すみません」が<ruby>聞こ<rt>きこ</rt></ruby>えた<ruby>時<rt>とき</rt></ruby>、びっくりした？<br/>「すみません」を<ruby>自分<rt>じぶん</rt></ruby>で<ruby>使った<rt>つかった</rt></ruby>ことある？<br/>どんな<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>が<ruby>一番<rt>いちばん</rt></ruby><ruby>混乱<rt>こんらん</rt></ruby>した？</span>
+<span class="line-romaji">kyou kii tekureteiruminnani kiki taindakedo —— nihon ni itta kotoaru hito ha 、「 sumimasen 」 ga kiko eta toki 、 bikkurishita ？ 「 sumimasen 」 wo jibun de tsukatta kotoaru ？ donna nihongo no kotoba ga ichiban konran shita ？</span>
+<span class="line-en">We&#x27;d love to hear from everyone listening right now.<br/>Have you ever heard *sumimasen* in Japan or in Japanese media?<br/>Did it surprise you?<br/>Have you ever tried using it yourself?<br/>And what Japanese word has confused you the most?</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">コメントに<ruby>教え<rt>おしえ</rt></ruby>てくれると<ruby>嬉しい<rt>うれしい</rt></ruby>。<br/>みんなの<ruby>話<rt>はなし</rt></ruby>が<ruby>読め<rt>よめ</rt></ruby>るの、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>楽しみ<rt>たのしみ</rt></ruby>にしてる。</span>
+<span class="line-romaji">komento ni oshie tekureruto ureshii 。 minnano hanashi ga yome runo 、 hontou ni tanoshimi nishiteru 。</span>
+<span class="line-en">Leave us a comment — we read them and they genuinely make our day.<br/>Every story, every question, every confusion —<br/>we want to hear all of it.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>今日<rt>きょう</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>が<ruby>楽しか<rt>たのしか</rt></ruby>ったと<ruby>思って<rt>おもって</rt></ruby>くれたら、<br/>チャンネル<ruby>登録<rt>とうろく</rt></ruby>をしてくれると<ruby>嬉しい<rt>うれしい</rt></ruby>な。<br/><ruby>次の<rt>つぎの</rt></ruby>エピソードを<ruby>見逃さ<rt>みのがさ</rt></ruby>ないために。</span>
+<span class="line-romaji">kyou no hanashi ga tanoshika ttato omotte kuretara 、 channeru touroku woshitekureruto ureshii na 。 tsugino episoodo wo minogasa naitameni 。</span>
+<span class="line-en">If you enjoyed today — if this felt like a conversation you want more of —<br/>please consider subscribing.<br/>It genuinely helps us, and it means you won&#x27;t miss the next one.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">このエピソードを、<ruby>日本<rt>にほん</rt></ruby>が<ruby>好き<rt>すき</rt></ruby>な<ruby>友達<rt>ともだち</rt></ruby>にシェアしてくれたら、<br/>もっと<ruby>嬉しい<rt>うれしい</rt></ruby>。<br/>「<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しようかな」って<ruby>迷っ<rt>まよっ</rt></ruby>てる<ruby>人<rt>ひと</rt></ruby>に、<br/><ruby>少し<rt>すこし</rt></ruby>でも<ruby>後押し<rt>あとおし</rt></ruby>になれたら。</span>
+<span class="line-romaji">kono episoodo wo 、 nihon ga suki na tomodachi ni shiea shitekuretara 、 motto ureshii 。 「 nihongo wo benkyou shiyoukana 」 tte mayotsu teru hito ni 、 sukoshi demo atooshi ninaretara 。</span>
+<span class="line-en">And if you know someone who loves Japan —<br/>someone who&#x27;s been thinking about learning Japanese —<br/>share this with them.<br/>Maybe it&#x27;ll be the thing that tips them over into starting.<br/>That would mean a lot to us.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">いいねボタンも、ぽちっとよろしく！</span>
+<span class="line-romaji">iine botan mo 、 pochittoyoroshiku ！</span>
+<span class="line-en">And if you enjoyed this, a like really helps us reach more people.<br/>One little click goes a long way.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>次の<rt>つぎの</rt></ruby>エピソードも<ruby>楽しみ<rt>たのしみ</rt></ruby>にしてて。<br/>また、<ruby>面白い<rt>おもしろい</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>の<ruby>世界<rt>せかい</rt></ruby>に<ruby>連れ<rt>つれ</rt></ruby>ていくから。</span>
+<span class="line-romaji">tsugino episoodo mo tanoshimi nishitete 。 mata 、 omoshiroi nihongo no sekai ni tsure teikukara 。</span>
+<span class="line-en">The next episode — we&#x27;ll go somewhere new together.<br/>More language, more culture, more of those moments<br/>where one word opens a whole new world.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp"><ruby>今日<rt>きょう</rt></ruby><ruby>来て<rt>きて</rt></ruby>くれて<ruby>本当<rt>ほんとう</rt></ruby>にありがとう。<br/><ruby>一緒に<rt>いっしょに</rt></ruby><ruby>過ご<rt>すご</rt></ruby>せて、<ruby>最高<rt>さいこう</rt></ruby>だった。</span>
+<span class="line-romaji">kyou kite kurete hontou niarigatou 。 isshoni sugo sete 、 saikou datta 。</span>
+<span class="line-en">Thank you so much for spending this time with us today.<br/>Honestly — we do this because of you.<br/>And it means more than we can say.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp">またね。<ruby>気を<rt>きを</rt></ruby>つけてね。</span>
+<span class="line-romaji">matane 。 kiwo tsuketene 。</span>
+<span class="line-en">Until next time. Take care of yourselves.</span>
+</div>
+</div>
+
+<div class="line speaker-pon">
+<div class="speaker-tag">ポン</div>
+<div class="line-text">
+<span class="line-jp">またね！そして——すみません、ありがとう！</span>
+<span class="line-romaji">matane ！ soshite —— sumimasen 、 arigatou ！</span>
+<span class="line-en">See you soon! And —<br/>*sumimasen*, for taking up your time.<br/>And *arigatou* — for giving it to us anyway.</span>
+</div>
+</div>
+
+<div class="line speaker-kitsu">
+<div class="speaker-tag">キツ</div>
+<div class="line-text">
+<span class="line-jp"><ruby>日本語<rt>にほんご</rt></ruby>の<ruby>世界<rt>せかい</rt></ruby>で、また<ruby>会い<rt>あい</rt></ruby>ましょう。</span>
+<span class="line-romaji">nihongo no sekai de 、 mata ai mashou 。</span>
+<span class="line-en">We&#x27;ll meet again in the world of Japanese.<br/><br/><br/>*[Soft music fades in and out]*</span>
+</div>
+</div>
+</div>
+
+<div class="glossary">
+<h2>WORD GLOSSARY (Episode 2)</h2>
+<div class="glossary-note">Key words from this episode.</div>
+<div class="glossary-grid">
+
+
+<div class="glossary-card">
+<div class="glossary-word">すみません</div>
+<div class="glossary-reading">すみません ・ sumimasen</div>
+<div class="glossary-meaning">Excuse me / Sorry / Thank you (deeply context-dependent)</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word">ありがとう</div>
+<div class="glossary-reading">ありがとう ・ arigatou</div>
+<div class="glossary-meaning">Thank you</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word"><ruby>済む<rt>すむ</rt></ruby></div>
+<div class="glossary-reading">すむ ・ sumu</div>
+<div class="glossary-meaning">To settle, resolve, come to a close</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word"><ruby>迷惑<rt>めいわく</rt></ruby></div>
+<div class="glossary-reading">めいわく ・ meiwaku</div>
+<div class="glossary-meaning">Inconvenience, nuisance</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word">おもてなし</div>
+<div class="glossary-reading">おもてなし ・ omotenashi</div>
+<div class="glossary-meaning">Selfless hospitality; anticipating another&#x27;s needs</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word"><ruby>和<rt>わ</rt></ruby></div>
+<div class="glossary-reading">わ ・ wa</div>
+<div class="glossary-meaning">Harmony; social balance</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word">いらっしゃいませ</div>
+<div class="glossary-reading">いらっしゃいませ ・ irasshaimase</div>
+<div class="glossary-meaning">Welcome (said to entering customers)</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word">お<ruby>気を<rt>きを</rt></ruby>つけて</div>
+<div class="glossary-reading">おきをつけて ・ o-ki wo tsukete</div>
+<div class="glossary-meaning">Please take care / Safe travels</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word"><ruby>頑張っ<rt>がんばっ</rt></ruby>て</div>
+<div class="glossary-reading">がんばって ・ ganbatte</div>
+<div class="glossary-meaning">Keep going / I believe in you</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word">ごめんなさい</div>
+<div class="glossary-reading">ごめんなさい ・ gomen nasai</div>
+<div class="glossary-meaning">I&#x27;m sorry (sincere, personal apology)</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word"><ruby>失礼<rt>しつれい</rt></ruby>します</div>
+<div class="glossary-reading">しつれいします ・ shitsurei shimasu</div>
+<div class="glossary-meaning">Excuse me (more formal; &quot;I am being rude&quot;)</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word"><ruby>旬<rt>じゅん</rt></ruby></div>
+<div class="glossary-reading">じゅん ・ shun</div>
+<div class="glossary-meaning">Seasonality; the perfect moment for something</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word"><ruby>領収書<rt>りょうしゅうしょ</rt></ruby></div>
+<div class="glossary-reading">りょうしゅうしょ ・ ryoushuusho</div>
+<div class="glossary-meaning">Receipt</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word"><ruby>感謝<rt>かんしゃ</rt></ruby></div>
+<div class="glossary-reading">かんしゃ ・ kansha</div>
+<div class="glossary-meaning">Gratitude, appreciation</div>
+</div>
+
+<div class="glossary-card">
+<div class="glossary-word"><ruby>気遣い<rt>きづかい</rt></ruby></div>
+<div class="glossary-reading">きづかい ・ kizukai</div>
+<div class="glossary-meaning">Consideration for others; thoughtful awareness</div>
+</div>
+</div></div>
+</div>
+<script>
+  function filterSection(section, event) {
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    if (event && event.target) event.target.classList.add('active');
+    document.querySelectorAll('.section, .section-divider').forEach(el => {
+      if (section === 'all' || el.dataset.section === section) el.classList.remove('hidden');
+      else el.classList.add('hidden');
+    });
+  }
+  function toggleRomaji() {
+    const wrap = document.querySelector('.script-wrap');
+    const btn = document.getElementById('romajiToggle');
+    wrap.classList.toggle('hide-romaji');
+    const visible = !wrap.classList.contains('hide-romaji');
+    btn.textContent = visible ? 'Romaji ON' : 'Romaji OFF';
+    btn.classList.toggle('active', visible);
+  }
+</script>
