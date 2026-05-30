@@ -1,4 +1,11 @@
-<style>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Japanese Story Podcast - Episode 02</title>
+
+  <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap');
   :root {
     --pon-bg:#E6F1FB; --pon-border:#B5D4F4; --pon-text:#0C447C;
@@ -37,12 +44,8 @@ rt {
 
 </style>
 
-
-<style>
-.production-notes{font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:14px;padding:12px;margin-bottom:1.5rem;line-height:1.7}
-.production-notes strong{color:var(--color-text-primary)}
-</style>
-
+</head>
+<body>
 <div class="script-wrap">
 
 <div class="podcast-header">
@@ -67,7 +70,6 @@ rt {
 <button class="filter-btn" onclick="filterSection('section11', event)">OUTRO</button>
 <button class="toggle-btn active" id="romajiToggle" onclick="toggleRomaji()">Romaji ON</button>
 </div>
-<div class="production-notes"><strong>PRODUCTION NOTES</strong><br/>Running time: ~45 minutes<br/>Characters: Pon (male, energetic, curious, beginner-intermediate learner), Kitsu (female, calm, warm, knowledgeable, grew up with Japanese)<br/>Tone: Cozy, conversational, story-driven — like two friends sharing coffee on a rainy afternoon<br/>Theme: One single word. Infinite depth.</div>
 <div class="section" data-section="opening">
 <div class="section-label">▶ INTRO</div>
 
@@ -1687,6 +1689,7 @@ rt {
 </div>
 </div></div>
 </div>
+
 <script>
   function filterSection(section, event) {
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -1705,3 +1708,5 @@ rt {
     btn.classList.toggle('active', visible);
   }
 </script>
+</body>
+</html>
